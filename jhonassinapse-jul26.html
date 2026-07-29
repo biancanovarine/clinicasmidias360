@@ -3,6 +3,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard de Performance - Sinapse & Dr. Jhonas Flauzino</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -10,6 +14,9 @@
         window.tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
                     colors: {
                         teal: {
                             50: '#f0fdfa',
@@ -24,256 +31,171 @@
                             500: '#f59e0b',
                             600: '#d97706',
                         }
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                     }
                 }
             }
         };
     </script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-        }
-    </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen pb-12">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-16">
 
-    <!-- HEADER -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/80 mb-8">
+    <!-- HEADER PRINCIPAL -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-teal-600/20">
-                    SJP
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-teal-600/20">
+                    S
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">Sinapse & Dr. Jhonas Geraldo Peixoto Flauzino</h1>
-                    <p class="text-xs font-medium text-slate-500">Psiquiatria • Telemedicina & Atendimento Presencial</p>
+                    <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">Sinapse & Dr. Jhonas Flauzino</h1>
+                    <p class="text-xs text-slate-500 font-semibold">Psiquiatria & Saúde Mental Integrada</p>
                 </div>
             </div>
 
-            <!-- Logos e Chancelas -->
-            <div class="flex items-center space-x-6">
+            <!-- CHANCELAS -->
+            <div class="flex items-center gap-4">
                 <!-- Google Partner Badge -->
-                <div class="hidden sm:flex items-center space-x-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-xl border border-slate-200">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
                         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
                     </svg>
-                    <span class="text-xs font-semibold text-slate-700">Google Partner</span>
+                    <span class="text-[11px] font-bold text-slate-700">Google Partner</span>
                 </div>
 
-                <!-- Doctoralia Badge -->
-                <div class="flex items-center space-x-2 bg-teal-50/80 px-3 py-1.5 rounded-lg border border-teal-100">
+                <!-- Doctoralia Stamp -->
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-teal-50 rounded-xl border border-teal-200/80">
+                    <span class="text-xs font-bold text-teal-800">Doctoralia</span>
                     <div class="flex text-amber-500">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
                     </div>
-                    <span class="text-xs font-bold text-teal-900">Doctoralia Premium</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
 
-        <!-- SUB-HEADER METADADOS -->
-        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-200/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="flex flex-wrap items-center gap-3">
-                <span class="bg-teal-50 text-teal-700 font-semibold text-xs px-3 py-1.5 rounded-full border border-teal-200/60 flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-                    Relatório Consolidado de Mídia e Agendamentos
-                </span>
-                <span class="text-xs font-medium text-slate-500">Período Analisado: <strong class="text-slate-800">01/07/2026 - 28/07/2026</strong></span>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                <div class="text-right">
-                    <p class="text-xs text-slate-400 font-medium">CPC Médio Consolidado</p>
-                    <p class="text-lg font-bold text-slate-800">R$ 8,69</p>
+        <!-- SUBHEADER DE METADADOS -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-teal-50 text-teal-800 rounded-full text-xs font-bold border border-teal-200">
+                    <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span> Relatório de Performance Executiva
                 </div>
-                <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow-md shadow-slate-900/10">
+                <h2 class="text-xl font-extrabold text-slate-900">Período Analisado: 01/07/2026 - 28/07/2026</h2>
+                <p class="text-xs text-slate-500">Gestão integrada Mídias 360 • Campanhas Presenciais & Telemedicina (Brasil)</p>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                <div class="bg-slate-50 px-4 py-2 rounded-2xl border border-slate-200 text-right">
+                    <span class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">CPC Médio Consolidado</span>
+                    <span class="text-base font-extrabold text-slate-900">R$ 8,69</span>
+                </div>
+                <button onclick="window.print()" class="px-5 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-teal-600/20">
                     Exportar Relatório
                 </button>
             </div>
         </div>
 
-        <!-- SEÇÃO DE DESTAQUE: RETOMADA DE FATURAMENTO & TRÁFEGO QUALIFICADO -->
-        <section class="bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 text-white rounded-[2rem] p-6 lg:p-8 shadow-xl space-y-6 relative overflow-hidden">
-            <div class="relative z-10 space-y-6">
+        <!-- SEÇÃO 1: ALCANCE DO ANÚNCIO NO GOOGLE -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">1. Alcance & Performance dos Anúncios no Google</h2>
+                <p class="text-xs text-slate-500 mt-1">Captação ativa por intenção de busca para atendimento presencial em Florianópolis e consultas online em todo o Brasil.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Card 1 -->
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm space-y-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Impressões Totais</p>
+                    <p class="text-2xl font-black text-slate-900">17.599</p>
+                    <p class="text-[11px] text-slate-500">Exibições qualificadas de busca</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm space-y-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Cliques Diretos</p>
+                    <p class="text-2xl font-black text-slate-900">1.582</p>
+                    <p class="text-[11px] text-teal-600 font-semibold">▲ Tráfego direto ao perfil</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm space-y-2 border-l-4 border-l-amber-500">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">CTR Consolidado</p>
+                    <p class="text-2xl font-black text-amber-600">8,99%</p>
+                    <p class="text-[11px] text-amber-600 font-semibold">★ 2,8x Média do Mercado (3,17%)</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm space-y-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Acessos Perfil Doctoralia</p>
+                    <p class="text-2xl font-black text-slate-900">5.594</p>
+                    <p class="text-[11px] text-teal-700 font-bold">28,3% oriundos do Google Ads</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm space-y-2">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Cliques no Telefone/Agendamento</p>
+                    <p class="text-2xl font-black text-teal-700">2.420+</p>
+                    <p class="text-[11px] text-slate-500">Ações diretas de agendamento</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: BENCHMARK & ANÁLISE DE TRÁFEGO QUALIFICADO -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Coluna Esquerda: Benchmark CTR -->
+            <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-sm space-y-4">
                 <div>
-                    <span class="bg-amber-500/20 text-amber-300 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full border border-amber-500/30">
-                        Inteligência de Mídia & Eficiência Operacional
-                    </span>
-                    <h2 class="text-2xl lg:text-3xl font-extrabold mt-3 tracking-tight">Retomada Expressiva de Faturamento com Foco em Público de Alta Intenção</h2>
-                    <p class="text-slate-300 text-sm mt-1 max-w-3xl">
-                        A otimização estratégica das mídias filtrou o tráfego disperso para atrair leads verdadeiramente qualificados. O resultado prático foi o salto direto de faturamento em Julho, mesmo com uma audiência mais refinada e assertiva.
+                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Eficiência de Atração (CTR)</h3>
+                    <p class="text-xs text-slate-500">Comparativo do CTR do cliente vs. Média de mercado (3,17%).</p>
+                </div>
+                <div class="h-48 relative">
+                    <canvas id="benchmarkChart"></canvas>
+                </div>
+                <div class="bg-teal-50 p-3 rounded-2xl border border-teal-100 text-xs text-teal-800 font-medium">
+                    <span class="font-bold">Alta Relevância:</span> A taxa de 8,99% garante posições privilegiadas com menor custo por clique.
+                </div>
+            </div>
+
+            <!-- Coluna Direita: Recuperação de Faturamento & Tráfego Qualificado -->
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-6 lg:p-8 border border-slate-800 shadow-xl space-y-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-teal-500/20 text-teal-300 rounded-full text-xs font-bold border border-teal-500/30">
+                        Estratégia de Otimização Mídias 360
+                    </div>
+                    <h3 class="text-xl font-bold text-white mt-2">Retomada de Faturamento e Refinamento de Tráfego</h3>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Em Julho, direcionamos a verba para palavras-chave e praças com maior taxa de conversão. Embora o volume bruto de visualizações tenha sido ajustado para evitar cliques desqualificados, o retorno financeiro superou **R$ 63.800,00**, retomando o patamar do 1º trimestre.
                     </p>
                 </div>
 
-                <!-- CARDS COMPARATIVOS ESTRATÉGICOS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                        <p class="text-xs font-medium text-slate-300">Faturamento Estimado em Julho</p>
-                        <div class="flex items-baseline justify-between mt-2">
-                            <span class="text-xs text-slate-400">Mai/Jun: ~R$ 34k</span>
-                            <span class="text-2xl font-bold text-amber-300">~R$ 64.000</span>
-                        </div>
-                        <p class="text-[11px] text-amber-400 font-semibold mt-2">▲ +88,2% de Retomada de Receita</p>
-                    </div>
-
-                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                        <p class="text-xs font-medium text-slate-300">Qualificação do Público</p>
-                        <div class="flex items-baseline justify-between mt-2">
-                            <span class="text-xs text-slate-400">Tráfego Filtrado</span>
-                            <span class="text-2xl font-bold text-teal-300">5.606</span>
-                        </div>
-                        <p class="text-[11px] text-teal-300 font-semibold mt-2">✓ Cliques Focados em Agendamento Real</p>
-                    </div>
-
-                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10">
-                        <p class="text-xs font-medium text-slate-300">Pacientes Novos (Julho)</p>
-                        <div class="flex items-baseline justify-between mt-2">
-                            <span class="text-xs text-slate-400">Jun: 58 pacientes</span>
-                            <span class="text-2xl font-bold text-emerald-300">122</span>
-                        </div>
-                        <p class="text-[11px] text-emerald-400 font-semibold mt-2">▲ +110,3% de Primeira Consulta</p>
-                    </div>
-                </div>
-
-                <!-- GRÁFICOS LADO A LADO: EVOLUÇÃO DE FATURAMENTO E VISIBILIDADE QUALIFICADA -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Gráfico 1: Evolução de Faturamento -->
-                    <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
-                        <h3 class="text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">Curva Histórica de Faturamento Estimado (2026)</h3>
-                        <div class="h-56 relative">
-                            <canvas id="revenueTrendChart"></canvas>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+                        <p class="text-xs text-slate-400">Evolução de Faturamento Estimado</p>
+                        <p class="text-2xl font-black text-teal-400 mt-1">R$ 63.800</p>
+                        <p class="text-[11px] text-emerald-400 font-semibold mt-1">▲ +87,6% vs. Junho (R$ 34k)</p>
+                        <div class="h-28 mt-2 relative">
+                            <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Gráfico 2: Evolução de Visibilidade Assertiva -->
-                    <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
-                        <h3 class="text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">Evolução de Visualizações do Perfil (Volume x Qualidade)</h3>
-                        <div class="h-56 relative">
-                            <canvas id="viewsTrendChart"></canvas>
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+                        <p class="text-xs text-slate-400">Visualizações de Perfil Qualificadas</p>
+                        <p class="text-2xl font-black text-amber-400 mt-1">5.606 Acessos</p>
+                        <p class="text-[11px] text-amber-300 font-semibold mt-1">🎯 Público mais assertivo e propenso a agendar</p>
+                        <div class="h-28 mt-2 relative">
+                            <canvas id="viewsChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SEÇÃO 1: ALCANCE DO ANÚNCIO NO GOOGLE ADS -->
-        <section class="space-y-4">
-            <div>
-                <h2 class="text-xl font-bold text-slate-900 tracking-tight">1. Alcance & Performance de Mídia (Google Ads)</h2>
-                <p class="text-xs text-slate-500">Captação ativa de pacientes para o Dr. Jhonas Flauzino e equipe Sinapse Psiquiatria.</p>
-            </div>
-
-            <!-- Grid de 5 Cartões Destaque -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm">
-                    <p class="text-xs font-medium text-slate-400">Impressões Totais</p>
-                    <p class="text-2xl font-extrabold text-slate-900 mt-2">17.599</p>
-                    <p class="text-[11px] font-semibold text-teal-600 mt-1">Exibições Qualificadas</p>
-                </div>
-
-                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm">
-                    <p class="text-xs font-medium text-slate-400">Cliques Diretos</p>
-                    <p class="text-2xl font-extrabold text-slate-900 mt-2">1.582</p>
-                    <p class="text-[11px] font-semibold text-teal-600 mt-1">Tráfego Qualificado</p>
-                </div>
-
-                <div class="bg-white p-5 rounded-[2rem] border border-amber-200 shadow-sm bg-gradient-to-br from-amber-50/20 to-transparent">
-                    <p class="text-xs font-medium text-amber-800">CTR da Campanha</p>
-                    <p class="text-2xl font-extrabold text-amber-600 mt-2">8,99%</p>
-                    <p class="text-[11px] font-semibold text-amber-700 mt-1">Alta Taxa de Resposta</p>
-                </div>
-
-                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm">
-                    <p class="text-xs font-medium text-slate-400">Acessos Totais ao Perfil</p>
-                    <p class="text-2xl font-extrabold text-slate-900 mt-2">5.594</p>
-                    <p class="text-[11px] font-semibold text-teal-600 mt-1">3.615 Dr. Jhonas / 1.393 Sinapse</p>
-                </div>
-
-                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/60 shadow-sm">
-                    <p class="text-xs font-medium text-slate-400">Engajamento Direto</p>
-                    <p class="text-2xl font-extrabold text-slate-900 mt-2">1.582</p>
-                    <p class="text-[11px] font-semibold text-teal-600 mt-1">28,3% Acessos Diretos via Ads</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 2: BENCHMARK DE EFICIÊNCIA & DOMÍNIO DE BUSCA -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Coluna Esquerda: Gráfico Benchmark (1/3) -->
-            <div class="bg-white p-6 rounded-[2rem] border border-slate-200/60 shadow-sm flex flex-col justify-between">
-                <div>
-                    <h3 class="text-base font-bold text-slate-900">Benchmark de CTR</h3>
-                    <p class="text-xs text-slate-500 mt-1">Taxa de Cliques (CTR) vs. Média de Mercado de Saúde.</p>
-                </div>
-                <div class="h-48 my-4 relative">
-                    <canvas id="benchmarkChart"></canvas>
-                </div>
-                <div class="bg-teal-50 p-3 rounded-xl border border-teal-100 text-center">
-                    <span class="text-xs font-bold text-teal-800">+183,6% Superior ao Benchmark</span>
-                </div>
-            </div>
-
-            <!-- Coluna Direita: Domínio de Busca / Share of Voice (2/3) -->
-            <div class="lg:col-span-2 bg-slate-900 text-white p-6 lg:p-8 rounded-[2rem] shadow-lg flex flex-col justify-between space-y-6">
-                <div>
-                    <div class="flex items-center justify-between">
-                        <span class="bg-teal-500/20 text-teal-300 text-xs font-bold px-3 py-1 rounded-full border border-teal-500/30">Share of Voice</span>
-                        <span class="text-xs text-slate-400">Análise de Leilões Google</span>
-                    </div>
-                    <h3 class="text-xl font-bold mt-3">Domínio de Busca em Topo de Página</h3>
-                    <p class="text-xs text-slate-400 mt-1">Exibição de destaque em consultas de psiquiatria presencial e consultas online.</p>
-                </div>
-
-                <div class="space-y-5">
-                    <!-- Progress 1 -->
-                    <div>
-                        <div class="flex justify-between text-xs font-semibold mb-1.5">
-                            <span class="text-slate-300">Top 3 (Posições Premium no Topo)</span>
-                            <span class="text-teal-400 font-bold">85,85%</span>
-                        </div>
-                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
-                            <div class="bg-teal-500 h-3 rounded-full" style="width: 85.85%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Progress 2 -->
-                    <div>
-                        <div class="flex justify-between text-xs font-semibold mb-1.5">
-                            <span class="text-slate-300">Top 1 (Primeira Posição Absoluta)</span>
-                            <span class="text-amber-400 font-bold">42,62%</span>
-                        </div>
-                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
-                            <div class="bg-amber-500 h-3 rounded-full" style="width: 42.62%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/60 text-xs text-slate-300">
-                    <strong>Análise Técnica:</strong> As mídias garantem a 1ª posição absoluta em 42,6% das buscas e exibição nas primeiras posições do topo do Google em 85,8% das pesquisas de psiquiatria.
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 3: DETALHAMENTO DE CAMPANHAS DE MÍDIA -->
+        <!-- SEÇÃO 3: DETALHAMENTO DE CAMPANHAS DE MÍDIA (ORDEM ESPECÍFICA) -->
         <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-6">
             <div>
                 <h2 class="text-xl font-bold text-slate-900">3. Performance por Tipo de Campanha</h2>
@@ -297,7 +219,7 @@
                     <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
                         <tr class="hover:bg-slate-50/80 transition-colors">
                             <td class="py-4 font-bold text-slate-900 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
                                 Online (Sinapse)
                             </td>
                             <td class="py-4 text-right">1.803</td>
@@ -321,7 +243,6 @@
                             <td class="py-4 text-right">50,42%</td>
                             <td class="py-4 text-right font-bold text-teal-700">71,93%</td>
                         </tr>
-                        
                         <tr class="hover:bg-slate-50/80 transition-colors">
                             <td class="py-4 font-bold text-slate-900 flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
@@ -348,7 +269,6 @@
                             <td class="py-4 text-right">57,35%</td>
                             <td class="py-4 text-right font-bold text-teal-700">42,23%</td>
                         </tr>
-                        
                         <tr class="hover:bg-slate-50/80 transition-colors">
                             <td class="py-4 font-bold text-slate-900 flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
@@ -388,169 +308,144 @@
                     </tbody>
                 </table>
             </div>
+            <p class="text-[11px] text-slate-400 font-medium">Nota: As campanhas do Dr. Jhonas apresentam share de leilão dominante no mercado online (71,93%), garantindo liderança em buscas por telemedicina psiquiátrica nacional.</p>
         </section>
 
-        <!-- SEÇÃO 4: PERFORMANCE DE PALAVRAS-CHAVE -->
+        <!-- SEÇÃO 4 & SEÇÃO 5: PALAVRAS-CHAVE E PRAÇAS -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Palavras-Chave (2/3 de largura) -->
+            <div class="lg:col-span-2 bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">4. Performance de Palavras-Chave Principais</h2>
+                    <p class="text-xs text-slate-500">Termos mais buscados e com maior eficiência de atração.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3">Palavra-Chave</th>
+                                <th class="pb-3 text-right">Impressões</th>
+                                <th class="pb-3 text-right">Cliques</th>
+                                <th class="pb-3 text-right">CTR</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr class="bg-teal-50/70 font-bold text-teal-900">
+                                <td class="py-3 px-2 rounded-l-lg">psiquiatra florianópolis</td>
+                                <td class="py-3 text-right">3.655</td>
+                                <td class="py-3 text-right text-teal-700">244</td>
+                                <td class="py-3 text-right rounded-r-lg">6,68%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-2 font-semibold">psiquiatra online</td>
+                                <td class="py-3 text-right">1.484</td>
+                                <td class="py-3 text-right font-bold text-slate-900">224</td>
+                                <td class="py-3 text-right text-teal-700 font-bold">15,09%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-2 font-semibold">psiquiatra online (telemedicina)</td>
+                                <td class="py-3 text-right">1.462</td>
+                                <td class="py-3 text-right font-bold text-slate-900">222</td>
+                                <td class="py-3 text-right text-teal-700 font-bold">15,18%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-2 font-semibold">consulta psiquiatria online</td>
+                                <td class="py-3 text-right">738</td>
+                                <td class="py-3 text-right font-bold text-slate-900">145</td>
+                                <td class="py-3 text-right text-amber-600 font-bold">19,65%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-2">consulta psiquiatra</td>
+                                <td class="py-3 text-right">3.136</td>
+                                <td class="py-3 text-right">132</td>
+                                <td class="py-3 text-right">4,21%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-2">jhonas geraldo peixoto flauzino</td>
+                                <td class="py-3 text-right">380</td>
+                                <td class="py-3 text-right font-bold text-slate-900">42</td>
+                                <td class="py-3 text-right text-teal-700 font-bold">11,05%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-2">sinapse psiquiatria</td>
+                                <td class="py-3 text-right">1.166</td>
+                                <td class="py-3 text-right">52</td>
+                                <td class="py-3 text-right">4,46%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Praças de Atuação (1/3 de largura) -->
+            <div class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">5. Locais Destaque</h2>
+                    <p class="text-xs text-slate-500">Cidades com maior volume de conversão de anúncios.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-teal-100 text-teal-800 rounded-xl text-xs font-bold border border-teal-200">Florianópolis (Sede)</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Fortaleza</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">São Paulo</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Recife</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Aracaju</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Natal</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Goiânia</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Curitiba</span>
+                    <span class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">Brasília</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-[11px] text-slate-500">
+                    A abrangência nacional do atendimento online fortalece o preenchimento de agenda de telemedicina em todo o país.
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 6: AGENDAMENTOS NA DOCTORALIA (COM EVOLUÇÃO GRÁFICA) -->
         <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-6">
-            <div>
-                <h2 class="text-xl font-bold text-slate-900">4. Palavras-Chave Principais de Maior Conversão</h2>
-                <p class="text-xs text-slate-500 mt-1">Termos de busca qualificados de psiquiatria e consultas virtuais em saúde mental.</p>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
-                            <th class="pb-3">Palavra-Chave</th>
-                            <th class="pb-3 text-right">Impressões</th>
-                            <th class="pb-3 text-right">Cliques</th>
-                            <th class="pb-3 text-right">CTR</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 font-medium">
-                        <!-- Termo Principal Destaque Turquesa -->
-                        <tr class="bg-teal-50/60 text-slate-900 font-semibold">
-                            <td class="py-3.5 px-3 rounded-l-xl flex items-center gap-2">
-                                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                psiquiatra florianópolis
-                            </td>
-                            <td class="py-3.5 text-right">3.655</td>
-                            <td class="py-3.5 text-right font-bold text-teal-700">244</td>
-                            <td class="py-3.5 text-right px-3 rounded-r-xl font-bold text-teal-700">6,68%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">psiquiatra online</td>
-                            <td class="py-3 text-right text-slate-600">1.484</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">224</td>
-                            <td class="py-3 text-right px-3 text-teal-700 font-bold">15,09%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">psiquiatra online (consulta)</td>
-                            <td class="py-3 text-right text-slate-600">1.462</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">222</td>
-                            <td class="py-3 text-right px-3 text-teal-700 font-bold">15,18%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">psiquiatra online (telemedicina)</td>
-                            <td class="py-3 text-right text-slate-600">855</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">162</td>
-                            <td class="py-3 text-right px-3 text-teal-700 font-bold">18,95%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">consulta psiquiatria online</td>
-                            <td class="py-3 text-right text-slate-600">738</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">145</td>
-                            <td class="py-3 text-right px-3 text-teal-700 font-bold">19,65%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">consulta psiquiatra</td>
-                            <td class="py-3 text-right text-slate-600">3.136</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">132</td>
-                            <td class="py-3 text-right px-3 text-slate-800 font-semibold">4,21%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">sinapse</td>
-                            <td class="py-3 text-right text-slate-600">1.166</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">52</td>
-                            <td class="py-3 text-right px-3 text-slate-800 font-semibold">4,46%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">jhonas geraldo peixoto flauzino</td>
-                            <td class="py-3 text-right text-slate-600">380</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">42</td>
-                            <td class="py-3 text-right px-3 text-teal-700 font-bold">11,05%</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-3 text-slate-800">psiquiatria telemedicina</td>
-                            <td class="py-3 text-right text-slate-600">40</td>
-                            <td class="py-3 text-right text-slate-800 font-semibold">10</td>
-                            <td class="py-3 text-right px-3 text-amber-600 font-bold">25,00%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 5: LOCAIS QUE MAIS PERFORMARAM A CAMPANHA -->
-        <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-6">
-            <div>
-                <span class="bg-teal-50 text-teal-700 font-semibold text-xs px-3 py-1.5 rounded-full border border-teal-200/60">
-                    Geolocalização & Telemedicina
-                </span>
-                <h2 class="text-xl font-bold text-slate-900 mt-2">5. Captação Geográfica de Maior Conversão</h2>
-                <p class="text-xs text-slate-500">Captação nacional estratégica cobrindo grandes capitais e praças de telemedicina.</p>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 text-center">
-                    <p class="text-[10px] text-teal-400 font-bold uppercase tracking-wider">Praça Presencial</p>
-                    <p class="text-sm font-extrabold mt-1">Florianópolis</p>
-                    <p class="text-[11px] text-slate-400 mt-1">Liderança Local</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Fortaleza</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">São Paulo</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Recife</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Aracaju</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Natal</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Goiânia</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Curitiba</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Brasília</p>
-                    <p class="text-[11px] text-teal-600 font-semibold mt-1">Alta Demanda</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Captação Online</p>
-                    <p class="text-sm font-bold text-slate-800 mt-1">Nacional</p>
-                    <p class="text-[11px] text-slate-500 font-semibold mt-1">Telemedicina</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 6: AGENDAMENTOS NA DOCTORALIA -->
-        <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">6. Agendamentos na Doctoralia (Histórico 2026)</h2>
-                    <p class="text-xs text-slate-500 mt-1">Evolução de agendamentos online e entrada de pacientes novos de primeira consulta.</p>
+                    <p class="text-xs text-slate-500 mt-1">Evolução visual demonstrando a desaceleração em Maio/Junho e a retomada expressiva em Julho.</p>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-semibold">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-slate-800"></span> Agendamentos Totais</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-teal-500"></span> Pacientes Novos (1ª Consulta)</span>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                <div class="lg:col-span-2 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                    <h3 class="text-xs font-bold text-slate-600 mb-3 uppercase tracking-wider">Curva de Agendamentos x Pacientes Novos</h3>
+                    <div class="h-60 relative">
+                        <canvas id="doctoraliaTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                        <p class="text-xs text-slate-500">Retomada de Pacientes Novos</p>
+                        <p class="text-xl font-extrabold text-teal-700 mt-0.5">122 Primeira Consulta</p>
+                        <p class="text-[11px] text-emerald-600 font-semibold mt-1">▲ +110,3% vs. Junho (58)</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                        <p class="text-xs text-slate-500">Agendamentos Totais</p>
+                        <p class="text-xl font-extrabold text-slate-900 mt-0.5">245 Agendamentos</p>
+                        <p class="text-[11px] text-teal-600 font-semibold mt-1">▲ +39,2% vs. Junho (176)</p>
+                    </div>
+                    <div class="bg-teal-50 p-3.5 rounded-2xl border border-teal-100 text-xs text-teal-800">
+                        <span class="font-bold">Efeito da Otimização:</span> O ajuste na qualificação de público em Julho interrompeu a queda de Maio/Junho e gerou o maior volume de pacientes novos do ano.
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto pt-2">
                 <table class="w-full text-left text-xs">
                     <thead>
                         <tr class="border-b border-slate-200 text-slate-400 font-semibold uppercase tracking-wider">
                             <th class="pb-3">Período</th>
                             <th class="pb-3 text-right">Agendamentos Totais</th>
                             <th class="pb-3 text-right">Pacientes Novos (1ª Consulta)</th>
+                            <th class="pb-3 text-right">Taxa de Conversão 1ª Consulta</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
@@ -558,21 +453,25 @@
                             <td class="py-3.5 font-bold text-slate-900">Abril 2026</td>
                             <td class="py-3.5 text-right font-bold text-slate-900">315</td>
                             <td class="py-3.5 text-right font-semibold text-slate-700">108</td>
+                            <td class="py-3.5 text-right text-slate-500">34,3%</td>
                         </tr>
                         <tr>
                             <td class="py-3.5 font-bold text-slate-900">Maio 2026</td>
                             <td class="py-3.5 text-right font-bold text-slate-900">147</td>
                             <td class="py-3.5 text-right font-semibold text-slate-700">46</td>
+                            <td class="py-3.5 text-right text-slate-500">31,3%</td>
                         </tr>
                         <tr>
                             <td class="py-3.5 font-bold text-slate-900">Junho 2026</td>
                             <td class="py-3.5 text-right font-bold text-slate-900">176</td>
                             <td class="py-3.5 text-right font-semibold text-slate-700">58</td>
+                            <td class="py-3.5 text-right text-slate-500">33,0%</td>
                         </tr>
-                        <tr class="bg-teal-50/50">
+                        <tr class="bg-teal-50/60">
                             <td class="py-3.5 font-bold text-slate-900">Julho 2026 (Parcial até dia 28)</td>
                             <td class="py-3.5 text-right font-bold text-teal-800">245</td>
                             <td class="py-3.5 text-right font-bold text-emerald-600">122</td>
+                            <td class="py-3.5 text-right font-bold text-emerald-600">49,8%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -580,60 +479,195 @@
         </section>
 
         <!-- SEÇÃO 7: REPUTAÇÃO DIGITAL & PROVA SOCIAL -->
-        <section class="bg-gradient-to-br from-teal-900 to-slate-900 text-white rounded-[2rem] p-6 lg:p-8 shadow-lg space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-teal-800/60 pb-6">
-                <div>
-                    <span class="bg-teal-500/20 text-teal-300 text-xs font-bold px-3 py-1 rounded-full border border-teal-500/30">Prova Social & Autoridade</span>
-                    <h2 class="text-2xl font-extrabold mt-2 tracking-tight">7. Reputação Digital & Prova Social</h2>
-                </div>
-
-                <div class="flex items-center space-x-6">
-                    <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 text-center">
-                        <p class="text-xs text-slate-300">Novas Opiniões no Período</p>
-                        <p class="text-2xl font-bold text-teal-300">+10</p>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 text-center">
-                        <p class="text-xs text-slate-300">Histórico Acumulado</p>
-                        <p class="text-2xl font-bold text-amber-300">437</p>
-                    </div>
-                </div>
+        <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-sm space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">7. Autoridade & Prova Social Coletiva</h2>
+                <p class="text-xs text-slate-500 mt-1">Sustentação de marca e taxa de decisão do paciente antes do agendamento.</p>
             </div>
 
-            <div class="bg-white/5 p-5 rounded-2xl border border-white/10 text-xs text-slate-300 leading-relaxed">
-                <p>
-                    <strong class="text-teal-300">Aceleração de Decisão no Atendimento Psiquiátrico:</strong> O histórico consolidado de <strong>437 opiniões auditadas</strong> cria um ambiente de absoluta segurança e autoridade para os pacientes de telemedicina e consultas presenciais. Mais de <strong>70% dos pacientes que chegam via anúncios do Google</strong> leem as avaliações de outros pacientes antes de agendar a primeira consulta, validando a excelência do Dr. Jhonas e da equipe Sinapse.
-                </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div class="bg-teal-50 p-6 rounded-2xl border border-teal-100 text-center space-y-2">
+                    <span class="text-xs font-bold text-teal-800 uppercase tracking-wider block">Novas Opiniões no Período</span>
+                    <span class="text-4xl font-black text-teal-700">+10</span>
+                    <p class="text-[11px] text-teal-800">Avaliações 5 estrelas verificadas</p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Histórico Acumulado</span>
+                    <span class="text-4xl font-black text-slate-900">437</span>
+                    <p class="text-[11px] text-slate-500">Opiniões positivas consolidadas</p>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                    <p class="font-bold text-teal-400">Poder de Conversão da Marca</p>
+                    <p class="text-slate-300 leading-relaxed">
+                        Cerca de <span class="font-bold text-white">70% dos pacientes</span> que chegam via anúncio analizam minuciosamente os comentários de experiências anteriores antes de confirmar o agendamento da 1ª consulta.
+                    </p>
+                </div>
             </div>
         </section>
 
     </main>
 
     <!-- FOOTER -->
-    <footer class="mt-16 border-t border-slate-200/80 pt-8 text-center text-xs text-slate-400">
-        <p class="font-medium">Mídias 360 &copy; 2026 - Gestão Estratégica de Performance para Médicos & Clínicas</p>
-        <p class="text-[11px] mt-1 text-slate-400">Relatório de Inteligência Comercial e Performance Digital</p>
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-center border-t border-slate-200/80 pt-6">
+        <p class="text-xs text-slate-400 font-medium">Relatório Executivo Gerado por Mídias 360 • Doctoralia Partner Consultancy</p>
     </footer>
 
     <!-- CHART RENDERING SCRIPT -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Chart 1: Revenue Trend (Jan to Jul 2026)
-            var ctxRev = document.getElementById('revenueTrendChart').getContext('2d');
+        function renderChartsWhenReady() {
+            if (typeof Chart === 'undefined') {
+                setTimeout(renderChartsWhenReady, 50);
+                return;
+            }
+
+            // Chart 1: CTR Benchmark Chart
+            var ctxBench = document.getElementById('benchmarkChart').getContext('2d');
+            new Chart(ctxBench, {
+                type: 'bar',
+                data: {
+                    labels: ['Média Mercado', 'Sinapse & Jhonas'],
+                    datasets: [{
+                        data: [3.17, 8.99],
+                        backgroundColor: ['#94a3b8', '#0d9488'],
+                        borderRadius: 8,
+                        barThickness: 28
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#64748b', font: { size: 10, weight: '600' } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                            ticks: {
+                                color: '#64748b',
+                                font: { size: 10 },
+                                callback: function(value) { return value + '%'; }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Revenue Recovery Trend (2026)
+            var ctxRev = document.getElementById('revenueChart').getContext('2d');
             new Chart(ctxRev, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+                    labels: ['Jan 26', 'Fev 26', 'Mar 26', 'Abr 26', 'Mai 26', 'Jun 26', 'Jul 26'],
+                    datasets: [{
+                        label: 'Ganhos Estimados (R$)',
+                        data: [44000, 75000, 60000, 62000, 34000, 34000, 63800],
+                        borderColor: '#0284c7',
+                        backgroundColor: 'rgba(2, 132, 199, 0.08)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#0284c7',
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'R$ ' + context.parsed.y.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#64748b', font: { size: 10, weight: '600' } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                            ticks: {
+                                color: '#64748b',
+                                font: { size: 10 },
+                                callback: function(value) { return 'R$ ' + (value/1000) + 'k'; }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Qualified Views Trend (2026)
+            var ctxViews = document.getElementById('viewsChart').getContext('2d');
+            new Chart(ctxViews, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan 26', 'Fev 26', 'Mar 26', 'Abr 26', 'Mai 26', 'Jun 26', 'Jul 26'],
+                    datasets: [{
+                        label: 'Visualizações do Perfil',
+                        data: [5345, 6198, 8462, 9010, 8226, 7089, 5606],
+                        backgroundColor: [
+                            '#cbd5e1', '#cbd5e1', '#cbd5e1', '#cbd5e1', '#94a3b8', '#94a3b8', '#0d9488'
+                        ],
+                        borderRadius: 6,
+                        barThickness: 18
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#64748b', font: { size: 10, weight: '600' } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                            ticks: { color: '#64748b', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Chart 4: Doctoralia Appointments Trend (Abril - Julho 2026)
+            var ctxDoc = document.getElementById('doctoraliaTrendChart').getContext('2d');
+            new Chart(ctxDoc, {
+                type: 'bar',
+                data: {
+                    labels: ['Abril', 'Maio', 'Junho', 'Julho (parcial)'],
                     datasets: [
                         {
-                            label: 'Ganhos Estimados (R$ em milhares)',
-                            data: [45, 75, 61, 63, 34, 34, 64],
-                            borderColor: '#38bdf8',
-                            backgroundColor: 'rgba(56, 189, 248, 0.12)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.3,
-                            pointBackgroundColor: '#38bdf8',
-                            pointRadius: 5
+                            label: 'Agendamentos Totais',
+                            data: [315, 147, 176, 245],
+                            backgroundColor: '#1e293b',
+                            borderRadius: 6,
+                            barThickness: 20
+                        },
+                        {
+                            label: 'Pacientes Novos (1ª Consulta)',
+                            data: [108, 46, 58, 122],
+                            backgroundColor: '#0d9488',
+                            borderRadius: 6,
+                            barThickness: 20
                         }
                     ]
                 },
@@ -646,88 +680,22 @@
                     scales: {
                         x: {
                             grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                            ticks: { color: '#64748b', font: { size: 11, weight: '600' } }
                         },
                         y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: {
-                                color: '#94a3b8',
-                                font: { size: 10 },
-                                callback: function(value) {
-                                    return 'R$ ' + value + 'k';
-                                }
-                            }
+                            grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                            ticks: { color: '#64748b', font: { size: 10 } }
                         }
                     }
                 }
             });
+        }
 
-            // Chart 2: Qualified Views Trend (Jan to Jul 2026)
-            var ctxViews = document.getElementById('viewsTrendChart').getContext('2d');
-            new Chart(ctxViews, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Visualizações de Perfil',
-                        data: [5345, 6198, 8462, 9010, 8226, 7089, 5606],
-                        backgroundColor: ['#334155', '#334155', '#334155', '#334155', '#0d9488', '#0d9488', '#14b8a6'],
-                        borderRadius: 6,
-                        barThickness: 20
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 10 } }
-                        },
-                        y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#94a3b8', font: { size: 10 } }
-                        }
-                    }
-                }
-            });
-
-            // Chart 3: Benchmark Chart (CTR)
-            var ctxBench = document.getElementById('benchmarkChart').getContext('2d');
-            new Chart(ctxBench, {
-                type: 'bar',
-                data: {
-                    labels: ['Média de Mercado', 'Sinapse & Jhonas'],
-                    datasets: [{
-                        label: 'CTR (%)',
-                        data: [3.17, 8.99],
-                        backgroundColor: ['#cbd5e1', '#d97706'],
-                        borderRadius: 8,
-                        barThickness: 32
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: {
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            renderChartsWhenReady();
+        } else {
+            document.addEventListener('DOMContentLoaded', renderChartsWhenReady);
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,1026 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Performance Histórica - Clínica Sinapse & Dr. Jhonas Flauzino</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; height: 340px; }
+        .scroll-smooth { scroll-behavior: smooth; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 scroll-smooth antialiased min-h-screen">
+
+    <!-- NAVEGAÇÃO SUPERIOR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 bg-teal-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/20">
+                    CS
+                </div>
+                <div>
+                    <span class="font-black text-slate-900 text-lg block leading-tight">Clínica Sinapse & Dr. Jhonas Flauzino</span>
+                    <span class="text-[11px] text-teal-600 font-bold uppercase tracking-widest">Psiquiatria (Atuação Nacional)</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-5">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                    </svg>
+                    <span class="text-xs font-bold text-slate-700">Google Partner</span>
+                </div>
+                <!-- Doctoralia VIP Badge -->
+                <div class="flex items-center gap-1.5 bg-teal-50/90 px-3.5 py-2 rounded-xl border border-teal-100">
+                    <span class="text-amber-500 text-sm font-black">★★★★★</span>
+                    <span class="text-[10px] font-black text-teal-900 uppercase tracking-wider">Doctoralia</span>
+                </div>
+                <div class="h-6 w-[1px] bg-slate-200"></div>
+                <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Mídias 360 / Google Ads</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+        <!-- SUB-HEADER DE METADADOS & DESTAQUE DE CPC DO ÚLTIMO MÊS -->
+        <section class="bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-100">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                            Relatório Executivo Histórico Consolidação
+                        </span>
+                        <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                            19 Meses de Inteligência (Jan/2025 - Jul/2026)
+                        </span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-black px-3 py-1 rounded-full uppercase">
+                            Alcance Brasil & Presencial
+                        </span>
+                    </div>
+                    <h1 class="text-3xl font-black text-slate-900 tracking-tight">Análise Estratégica de Performance & Visibilidade Nacional</h1>
+                    <p class="text-slate-500 text-sm mt-1">Consolidação Histórica do Ecossistema de Mídia no Google Ads & Doctoralia</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                    <!-- DESTAQUE SOLICITADO: CPC MÉDIO DO ÚLTIMO MÊS -->
+                    <div class="bg-gradient-to-br from-teal-900 to-slate-900 text-white px-6 py-3.5 rounded-2xl text-left border border-teal-800/80 shadow-md">
+                        <p class="text-[10px] font-bold text-teal-300 uppercase tracking-widest">CPC Médio (Último Mês - Jul/26)</p>
+                        <p class="text-2xl font-black text-amber-400">R$ 9,06</p>
+                        <p class="text-[9px] text-teal-200 mt-0.5">CPC Histórico Geral: R$ 2,85</p>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 px-5 py-3.5 rounded-2xl text-left">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Valor Mensal Investido</p>
+                        <p class="text-xl font-black text-slate-900">R$ 15.000,00 / mês</p>
+                        <p class="text-[9px] text-slate-500 font-medium">R$ 7.500 (CPF) + R$ 7.500 (CNPJ)</p>
+                    </div>
+
+                    <button onclick="window.print()" class="bg-slate-900 text-white px-5 py-3.5 rounded-2xl text-xs font-bold shadow-xl shadow-slate-900/10 hover:bg-slate-800 transition-all">
+                        Exportar PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAINEL RESUMO: ESTRUTURA DE ESTRATÉGIA & TEMPO DE CAMPANHA -->
+        <section class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="bg-teal-100 text-teal-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                    Estrutura de Mídia & Histórico de Ativação
+                </span>
+                <span class="text-xs font-bold text-slate-500">
+                    Aporte Conjunto Atual: <strong class="text-slate-900">R$ 15.000,00 / mês</strong>
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                <!-- Dr. Jhonas Flauzino (CPF) -->
+                <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2.5 py-0.5 rounded-md">Dr. Jhonas Flauzino (CPF)</span>
+                        <h4 class="text-sm font-black text-slate-900 mt-1">Funil de Autoridade Médica & Telemedicina</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">Início da Campanha: <strong>21/01/2025</strong></p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-slate-400 block">Tempo Ativo</span>
+                        <span class="text-sm font-black text-amber-600">~18 meses</span>
+                        <span class="text-[10px] block text-slate-500 font-semibold">R$ 7.500 / mês</span>
+                    </div>
+                </div>
+
+                <!-- Clínica Sinapse (CNPJ) -->
+                <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-bold px-2.5 py-0.5 rounded-md">Clínica Sinapse (CNPJ)</span>
+                        <h4 class="text-sm font-black text-slate-900 mt-1">Funil Institucional & Tratamentos</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">Início da Campanha: <strong>28/10/2025</strong></p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-slate-400 block">Tempo Ativo</span>
+                        <span class="text-sm font-black text-teal-700">~9 meses</span>
+                        <span class="text-[10px] block text-slate-500 font-semibold">R$ 7.500 / mês</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 1: ALCANCE & PERFORMANCE DE MÍDIA (GOOGLE ADS) -->
+        <section class="space-y-6">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Alcance & Performance de Mídia (Google Ads)</h2>
+                <p class="text-sm text-slate-500">Mapeamento da atração ativa e volume de engajamento gerado pelas campanhas no período consolidado.</p>
+            </div>
+
+            <!-- Grid de 4 Métricas Principais Atualizadas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Impressões Totais</p>
+                    <h3 class="text-3xl font-black text-slate-900">616.750</h3>
+                    <p class="text-[11px] font-bold text-teal-600">Volume Total de Buscas Relevantes Exibidas</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cliques em Anúncios</p>
+                        <span class="bg-teal-100 text-teal-900 font-black text-[9px] px-2 py-0.5 rounded-md">60% p/ Doctoralia</span>
+                    </div>
+                    <h3 class="text-3xl font-black text-slate-900">39.310</h3>
+                    <p class="text-[11px] font-bold text-teal-700">▲ 60% do Tráfego Doctoralia vem das Campanhas</p>
+                </div>
+
+                <div class="bg-amber-50 p-6 rounded-[2rem] border border-amber-200/80 shadow-sm space-y-2">
+                    <p class="text-[10px] font-black text-amber-800 uppercase tracking-widest">CTR Global de Atração</p>
+                    <h3 class="text-3xl font-black text-amber-600">6,37%</h3>
+                    <p class="text-[11px] font-bold text-amber-700">▲ 2x Média de Mercado (3,17%)</p>
+                </div>
+
+                <div class="bg-teal-600 p-6 rounded-[2rem] shadow-lg shadow-teal-600/20 text-white space-y-2">
+                    <p class="text-[10px] font-black text-teal-200 uppercase tracking-widest">Impressões de Chamada</p>
+                    <h3 class="text-3xl font-black">95.956</h3>
+                    <p class="text-[11px] font-bold text-teal-100">Nº de Telefone Entregue Junto ao Anúncio</p>
+                </div>
+            </div>
+
+            <!-- Caixas Didáticas Explicativas para Transparência -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <h4 class="text-xs font-black text-teal-800 uppercase tracking-wider">O que são Impressões Totais (616.750)?</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Refere-se ao volume de pesquisas no Google em que os anúncios da clínica e do médico foram exibidos. Por exemplo, em pesquisas por <strong class="text-teal-700">"psiquiatra online"</strong> ou <strong class="text-teal-700">"psiquiatra florianópolis"</strong>, o anúncio é exibido diretamente para potenciais pacientes altamente qualificados.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider">O que é o CTR (6,37%) & Impacto no Perfil?</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        O CTR mede a taxa de atração do anúncio. Além de gerar <strong class="text-slate-900">6,37%</strong> de cliques (2x a média de mercado), é responsável por direcionar o tráfego qualificado: <strong class="text-teal-800">60% de todos os acessos ao perfil na Doctoralia têm origem direta nas campanhas de mídia!</strong>
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 rounded-[2rem] border border-slate-800 space-y-2">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+                        <h4 class="text-xs font-black text-teal-300 uppercase tracking-wider">Atendimento & Fidelização do Paciente</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Um atendimento ágil, humanizado e acolhedor por parte das secretárias na recepção é determinante para transformar o interesse gerado pelos anúncios em agendamentos efetivos, garantindo a satisfação e a fidelização do paciente desde o primeiro contato.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUADROS EVOLUTIVOS DAS CAMPANHAS (DADOS REAIS DA PLANILHA DE HISTÓRICO) -->
+        <section class="space-y-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Histórico de Performance</span>
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight mt-2">Evolução Histórica das Campanhas (2025 - 2026)</h2>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo de Investimento, CPC Médio, CTR e Dominância de Leilão ao longo de 19 meses.</p>
+                </div>
+                <div class="bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700">
+                    Média de Aporte Atual: R$ 15.000,00 / mês
+                </div>
+            </div>
+
+            <!-- Gráfico 1: Investimento Mensal e CPC Médio -->
+            <div class="bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">1. Evolução do Investimento Mensal e CPC Médio</h3>
+                        <p class="text-xs text-slate-500">Passe o mouse ou clique nas barras para visualizar o Investimento e o CPC Médio praticado em cada mês.</p>
+                    </div>
+                    <div class="flex gap-4 text-xs font-bold">
+                        <span class="flex items-center gap-1.5 text-teal-700"><span class="w-3 h-3 rounded-full bg-teal-600"></span> Investimento Mensal no Google (R$)</span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="investCpcChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráficos 2 e 3 em Lado a Lado: CTR Mensal & Share of Voice -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Gráfico CTR Mensal -->
+                <div class="bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-sm space-y-6">
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">2. Evolução do CTR Mensal (%)</h3>
+                        <p class="text-xs text-slate-500 mt-1">Manutenção da alta taxa de clique (Média Geral: 6,37% vs 3,17% do mercado).</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="ctrEvolutionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Dominância & Topo da Página -->
+                <div class="bg-slate-900 rounded-[2rem] p-8 text-white space-y-6 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-teal-500/20 text-teal-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-teal-500/30">Liderança de Busca</span>
+                        <h3 class="text-lg font-black text-white mt-3">3. Presença & Dominância de Leilão no Google</h3>
+                        <p class="text-xs text-slate-400 mt-1">Evolução do volume de exibição total e presença nas posições do topo.</p>
+                    </div>
+
+                    <div class="space-y-5 my-2">
+                        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-300 uppercase tracking-widest">Entrega no Topo (Top 3 Posições)</span>
+                                <span class="text-lg font-black text-teal-400">77,74% (Geral)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">Atingiu incrível pico de <strong class="text-amber-400">84,63% em Julho/2026</strong> na disputa do leilão.</p>
+                        </div>
+
+                        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-300 uppercase tracking-widest">Dominância de Pesquisa Total</span>
+                                <span class="text-lg font-black text-amber-400">22,29% (Geral)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">Volume conquistado de <strong class="text-teal-300">31,35% em Julho/2026</strong> sobre o total de buscas ativas.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-teal-950/60 rounded-xl border border-teal-800/50 text-xs text-teal-200">
+                        <strong>Ganho de Mercado:</strong> A estratégia conjunta garantiu captura de mais de 31% do volume total de buscas ativas de psiquiatria no último mês.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: ANÁLISE DETALHADA POR GRUPO DE ANÚNCIO -->
+        <section class="space-y-6">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">2. Análise Detalhada por Grupo de Anúncio</h2>
+                <p class="text-sm text-slate-500">Detalhamento por modalidade e localização de campanha no leilão do Google Ads.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-200/80 shadow-sm overflow-hidden overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200/80 text-slate-400 font-bold uppercase tracking-widest">
+                            <th class="px-6 py-4">Campanha</th>
+                            <th class="px-6 py-4 text-right">Impressões</th>
+                            <th class="px-6 py-4 text-right">Cliques</th>
+                            <th class="px-6 py-4 text-right">CPC Médio</th>
+                            <th class="px-6 py-4 text-right bg-teal-50/50 text-teal-800">% Impr. Topo</th>
+                            <th class="px-6 py-4 text-right bg-teal-50/50 text-teal-800">% Impr. 1ª Posiç</th>
+                            <th class="px-6 py-4 text-right">Parcela Impress</th>
+                            <th class="px-6 py-4 text-right">CTR</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium">
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-5 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                                Institucional (Sinapse)
+                            </td>
+                            <td class="px-6 py-5 text-right">20.958</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-900">1.147</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-700">R$ 2,86</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">54,44%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">41,65%</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-700">24,65%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-600">5,47%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                            <td class="px-6 py-5 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                Nome (Jhonas)
+                            </td>
+                            <td class="px-6 py-5 text-right">7.210</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-900">945</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-700">R$ 0,78</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">74,46%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">55,09%</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-700">69,13%</td>
+                            <td class="px-6 py-5 text-right font-bold text-amber-600">13,11%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-5 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                                Online
+                            </td>
+                            <td class="px-6 py-5 text-right">388.623</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-900">28.503</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-700">R$ 2,95</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">79,06%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">29,53%</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-700">19,90%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-600">7,33%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-5 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                Presencial Florianópolis
+                            </td>
+                            <td class="px-6 py-5 text-right">57.425</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-900">2.994</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-700">R$ 3,33</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">77,20%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">23,66%</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-700">20,19%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-600">5,21%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-5 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                                Presencial SP
+                            </td>
+                            <td class="px-6 py-5 text-right">142.534</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-900">5.721</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-700">R$ 2,90</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">57,86%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-800">13,06%</td>
+                            <td class="px-6 py-5 text-right font-bold text-slate-700">10,99%</td>
+                            <td class="px-6 py-5 text-right font-bold text-teal-600">4,01%</td>
+                        </tr>
+                        <tr class="bg-slate-900 text-white font-bold">
+                            <td class="px-6 py-4 rounded-l-xl">Total Geral</td>
+                            <td class="px-6 py-4 text-right">616.750</td>
+                            <td class="px-6 py-4 text-right text-teal-400">39.310</td>
+                            <td class="px-6 py-4 text-right text-teal-300">R$ 2,85</td>
+                            <td class="px-6 py-4 text-right">77,74%</td>
+                            <td class="px-6 py-4 text-right">29,34%</td>
+                            <td class="px-6 py-4 text-right text-slate-300">22,29%</td>
+                            <td class="px-6 py-4 text-right text-amber-400 rounded-r-xl">6,37%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- LEGENDA EXPLICATIVA SIMPLES DA TABELA DE ANÚNCIOS -->
+            <div class="bg-slate-50 border border-slate-200/80 p-6 rounded-2xl space-y-3">
+                <h4 class="text-xs font-black text-slate-900 uppercase tracking-wider">Legenda Explicativa dos Indicadores da Tabela:</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-slate-600">
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60">
+                        <strong class="text-slate-900 block mb-0.5">CPC Médio (Custo por Clique)</strong>
+                        Valor médio investido a cada acesso gerado pelo anúncio no Google.
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60">
+                        <strong class="text-teal-800 block mb-0.5">% Impr. Topo (Top 3)</strong>
+                        Porcentagem de exibição do anúncio nos 3 primeiros lugares da página de busca.
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60">
+                        <strong class="text-teal-800 block mb-0.5">% Impr. 1ª Posição</strong>
+                        Porcentagem de vezes que o anúncio ocupou a 1ª posição absoluta do Google.
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60">
+                        <strong class="text-slate-900 block mb-0.5">Parcela de Impressão</strong>
+                        Porcentagem de participação conquistada do volume total de buscas existentes.
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60">
+                        <strong class="text-amber-700 block mb-0.5">CTR (Taxa de Clique)</strong>
+                        Eficiência do anúncio em converter visualizações de busca em acessos reais.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: PALAVRAS-CHAVE DE MAIOR CONVERSÃO (30 MAIS BUSCADAS) -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex justify-between items-end flex-wrap gap-2">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900 tracking-tight">3. Palavras-Chave de Maior Conversão</h2>
+                        <p class="text-sm text-slate-500">As 30 palavras-chave mais buscadas e qualificadas do histórico de campanha.</p>
+                    </div>
+                    <span class="text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-100">
+                        Top 30 Termos no Google
+                    </span>
+                </div>
+
+                <div class="bg-white rounded-[2rem] border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="max-h-[580px] overflow-y-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs">
+                            <thead class="sticky top-0 bg-slate-100 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider z-10">
+                                <tr>
+                                    <th class="px-5 py-3.5">#</th>
+                                    <th class="px-5 py-3.5">Termo de Busca</th>
+                                    <th class="px-5 py-3.5 text-right">Impressões</th>
+                                    <th class="px-5 py-3.5 text-right">Cliques</th>
+                                    <th class="px-5 py-3.5 text-right">CTR</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium">
+                                <tr class="bg-teal-50/70 font-bold text-teal-900">
+                                    <td class="px-5 py-3">1</td>
+                                    <td class="px-5 py-3 flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                                        psiquiatria sp
+                                    </td>
+                                    <td class="px-5 py-3 text-right">39.089</td>
+                                    <td class="px-5 py-3 text-right font-black text-teal-700">2.688</td>
+                                    <td class="px-5 py-3 text-right font-black">6,88%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">2</td>
+                                    <td class="px-5 py-3 font-bold text-slate-900">psiquiatra sp</td>
+                                    <td class="px-5 py-3 text-right">68.377</td>
+                                    <td class="px-5 py-3 text-right font-semibold">2.389</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">3,49%</td>
+                                </tr>
+                                <tr class="bg-teal-50/50">
+                                    <td class="px-5 py-3 text-teal-700 font-bold">3</td>
+                                    <td class="px-5 py-3 font-bold text-teal-900">psiquiatra online</td>
+                                    <td class="px-5 py-3 text-right">9.640</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-700">1.346</td>
+                                    <td class="px-5 py-3 text-right font-black text-teal-800">13,96%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">4</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra salvador</td>
+                                    <td class="px-5 py-3 text-right">17.085</td>
+                                    <td class="px-5 py-3 text-right font-semibold">1.186</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">6,94%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">5</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatria</td>
+                                    <td class="px-5 py-3 text-right">26.749</td>
+                                    <td class="px-5 py-3 text-right font-semibold">1.113</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">4,16%</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="px-5 py-3 text-slate-400 font-bold">6</td>
+                                    <td class="px-5 py-3 font-bold text-teal-800">sinapse</td>
+                                    <td class="px-5 py-3 text-right">20.302</td>
+                                    <td class="px-5 py-3 text-right font-semibold">1.068</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-700">5,26%</td>
+                                </tr>
+                                <tr class="bg-teal-50/40">
+                                    <td class="px-5 py-3 text-teal-700 font-bold">7</td>
+                                    <td class="px-5 py-3 font-bold text-teal-900">psiquiatra florianópolis</td>
+                                    <td class="px-5 py-3 text-right">18.810</td>
+                                    <td class="px-5 py-3 text-right font-semibold">1.036</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-700">5,51%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">8</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra salvador</td>
+                                    <td class="px-5 py-3 text-right">8.605</td>
+                                    <td class="px-5 py-3 text-right font-semibold">916</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-600">10,64%</td>
+                                </tr>
+                                <tr class="bg-amber-50/30">
+                                    <td class="px-5 py-3 text-amber-700 font-bold">9</td>
+                                    <td class="px-5 py-3 font-bold text-amber-900">consulta psiquiatria online</td>
+                                    <td class="px-5 py-3 text-right">6.043</td>
+                                    <td class="px-5 py-3 text-right font-bold text-amber-700">909</td>
+                                    <td class="px-5 py-3 text-right font-black text-amber-600">15,04%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">10</td>
+                                    <td class="px-5 py-3 text-slate-800">natal psiquiatra</td>
+                                    <td class="px-5 py-3 text-right">11.197</td>
+                                    <td class="px-5 py-3 text-right font-semibold">885</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">7,90%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">11</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatras salvador</td>
+                                    <td class="px-5 py-3 text-right">7.403</td>
+                                    <td class="px-5 py-3 text-right font-semibold">831</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-600">11,23%</td>
+                                </tr>
+                                <tr class="bg-teal-50/50">
+                                    <td class="px-5 py-3 text-teal-700 font-bold">12</td>
+                                    <td class="px-5 py-3 font-bold text-teal-900">psiquiatra online</td>
+                                    <td class="px-5 py-3 text-right">5.688</td>
+                                    <td class="px-5 py-3 text-right font-semibold">813</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-700">14,29%</td>
+                                </tr>
+                                <tr class="bg-amber-50/20">
+                                    <td class="px-5 py-3 text-amber-700 font-bold">13</td>
+                                    <td class="px-5 py-3 font-bold text-amber-900">psiquiatra curitiba</td>
+                                    <td class="px-5 py-3 text-right">4.916</td>
+                                    <td class="px-5 py-3 text-right font-semibold">767</td>
+                                    <td class="px-5 py-3 text-right font-black text-amber-600">15,60%</td>
+                                </tr>
+                                <tr class="bg-amber-100/40 font-bold text-amber-900">
+                                    <td class="px-5 py-3 text-amber-800">14</td>
+                                    <td class="px-5 py-3">jhonas geraldo peixoto flauzino</td>
+                                    <td class="px-5 py-3 text-right">5.756</td>
+                                    <td class="px-5 py-3 text-right font-black text-amber-700">742</td>
+                                    <td class="px-5 py-3 text-right font-black text-amber-700">12,89%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">15</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra curitiba</td>
+                                    <td class="px-5 py-3 text-right">6.551</td>
+                                    <td class="px-5 py-3 text-right font-semibold">728</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-600">11,11%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">16</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatria</td>
+                                    <td class="px-5 py-3 text-right">15.782</td>
+                                    <td class="px-5 py-3 text-right font-semibold">706</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">4,47%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">17</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatras sp</td>
+                                    <td class="px-5 py-3 text-right">13.971</td>
+                                    <td class="px-5 py-3 text-right font-semibold">645</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">4,62%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">18</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatras recife</td>
+                                    <td class="px-5 py-3 text-right">5.861</td>
+                                    <td class="px-5 py-3 text-right font-semibold">617</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-600">10,53%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">19</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra natal</td>
+                                    <td class="px-5 py-3 text-right">5.756</td>
+                                    <td class="px-5 py-3 text-right font-semibold">602</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-600">10,46%</td>
+                                </tr>
+                                <tr class="bg-amber-50/30">
+                                    <td class="px-5 py-3 text-amber-700 font-bold">20</td>
+                                    <td class="px-5 py-3 font-bold text-amber-900">são luís psiquiatra</td>
+                                    <td class="px-5 py-3 text-right">4.857</td>
+                                    <td class="px-5 py-3 text-right font-semibold">583</td>
+                                    <td class="px-5 py-3 text-right font-bold text-amber-600">12,00%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">21</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatras campo grande</td>
+                                    <td class="px-5 py-3 text-right">8.671</td>
+                                    <td class="px-5 py-3 text-right font-semibold">564</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">6,50%</td>
+                                </tr>
+                                <tr class="bg-teal-50/50">
+                                    <td class="px-5 py-3 text-teal-700 font-bold">22</td>
+                                    <td class="px-5 py-3 font-bold text-teal-900">psiquiatra online</td>
+                                    <td class="px-5 py-3 text-right">4.226</td>
+                                    <td class="px-5 py-3 text-right font-semibold">527</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-700">12,47%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">23</td>
+                                    <td class="px-5 py-3 text-slate-800">psicólogo online</td>
+                                    <td class="px-5 py-3 text-right">5.771</td>
+                                    <td class="px-5 py-3 text-right font-semibold">500</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">8,66%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">24</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra</td>
+                                    <td class="px-5 py-3 text-right">10.532</td>
+                                    <td class="px-5 py-3 text-right font-semibold">465</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">4,42%</td>
+                                </tr>
+                                <tr class="bg-amber-50/30">
+                                    <td class="px-5 py-3 text-amber-700 font-bold">25</td>
+                                    <td class="px-5 py-3 font-bold text-amber-900">psiquiatra maceió</td>
+                                    <td class="px-5 py-3 text-right">3.360</td>
+                                    <td class="px-5 py-3 text-right font-semibold">441</td>
+                                    <td class="px-5 py-3 text-right font-bold text-amber-600">13,13%</td>
+                                </tr>
+                                <tr class="bg-teal-50/50">
+                                    <td class="px-5 py-3 text-teal-700 font-bold">26</td>
+                                    <td class="px-5 py-3 font-bold text-teal-900">psiquiatras online</td>
+                                    <td class="px-5 py-3 text-right">3.535</td>
+                                    <td class="px-5 py-3 text-right font-semibold">440</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-700">12,45%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">27</td>
+                                    <td class="px-5 py-3 text-slate-800">consulta psiquiatra</td>
+                                    <td class="px-5 py-3 text-right">12.920</td>
+                                    <td class="px-5 py-3 text-right font-semibold">421</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">3,26%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">28</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra maceió</td>
+                                    <td class="px-5 py-3 text-right">4.691</td>
+                                    <td class="px-5 py-3 text-right font-semibold">396</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">8,44%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-5 py-3 text-slate-400">29</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatra</td>
+                                    <td class="px-5 py-3 text-right">12.871</td>
+                                    <td class="px-5 py-3 text-right font-semibold">379</td>
+                                    <td class="px-5 py-3 text-right font-bold text-slate-800">2,94%</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="px-5 py-3 text-slate-400">30</td>
+                                    <td class="px-5 py-3 text-slate-800">psiquiatria geral e especializada</td>
+                                    <td class="px-5 py-3 text-right">8.920</td>
+                                    <td class="px-5 py-3 text-right font-semibold">362</td>
+                                    <td class="px-5 py-3 text-right font-bold text-teal-600">4,06%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-teal-900 rounded-[2rem] p-8 text-white space-y-6 self-start">
+                <h3 class="text-lg font-black tracking-tight">Como Funciona a Ativação por Palavras-Chave?</h3>
+                <p class="text-xs text-teal-200 leading-relaxed">
+                    Quando o paciente digita termos no Google que revelam necessidade ativa de atendimento psiquiátrico (como <span class="text-amber-300 font-bold">"psiquiatra online"</span> ou <span class="text-amber-300 font-bold">"psiquiatra florianópolis"</span>), o leilão do Google Ads identifica a intenção e imediatamente exibe o anúncio no topo da página.
+                </p>
+                <div class="bg-teal-800/60 p-4 rounded-2xl border border-teal-700 text-xs text-teal-100 space-y-3">
+                    <p class="font-bold text-amber-300">Inteligência de Aporte Nacional & Marca:</p>
+                    <p class="text-slate-200 leading-relaxed">
+                        Termos de marca como <span class="text-amber-300 font-bold">"jhonas geraldo peixoto flauzino"</span> registram taxas de atração (CTR) de até <strong class="text-white">12,89%</strong>. Consultas diretas de Telemedicina como <span class="text-amber-300 font-bold">"consulta psiquiatria online"</span> atingem <strong class="text-white">15,04% de CTR</strong>.
+                    </p>
+                </div>
+                <div class="p-3 bg-teal-950/80 rounded-xl border border-teal-700/60 text-[11px] text-teal-200">
+                    <strong>Nacionalidade do Funil:</strong> Presença ativa consolidada nos maiores centros do país (SP, Salvador, Curitiba, Recife, Natal, São Luís, Campo Grande, Maceió).
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: PERFORMANCE GEOGRÁFICA DE DESTAQUE (MAPA & POLOS NACIONAIS) -->
+        <section class="bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Mapeamento Territorial & Nacional</span>
+                    <h2 class="text-2xl font-black text-slate-900 mt-2 tracking-tight">4. Desempenho Geográfico e Polos Regionais de Destaque</h2>
+                    <p class="text-xs text-slate-500 mt-1">Visão completa da entrega de anúncios na Grande Florianópolis, São Paulo e Polos de Telemedicina Brasil.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-teal-500 animate-ping"></span>
+                    <span class="text-xs font-black text-teal-900 bg-teal-50 px-3 py-1.5 rounded-xl border border-teal-100">
+                        Atuação Nível Brasil + Presencial
+                    </span>
+                </div>
+            </div>
+
+            <!-- CARD VISUAL DE MAPA REGIONAL & METRÓPOLES DEDICADAS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Coluna 1: Presencial Florianópolis & Grande Floripa -->
+                <div class="bg-gradient-to-br from-teal-900 to-slate-900 text-white p-6 rounded-[2rem] space-y-4 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-teal-500/30 text-teal-200 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase border border-teal-500/40">Núcleo Físico & Sede</span>
+                            <span class="text-amber-400 font-bold text-xs">Atendimento Físico</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white">Florianópolis & Região Metropolitana</h3>
+                        <p class="text-xs text-teal-200/80 mt-1">Bairros de alta renda e polos universitários corporativos.</p>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60 text-xs">
+                            <strong class="text-teal-300 block mb-1">Florianópolis (Bairros Destaque):</strong>
+                            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-200">
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Centro</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Itacorubi</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Trindade</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Agronômica</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Coqueiros</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Santa Mônica</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Córrego Grande</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60 text-xs">
+                            <strong class="text-amber-300 block mb-1">Região Metropolitana Externa:</strong>
+                            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-200">
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">São José (Kobrasol/Campinas)</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Palhoça (Pedra Branca)</span>
+                                <span class="px-2 py-0.5 bg-slate-700/80 rounded">Biguaçu</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-teal-950/80 rounded-xl border border-teal-700/50 text-[10px] text-teal-200">
+                        <strong>Presença Local:</strong> Captura de consultas presenciais na Grande Florianópolis com elevada taxa de conversão.
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Hub Presencial & Telemedicina SP -->
+                <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-200/80 space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-blue-100 text-blue-900 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Polo Estratégico SP</span>
+                            <span class="text-blue-700 font-bold text-xs">Presencial & Online</span>
+                        </div>
+                        <h3 class="text-lg font-black text-slate-900">São Paulo & Região Paulista</h3>
+                        <p class="text-xs text-slate-500 mt-1">Campanhas dedicadas com elevado volume de impressões (142.534).</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Volume de Busca SP</span>
+                                <span class="text-teal-700">142.534 Impr.</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2">
+                                <div class="bg-teal-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Cliques Qualificados SP</span>
+                                <span class="text-amber-600">5.721 Cliques</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2">
+                                <div class="bg-amber-500 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100 text-[11px] text-blue-900 leading-relaxed">
+                        <strong>Estratégia SP:</strong> Sinergia entre modalidade presencial em SP e consultas de alta especialidade via Telemedicina.
+                    </div>
+                </div>
+
+                <!-- Coluna 3: Polos Nacionais de Telemedicina (Brasil) -->
+                <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-200/80 space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Expansão Brasil</span>
+                            <span class="text-amber-700 font-bold text-xs">Telemedicina</span>
+                        </div>
+                        <h3 class="text-lg font-black text-slate-900">Principais Capitais de Atração Nacional</h3>
+                        <p class="text-xs text-slate-500 mt-1">Metrópoles ativas gerando consultas online contínuas.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800 flex justify-between items-center">
+                            <span>Salvador/BA</span>
+                            <span class="text-teal-700 text-[10px] bg-teal-50 px-1.5 py-0.5 rounded">Alto Vol.</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800 flex justify-between items-center">
+                            <span>Curitiba/PR</span>
+                            <span class="text-amber-700 text-[10px] bg-amber-50 px-1.5 py-0.5 rounded">15,6% CTR</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800 flex justify-between items-center">
+                            <span>Natal/RN</span>
+                            <span class="text-teal-700 text-[10px] bg-teal-50 px-1.5 py-0.5 rounded">Alta Taxa</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800 flex justify-between items-center">
+                            <span>Recife/PE</span>
+                            <span class="text-teal-700 text-[10px] bg-teal-50 px-1.5 py-0.5 rounded">10,5% CTR</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800 flex justify-between items-center">
+                            <span>São Luís/MA</span>
+                            <span class="text-amber-700 text-[10px] bg-amber-50 px-1.5 py-0.5 rounded">12% CTR</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800 flex justify-between items-center">
+                            <span>Maceió/AL</span>
+                            <span class="text-teal-700 text-[10px] bg-teal-50 px-1.5 py-0.5 rounded">13,1% CTR</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-[11px] text-amber-900 leading-relaxed">
+                        <strong>Cobertura Nacional:</strong> A campanha de Telemedicina capta demanda qualificada em todas as regiões do país.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: REPUTAÇÃO DIGITAL & PROVA SOCIAL DOCTORALIA -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-teal-900 text-white rounded-[2rem] p-8 space-y-6 shadow-xl shadow-teal-900/10 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="bg-teal-800 text-teal-200 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Autoridade Confirmada</span>
+                            <h2 class="text-2xl font-black tracking-tight mt-2">5. Reputação Digital Extraordinária</h2>
+                        </div>
+                        <span class="text-amber-400 text-2xl font-black">★★★★★</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+                        <div class="bg-teal-800/60 p-4 rounded-2xl border border-teal-700/80">
+                            <p class="text-[9px] font-bold text-teal-300 uppercase tracking-widest mb-1">Novas Opiniões</p>
+                            <p class="text-2xl font-black text-amber-400">+333</p>
+                            <p class="text-[9px] text-teal-300 mt-0.5">Registradas no Período</p>
+                        </div>
+                        <div class="bg-teal-800/60 p-4 rounded-2xl border border-teal-700/80">
+                            <p class="text-[9px] font-bold text-teal-300 uppercase tracking-widest mb-1">Dr. Jhonas (CPF)</p>
+                            <p class="text-2xl font-black text-white">628</p>
+                            <p class="text-[9px] text-teal-300 mt-0.5">Opiniões Positivas</p>
+                        </div>
+                        <div class="bg-teal-800/60 p-4 rounded-2xl border border-teal-700/80">
+                            <p class="text-[9px] font-bold text-teal-300 uppercase tracking-widest mb-1">Clínica Sinapse (CNPJ)</p>
+                            <p class="text-2xl font-black text-white">438</p>
+                            <p class="text-[9px] text-teal-300 mt-0.5">Opiniões Positivas</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-teal-800/40 rounded-2xl border border-teal-700/60 text-xs text-teal-100 leading-relaxed space-y-2">
+                        
+                        <p>
+                            Estudos comprovam que mais de <span class="text-white font-bold underline">70% dos novos pacientes consultam as avaliações</span> na Doctoralia antes de confirmar o agendamento. Além disso, <strong class="text-amber-300">60% de todo o tráfego de acesso ao perfil tem origem direta nas campanhas ativas de mídia Google Ads</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumo Integrado Mídias 360 -->
+            <div class="bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-6">
+                <div>
+                    <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Síntese Estratégica Nacional</span>
+                    <h3 class="text-xl font-black text-slate-900 mt-2">Resumo da Estratégia de Mídia (Brasil & Presencial)</h3>
+                    <p class="text-xs text-slate-500 mt-1">Principais fatores que garantem a consolidação da marca a nível Brasil.</p>
+                </div>
+
+                <ul class="space-y-3.5 text-xs text-slate-700">
+                    <li class="flex items-start gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-teal-100 text-teal-800 font-bold flex items-center justify-center shrink-0 text-[10px]">1</span>
+                        <span><strong>Dominância Dupla (CPF + CNPJ):</strong> Manutenção paralela de CPF e CNPJ blindando as primeiras posições do leilão em todo o país.</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-teal-100 text-teal-800 font-bold flex items-center justify-center shrink-0 text-[10px]">2</span>
+                        <span><strong>Canal Direto de Chamadas:</strong> Mais de 95.956 exibições do número direto nos anúncios de busca.</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-teal-100 text-teal-800 font-bold flex items-center justify-center shrink-0 text-[10px]">3</span>
+                        <span><strong>Tráfego Qualificado Doctoralia:</strong> 60% de todos os acessos do perfil são alimentados continuamente pelo ecossistema de anúncios no Google.</span>
+                    </li>
+                </ul>
+
+                <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-0.5">Mídias 360 &copy; 2026</p>
+                        <p class="text-[11px] text-slate-500">Gestão Estratégica & Inteligência de Performance Médica</p>
+                    </div>
+                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">Atuação Brasil</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- RODAPÉ DE PÁGINA -->
+    <footer class="bg-white border-t border-slate-200/80 py-8 text-center">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Mídias 360 &copy; 2026</p>
+        <p class="text-[10px] text-slate-400 italic">Consultoria & Gestão Estratégica de Performance para Médicos e Clínicas</p>
+    </footer>
+
+    <!-- SCRIPTS DE RENDERIZAÇÃO DOS GRÁFICOS (CHART.JS - DADOS REAIS DO EXCEL) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Rótulos Históricos (Jan/25 a Jul/26 - 19 Meses)
+            const monthsLabels = [
+                'Jan/25', 'Fev/25', 'Mar/25', 'Abr/25', 'Mai/25', 'Jun/25', 'Jul/25', 'Ago/25', 'Set/25', 'Out/25', 'Nov/25', 'Dez/25',
+                'Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26', 'Jun/26', 'Jul/26'
+            ];
+
+            // Dados Reais das Planilhas
+            const investData = [484.84, 1862.64, 1941.95, 2010.32, 2663.48, 4206.60, 5612.81, 5018.51, 6144.27, 3534.76, 9984.87, 11847.70, 13482.48, 11442.01, 11340.79, 11650.52, 11739.55, 11021.89, 14887.55];
+            const cpcData = [1.92, 2.49, 2.45, 2.35, 3.68, 2.93, 3.05, 2.96, 3.06, 1.91, 2.15, 2.87, 5.41, 3.20, 2.57, 2.48, 3.18, 2.73, 9.06];
+            const ctrData = [8.43, 6.43, 7.02, 7.49, 6.59, 6.81, 6.52, 6.39, 6.81, 8.61, 6.63, 6.38, 5.66, 6.37, 6.24, 5.82, 5.13, 6.23, 9.13];
+
+            // Chart 1: Investimento x CPC Médio em Tooltip Interativo
+            const ctxInvestCpc = document.getElementById('investCpcChart').getContext('2d');
+            new Chart(ctxInvestCpc, {
+                type: 'bar',
+                data: {
+                    labels: monthsLabels,
+                    datasets: [
+                        {
+                            label: 'Investimento Mensal (R$)',
+                            data: investData,
+                            backgroundColor: 'rgba(13, 148, 136, 0.85)',
+                            hoverBackgroundColor: '#0f766e',
+                            borderColor: '#0d9488',
+                            borderRadius: 6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const index = context.dataIndex;
+                                    const valInvest = investData[index];
+                                    const valCpc = cpcData[index];
+                                    return [
+                                        'Investimento: R$ ' + valInvest.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                                        'CPC Médio: R$ ' + valCpc.toFixed(2)
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            ticks: { callback: v => 'R$ ' + v.toLocaleString('pt-BR') },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Chart 2: Evolução CTR Mensal
+            const ctxCtr = document.getElementById('ctrEvolutionChart').getContext('2d');
+            new Chart(ctxCtr, {
+                type: 'line',
+                data: {
+                    labels: monthsLabels,
+                    datasets: [{
+                        label: 'CTR Mensal (%)',
+                        data: ctrData,
+                        borderColor: '#0d9488',
+                        backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#0d9488',
+                        pointBorderColor: '#ffffff',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 4,
+                            ticks: { callback: v => v.toFixed(1) + '%' },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

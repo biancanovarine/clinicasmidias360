@@ -1,0 +1,1042 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Performance & Retenção - Clínica Harmony & Dra. Giovanna Petrucci | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            900: '#78350f',
+                        },
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            900: '#881337',
+                            950: '#4c0519',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        }
+        
+        .gradient-amber {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        #geoMap {
+            width: 100%;
+            height: 380px;
+            border-radius: 1.5rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Header Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-bold text-xl border border-teal-500/20 shadow-xs">
+                    CH
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Clínica Harmony & Dra. Giovanna Petrucci</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200">Psicologia (CNPJ + CPF)</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance Digital & Proteção de Mercado • João Pessoa / PB</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header Metadata Bar -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-sm border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    Período Analisado: <span class="text-teal-700">01/01/2026 - 31/07/2026 (7 Meses)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 2,22</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-emerald-200">
+                    🎯 102 Pacientes Novos no Período (18 Diretos via Ads + Secretária)
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Exportar Relatório Executivo
+            </button>
+        </div>
+
+        <!-- SEÇÃO RETENÇÃO / RISCO COMPETITIVO DE MERCADO -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-900 to-rose-950 text-white rounded-[2rem] p-7 shadow-2xl border border-rose-900/50 relative overflow-hidden print-card">
+            <div class="absolute -right-16 -top-16 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-6">
+                <div>
+                    <span class="bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                        ⚠️ Alerta de Inteligência de Mercado & Proteção de Marca
+                    </span>
+                    <h2 class="text-2xl font-black text-white tracking-tight mt-2">1. O Impacto Estratégico do Tráfego em João Pessoa</h2>
+                    <p class="text-xs text-slate-300 mt-1 max-w-3xl">
+                        Análise de riscos competitivos e proteção de fatia de mercado para a Clínica Harmony e o perfil da Dra. Giovanna Petrucci.
+                    </p>
+                </div>
+                <div class="bg-rose-900/40 border border-rose-500/40 p-4 rounded-2xl text-center shrink-0">
+                    <span class="text-[10px] uppercase font-bold text-rose-300 tracking-wider">Concorrentes Diretos</span>
+                    <div class="text-3xl font-black text-rose-400">861 Psicólogos</div>
+                    <span class="text-[10px] text-slate-300">Cadastrados na Doctoralia em João Pessoa (246 com agenda aberta)</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 space-y-2">
+                    <div class="text-amber-400 font-bold text-xs uppercase">🏆 Dominância Absoluta de Tráfego</div>
+                    <div class="text-2xl font-black text-white">1.107 Visitas/Mês</div>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Enquanto a média dos concorrentes em João Pessoa é de apenas <strong>25 cliques no perfil/mês</strong>, a Clínica Harmony gera <strong>44x mais visibilidade</strong>.
+                    </p>
+                </div>
+
+                <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 space-y-2">
+                    <div class="text-teal-400 font-bold text-xs uppercase">📞 Líder Absoluto em Ligações</div>
+                    <div class="text-2xl font-black text-teal-300">1.086 Chamadas Totais</div>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Média de <strong>155 chamadas telefônicas/mês</strong> (vs. média de 11 do mercado), sendo <strong>561 (CNPJ Harmony - 51,7%)</strong> e <strong>525 (CPF Dra. Giovanna - 48,3%)</strong>.
+                    </p>
+                </div>
+
+                <div class="bg-rose-900/30 p-5 rounded-2xl border border-rose-500/30 space-y-2">
+                    <div class="text-rose-400 font-bold text-xs uppercase">⚠️ Risco Direto de Churn</div>
+                    <div class="text-2xl font-black text-rose-300">Sair = Abrir Leilão</div>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Pausar o tráfego pago não elimina a busca dos pacientes em João Pessoa: apenas entrega de bandeja <strong>13.831 pesquisas ativas</strong> para os outros 860 psicólogos.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 text-xs text-slate-300 flex items-start gap-3 mt-4">
+                <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <div>
+                    <strong class="text-amber-300">Sinergia Estratégica Dual (CPF + CNPJ):</strong> Todos os resultados do perfil individual da <em>Dra. Giovanna Petrucci (CPF)</em> alimentam e retroalimentam a autoridade da <em>Clínica Harmony (CNPJ)</em>. A dobradinha no Google blinda o mercado local no Altiplano, Tambaú, Manaíra e Cabo Branco.
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Alcance dos Anúncios no Google Ads -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Volume & Intenção de Pesquisa em Psicologia</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">2. Alcance Consolidado dos Anúncios (Jan - Jul/2026)</h2>
+                <p class="text-slate-600 text-sm mt-1 max-w-4xl">
+                    Performance acumulada das campanhas de psicologia clínica e saúde mental para a Clínica Harmony e a Dra. Giovanna Petrucci.
+                </p>
+            </div>
+
+            <!-- Stat Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                
+                <!-- Card 1: Impressões -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">13.831</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Exibições de topo em João Pessoa</p>
+                </div>
+
+                <!-- Card 2: Cliques Diretos -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Diretos</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">1.075</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-800 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 13,9% do tráfego CNPJ</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Acessos ao Perfil CNPJ -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos Perfil CNPJ</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">7.754</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Visitas na clínica (+2.565 CPF)</p>
+                </div>
+
+                <!-- Card 4: CTR Consolidado -->
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR (Taxa de Cliques)</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">7,77%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ 2,45x Média Saúde (3,17%)</p>
+                </div>
+
+                <!-- Card 5: Ligações CNPJ + CPF -->
+                <div class="bg-emerald-600 text-white rounded-[2rem] p-5 shadow-md border border-emerald-700/20 print-card">
+                    <div class="flex items-center justify-between text-emerald-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-100">Ligações Telefônicas</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-700/50 flex items-center justify-center text-white font-bold text-xs">
+                            📞
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">1.086</div>
+                    <div class="mt-2 text-[10px] text-emerald-100 font-medium space-y-0.5">
+                        <div class="flex justify-between"><span>CNPJ Harmony:</span> <span class="font-extrabold">561 (51,7%)</span></div>
+                        <div class="flex justify-between"><span>CPF Dra. Giovanna:</span> <span class="font-extrabold">525 (48,3%)</span></div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Pacientes Novos -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Pacientes Novos</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600 font-bold text-xs">
+                            👥
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">102</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Novos contratos iniciados</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: Benchmark & Share of Voice -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-200/60 flex flex-col justify-between print-card">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Anúncios</span>
+                        <span class="bg-teal-100 text-teal-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">+145% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Benchmark de CTR (%)</h3>
+                    <p class="text-xs text-slate-500 mt-1">Taxa de atração da Clínica Harmony / Dra. Giovanna vs. Média do Setor de Saúde (3,17%).</p>
+                </div>
+
+                <div class="my-6 relative h-48 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100 text-xs text-slate-600 flex items-start gap-2">
+                    <svg class="w-4 h-4 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>O CTR consolidado de <strong>7,77%</strong> demonstra alto poder de captura de pesquisas sobre psicologia em João Pessoa.</span>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice & Visibilidade de Topo</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Exposição em João Pessoa</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Presença Dominante no Leilão do Google Ads</h3>
+                    <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                        A dobradinha entre a campanha de especialidade da Clínica Harmony e o perfil individual da Dra. Giovanna blinda o mercado local.
+                    </p>
+                </div>
+
+                <div class="my-6 space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+                                Top Page (% Exibição no Topo da Página)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">74,05% (CNPJ) | 77,89% (CPF)</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 75.5%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5">Em cerca de 7,5 de cada 10 buscas, seus anúncios surgem em posição de topo de página.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                1ª Posição Absoluta (% Topo 1)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">27,87% (CNPJ) | 29,01% (CPF)</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-amber h-full rounded-full" style="width: 28.3%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5">Liderança imediata no 1º resultado visível em até 29% das pesquisas regionais.</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Foco Estratégico: Altiplano, Tambaú, Manaíra, Cabo Branco, Bessa e Centro (João Pessoa)
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 4: Performance Geográfica e Bairros -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                        Geolocalização Estratégica
+                    </span>
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        João Pessoa / PB (Altiplano / Zona Leste)
+                    </span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">4. Performance Geográfica & Cobertura de Bairros</h2>
+                <p class="text-xs text-slate-500 mt-1">Sede no Shopping Pátio Altiplano com alta atração nos raios primários de 3km e 6km, estendendo-se até 12km.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm space-y-4 print-card">
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <div>
+                            <h3 class="font-black text-slate-900 text-base">Localização do Consultório & Zonas Principais</h3>
+                            <p class="text-xs text-slate-500">Shopping Pátio Altiplano - R. Poeta Targino Teixeira, 251, Sala 44 - Altiplano, João Pessoa - PB</p>
+                        </div>
+                        <div class="flex items-center gap-3 text-[10px] font-bold">
+                            <span class="flex items-center gap-1 text-teal-700">
+                                <span class="w-3 h-3 rounded-full bg-teal-500 border border-teal-700 inline-block"></span> Raios Núcleo (3km & 6km)
+                            </span>
+                            <span class="flex items-center gap-1 text-slate-500">
+                                <span class="w-3 h-3 rounded-full bg-slate-300 border border-slate-500 inline-block"></span> Raio Expansão (12km)
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- MAP CONTAINER -->
+                    <div id="geoMap"></div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-sm">
+                            📍
+                        </div>
+                        <div class="text-xs text-slate-600">
+                            <p class="font-bold text-slate-900 mb-0.5">Endereço da Clínica:</p>
+                            <p class="text-slate-700 font-medium">Rua Poeta Targino Teixeira, 251 - Sala 44, Shopping Pátio Altiplano, Altiplano Cabo Branco, João Pessoa - PB, CEP 58046-090</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 rounded-[2rem] p-7 text-white flex flex-col justify-between space-y-6 shadow-xl print-card">
+                    <div class="space-y-4">
+                        <span class="bg-amber-400/20 text-amber-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-amber-400/30">Análise de Bairros de João Pessoa</span>
+                        <h3 class="text-xl font-black text-white leading-snug">Captação em Bairros Nobres & Comerciais</h3>
+                        
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-teal-900/50 p-3.5 rounded-2xl border border-teal-500/30">
+                                <span class="text-amber-300 font-bold block mb-1">Núcleo Altiplano & Orla (3km a 6km):</span>
+                                <p class="text-slate-300 text-[11px] leading-relaxed">
+                                    Concentração imediata dos pacientes de alto padrão residentes em <strong>Altiplano, Cabo Branco, Tambaú e Manaíra</strong>.
+                                </p>
+                            </div>
+
+                            <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700">
+                                <span class="text-teal-300 font-bold block mb-1">Expansão Urbana (Raio 12km):</span>
+                                <p class="text-slate-300 text-[11px] leading-relaxed">
+                                    Atração contínua vinda dos bairros <strong>Bessa, Miramar, Torre, Estados e Centro</strong> de João Pessoa.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700/80 text-[11px] text-slate-400">
+                        <strong>Estratégia Local:</strong> A localização privilegiada no Shopping Pátio Altiplano facilita a adesão e retorno dos pacientes.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Tabela de Ganho em Leilões (Share of Voice) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura Detalhada de Mídia (CNPJ vs CPF)</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Tabela de Ganho em Leilões (Share of Voice)</h2>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                    Consolidado Jan - Jul/2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impr. Chamadas</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Médio</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Top Page (% Sup.)</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Posição Abs.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Parcela de Impressão</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                                Especialidade - Harmony (CNPJ)
+                            </td>
+                            <td class="py-4 px-4 text-right">8.616</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">650</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-600">7,54%</td>
+                            <td class="py-4 px-4 text-right">1.467</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 2,31</td>
+                            <td class="py-4 px-4 text-right">74,05%</td>
+                            <td class="py-4 px-4 text-right">27,87%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-800">19,34%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/20">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Institucional - Harmony (CNPJ)
+                            </td>
+                            <td class="py-4 px-4 text-right">1</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">0</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-500">0,00%</td>
+                            <td class="py-4 px-4 text-right">1</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-400">--</td>
+                            <td class="py-4 px-4 text-right">100,00%</td>
+                            <td class="py-4 px-4 text-right">100,00%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-800">&lt; 10%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                                Especialidade - Dra. Giovanna (CPF)
+                            </td>
+                            <td class="py-4 px-4 text-right">5.184</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">420</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-600">8,10%</td>
+                            <td class="py-4 px-4 text-right">1.200</td>
+                            <td class="py-4 px-4 text-right">R$ 2,11</td>
+                            <td class="py-4 px-4 text-right font-bold text-indigo-700">77,89%</td>
+                            <td class="py-4 px-4 text-right font-bold text-indigo-700">29,01%</td>
+                            <td class="py-4 px-4 text-right font-bold text-indigo-800">11,67%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                Institucional - Dra. Giovanna (CPF)
+                            </td>
+                            <td class="py-4 px-4 text-right">30</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">5</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-600">16,67%</td>
+                            <td class="py-4 px-4 text-right">8</td>
+                            <td class="py-4 px-4 text-right font-bold text-emerald-700">R$ 0,93</td>
+                            <td class="py-4 px-4 text-right">70,00%</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">46,67%</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-800">46,88%</td>
+                        </tr>
+
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">Total Consolidado</td>
+                            <td class="py-4 px-4 text-right">13.831</td>
+                            <td class="py-4 px-4 text-right text-teal-300">1.075</td>
+                            <td class="py-4 px-4 text-right text-amber-300">7,77%</td>
+                            <td class="py-4 px-4 text-right text-teal-200">2.676</td>
+                            <td class="py-4 px-4 text-right text-teal-200">R$ 2,22</td>
+                            <td class="py-4 px-4 text-right">75,48%</td>
+                            <td class="py-4 px-4 text-right">28,34%</td>
+                            <td class="py-4 px-4 text-right rounded-r-xl">
+                                <span class="bg-teal-500 text-slate-950 font-black px-2.5 py-1 rounded-lg">Alta Cobertura</span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-3">
+                <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                <div>
+                    <strong class="text-slate-800">Análise de Estrutura Dual:</strong> A campanha da <em>Dra. Giovanna (CPF)</em> atinge um impressionante CTR de <strong>8,10%</strong> (a R$ 2,11 por clique), funcionando como gerador de autoridade que retroalimenta a estrutura da <em>Clínica Harmony (CNPJ)</em> (que gerou 650 cliques a R$ 2,31).
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Performance de Palavras-Chave Principais -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção em Psicologia & Saúde Mental</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Performance de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Jan - Jul/2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3 px-4 bg-slate-50 rounded-l-xl">Palavra-Chave / Termo de Pesquisa</th>
+                            <th class="py-3 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        
+                        <tr class="bg-teal-50/80 border-l-4 border-teal-600 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>psicólogo joão pessoa</span>
+                                <span class="bg-teal-200/80 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-2">Pilar Principal</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-black text-slate-900">4.525</td>
+                            <td class="py-3.5 px-4 text-right text-teal-700 font-black">446</td>
+                            <td class="py-3.5 px-4 text-right text-teal-800 font-black">7,86%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">psicólogo</td>
+                            <td class="py-3.5 px-4 text-right">4.036</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">186</td>
+                            <td class="py-3.5 px-4 text-right font-semibold text-slate-800">3,22%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>joão pessoa psicólogo</span>
+                                <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full ml-2">Alta Intenção</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">1.544</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">172</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">8,99%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>psicólogos</span>
+                                <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full ml-2">Volume Direto</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">1.607</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">124</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">9,81%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>psicologa joao pessoa</span>
+                                <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full ml-2">Alta Intenção</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">368</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">31</td>
+                            <td class="py-3.5 px-4 text-right font-black text-emerald-600">11,12%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold">
+                            <td class="py-3.5 px-4">consultório de psicologia joão pessoa</td>
+                            <td class="py-3.5 px-4 text-right">371</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">24</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">6,12%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold">
+                            <td class="py-3.5 px-4">psicólogos joão pessoa</td>
+                            <td class="py-3.5 px-4 text-right">110</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">18</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">8,34%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3.5 px-4">consultório psicologia</td>
+                            <td class="py-3.5 px-4 text-right">140</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">16</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">2,94%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3.5 px-4">psicologia joão pessoa</td>
+                            <td class="py-3.5 px-4 text-right">106</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">11</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">6,21%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3.5 px-4">psicólogo particular</td>
+                            <td class="py-3.5 px-4 text-right">99</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">11</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">3,85%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/30 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>giovanna petrucci</span>
+                                <span class="bg-amber-200/80 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-2">Marca Pessoal</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">29</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-amber-700">5</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-600">17,24%</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: EVOLUÇÃO DE FATURAMENTO, LTV E PACIENTES RECORRENTES -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Retorno de Investimento (LTV & Recorrência)</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">7. Faturamento Acumulado & Valor do Paciente de Psicologia</h2>
+                    <p class="text-xs text-slate-500 mt-1">
+                        Evoluição constante dos ganhos em 2026 (Pico em Março com R$ 135 mil e estabilização sólida em ~R$ 114 mil/mês).
+                    </p>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-2 rounded-2xl text-right shrink-0">
+                    <span class="text-[10px] uppercase font-bold text-emerald-800 tracking-wider">Investimento Total Combinado</span>
+                    <div class="text-lg font-black text-emerald-950">R$ 3.200 /mês <span class="text-xs font-normal text-slate-600">(CNPJ R$ 2k + CPF R$ 1,2k)</span></div>
+                </div>
+            </div>
+
+            <!-- Revenue Line Chart -->
+            <div class="relative h-64 w-full">
+                <canvas id="revenueChart"></canvas>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <!-- Box Psicólogos & Valores -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-3">
+                    <span class="text-xs font-bold uppercase text-slate-700 tracking-wider">Corpo Clínico & Valores de Consulta</span>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center">
+                            <span class="font-bold text-slate-800">Dr. Antonio:</span>
+                            <span class="font-black text-teal-700">R$ 220</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center">
+                            <span class="font-bold text-slate-800">Dra. Vivian:</span>
+                            <span class="font-black text-teal-700">R$ 300</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center">
+                            <span class="font-bold text-slate-800">Dra. Silvia:</span>
+                            <span class="font-black text-teal-700">R$ 250</span>
+                        </div>
+                        <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200 flex justify-between items-center">
+                            <span class="font-bold text-teal-900">Dra. Giovanna:</span>
+                            <span class="font-black text-teal-800">R$ 450</span>
+                        </div>
+                    </div>
+                    <div class="text-[11px] text-slate-600">
+                        <strong>Média Ponderada por Consulta:</strong> ~R$ 305,00 por sessão.
+                    </div>
+                </div>
+
+                <!-- Box LTV & ROI -->
+                <div class="bg-gradient-to-br from-slate-900 to-teal-950 text-white p-5 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-amber-300 tracking-wider">A Matemática da Recorrência em Psicologia</span>
+                        <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                            Ao contrário de consultas avulsas, o paciente de psicologia permanece em acompanhamento semanal por **meses ou anos (LTV)**.
+                        </p>
+                    </div>
+                    <div class="bg-teal-900/60 p-3 rounded-xl border border-teal-500/30 text-xs text-teal-200">
+                        💡 <strong>Cálculo de ROI:</strong> Apenas <strong>3 a 4 novos pacientes recorrentes mantidos por mês</strong> pagam 100% de todo o investimento em anúncios no Google Ads (R$ 3.200). Com **102 novos pacientes no ano**, o lucro gerado é extremamente alto e multiplicador.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 8: Reputação Digital & Prova Social -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Prova Social Consolidadas</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">8. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-amber-500">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Liderança Absoluta</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões CNPJ + CPF</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">167 <span class="text-lg font-normal text-slate-300">opiniões</span></div>
+                    <p class="text-xs text-teal-300 font-semibold">112 CNPJ (22 novas) | 55 Dra. Giovanna (5 novas)</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Sólida aprovação de pacientes em João Pessoa.</p>
+                </div>
+
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Atualização no Período
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+27 Novas Opiniões</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Crescimento constante de reputação de Janeiro a Julho/2026 nas duas frentes.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Excelente validação orgânica que turbina a taxa de conversão do Ads.
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 text-xs text-slate-700 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2 text-slate-900 font-extrabold text-sm">
+                            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            Diagnóstico de Blindagem
+                        </div>
+                        <p class="leading-relaxed text-slate-600">
+                            A união de 167 opiniões validadas, presença massiva nas buscas (7,77% CTR) e o suporte do ecossistema dual (CPF/CNPJ) blinda a posição da Clínica Harmony frente aos 861 psicólogos de João Pessoa.
+                        </p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
+                        <span class="font-bold text-teal-700">Status: Dominante</span>
+                        <span class="text-slate-400">Doctoralia Analytics</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Consultoria de Performance e Inteligência de Marketing Médico.</p>
+            <p class="text-[10px] text-slate-400">Relatório de Retenção & Estratégia Exclusivo para Clínica Harmony & Dra. Giovanna Petrucci.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        window.onload = function() {
+            // Leaflet Map Initialization
+            const clinicCoords = [-7.1415, -34.8238]; // Shopping Pátio Altiplano, João Pessoa - PB
+            const mapElement = document.getElementById('geoMap');
+            
+            if (mapElement) {
+                const map = L.map('geoMap', {
+                    center: clinicCoords,
+                    zoom: 12,
+                    zoomControl: true,
+                    scrollWheelZoom: false
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                // 12km expansion radius
+                const circle12km = L.circle(clinicCoords, {
+                    color: '#64748b',
+                    fillColor: '#94a3b8',
+                    fillOpacity: 0.08,
+                    radius: 12000,
+                    dashArray: '6, 6',
+                    weight: 1.5
+                }).addTo(map);
+                circle12km.bindPopup("<b>Raio de Expansão CNPJ (12km)</b><br>Abrangência em João Pessoa e Bessa.");
+
+                // 6km core radius
+                const circle6km = L.circle(clinicCoords, {
+                    color: '#0d9488',
+                    fillColor: '#14b8a6',
+                    fillOpacity: 0.28,
+                    radius: 6000,
+                    weight: 3
+                }).addTo(map);
+                circle6km.bindPopup("<b>Núcleo de Maior Atração (3km & 6km)</b><br>Altiplano, Cabo Branco, Tambaú e Manaíra.");
+
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: #0d9488; width: 36px; height: 36px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">🧠</div>`,
+                    iconSize: [36, 36],
+                    iconAnchor: [18, 18]
+                });
+
+                const marker = L.marker(clinicCoords, { icon: customIcon }).addTo(map);
+                marker.bindPopup(`
+                    <div style="font-family: sans-serif; font-size: 12px; padding: 2px;">
+                        <strong style="color: #0d9488; font-size: 13px;">Clínica Harmony & Dra. Giovanna Petrucci</strong><br>
+                        <span>Shopping Pátio Altiplano, R. Poeta Targino Teixeira, 251, Sala 44</span><br>
+                        <span style="color: #64748b;">Altiplano, João Pessoa - PB</span>
+                    </div>
+                `).openPopup();
+            }
+
+            // CTR Benchmark Chart
+            const chartElement = document.getElementById('ctrBenchmarkChart');
+            if (chartElement) {
+                const ctxCtr = chartElement.getContext('2d');
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Média Saúde (3,17%)', 'Harmony + Giovanna (7,77%)'],
+                        datasets: [{
+                            label: 'Taxa de Cliques (CTR %)',
+                            data: [3.17, 7.77],
+                            backgroundColor: ['#cbd5e1', '#d97706'],
+                            borderColor: ['#94a3b8', '#b45309'],
+                            borderWidth: 1.5,
+                            borderRadius: 12,
+                            borderSkipped: false,
+                            barThickness: 38
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) { return context.parsed.y + '% de CTR'; }
+                                },
+                                backgroundColor: '#0f172a',
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10,
+                                ticks: {
+                                    callback: function(value) { return value + '%'; },
+                                    font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
+                                    color: '#64748b'
+                                },
+                                grid: { color: '#f1f5f9' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+                                    color: '#334155'
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Revenue Trend Chart (2026)
+            const revenueElement = document.getElementById('revenueChart');
+            if (revenueElement) {
+                const ctxRevenue = revenueElement.getContext('2d');
+                
+                const gradientRevenue = ctxRevenue.createLinearGradient(0, 0, 0, 200);
+                gradientRevenue.addColorStop(0, 'rgba(13, 148, 136, 0.25)');
+                gradientRevenue.addColorStop(1, 'rgba(13, 148, 136, 0.0)');
+
+                new Chart(ctxRevenue, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan 26', 'Fev 26', 'Mar 26', 'Abr 26', 'Mai 26', 'Jun 26', 'Jul 26'],
+                        datasets: [
+                            {
+                                label: 'Ganhos Estimados (R$ mil)',
+                                data: [50, 82, 112, 90, 97, 92, 92],
+                                borderColor: '#2563eb',
+                                borderWidth: 3,
+                                fill: false,
+                                tension: 0.3,
+                                pointBackgroundColor: '#2563eb',
+                                pointRadius: 5
+                            },
+                            {
+                                label: 'Faturamento Total (R$ mil)',
+                                data: [61, 102, 135, 114, 118, 112, 114],
+                                borderColor: '#0d9488',
+                                borderWidth: 3,
+                                backgroundColor: gradientRevenue,
+                                fill: true,
+                                tension: 0.3,
+                                pointBackgroundColor: '#0d9488',
+                                pointRadius: 6
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+                                    usePointStyle: true,
+                                    boxWidth: 8
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) { return context.dataset.label + ': R$ ' + context.parsed.y + '.000'; }
+                                },
+                                backgroundColor: '#0f172a',
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 150,
+                                ticks: {
+                                    callback: function(value) { return 'R$ ' + value + 'k'; },
+                                    font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
+                                    color: '#64748b'
+                                },
+                                grid: { color: '#f1f5f9' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+                                    color: '#334155'
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,574 @@
+<html lang="pt-BR" class="h-full bg-slate-50 scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Executivo Estratégico | Sinapse & Dr. Jhonas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons for executive icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            teal: '#0D9488',
+                            tealLight: '#F0FDFA',
+                            tealDark: '#0F766E',
+                            amber: '#D97706',
+                            amberLight: '#FEF3C7',
+                            slateBg: '#F8FAFC',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between text-slate-800 antialiased selection:bg-teal-100 selection:text-teal-900">
+
+    <!-- HEADER FIXO DE APRESENTAÇÃO -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Cliente e Título -->
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200">
+                            Auditoria de Eficiência & Alocação
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium">Relatório Estratégico</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2 mt-0.5">
+                        Sinapse <span class="text-slate-300">&amp;</span> Dr. Jhonas
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Chancelas Oficiais e Ações -->
+            <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Doctoralia Badge -->
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+                        <svg class="w-4 h-4 text-teal-600" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                        </svg>
+                        <span>Ecossistema <strong>Doctoralia</strong></span>
+                    </div>
+
+                    <!-- Google Partner Badge -->
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span>Google <strong>Partner</strong></span>
+                    </div>
+                </div>
+
+                <!-- Botão Imprimir -->
+                <div class="flex items-center gap-1 no-print">
+                    <button onclick="window.print()" class="p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors" title="Imprimir / Exportar PDF">
+                        <i class="fa-solid fa-print"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (LANDING PAGE ÚNICA) -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- SEÇÃO 1: ESTRUTURA ATIVA DOCTORALIA HOJE -->
+        <section id="doctoralia-atual" class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">01. Ecossistema Atual</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+                        O que está ativo na Doctoralia hoje?
+                    </h2>
+                </div>
+                <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-teal-50 text-teal-700 font-semibold text-xs border border-teal-200">
+                    <i class="fa-solid fa-check-circle"></i> Visão de Plataforma
+                </span>
+            </div>
+
+            <!-- Card Destacado: O que está ativo na Doctoralia hoje -->
+            <div class="glass-card rounded-[2rem] p-6 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 text-white shadow-xl">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2.5 rounded-2xl bg-teal-500/20 text-teal-300">
+                            <i class="fa-solid fa-cubes text-xl"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Serviços Contratados na Doctoralia</h3>
+                            <p class="text-xs text-slate-300">Mapeamento dos produtos ativos no ambiente Doctoralia</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                        Ativos em 2 Contas (Sinapse &amp; Jhonas)
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-2xl bg-white/10 border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-teal-300 uppercase tracking-wider">Perfis VIP</span>
+                            <h4 class="text-base font-bold text-white mt-1">Mensalidades de Perfis</h4>
+                            <p class="text-xs text-slate-300 mt-1">Perfil PJ (Sinapse) e Perfil PF (Dr. Jhonas) ativos para agendamento 24/7 e reputação.</p>
+                        </div>
+                        <span class="mt-4 text-xs font-bold text-teal-300 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check text-[10px]"></i> Ativas (2 Contas)
+                        </span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/10 border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-teal-300 uppercase tracking-wider">Destaque PJ</span>
+                            <h4 class="text-base font-bold text-white mt-1">First Class Sinapse</h4>
+                            <p class="text-xs text-slate-300 mt-1">Posicionamento prioritário para o perfil institucional Sinapse.</p>
+                        </div>
+                        <span class="mt-4 text-xs font-bold text-teal-300 flex items-center gap-1">
+                            <i class="fa-solid fa-location-dot text-[10px]"></i> Teleconsulta + 16 Cidades
+                        </span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/10 border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-teal-300 uppercase tracking-wider">Destaque PF</span>
+                            <h4 class="text-base font-bold text-white mt-1">First Class Dr. Jhonas</h4>
+                            <p class="text-xs text-slate-300 mt-1">Posicionamento prioritário para a autoridade médica individual.</p>
+                        </div>
+                        <span class="mt-4 text-xs font-bold text-teal-300 flex items-center gap-1">
+                            <i class="fa-solid fa-location-dot text-[10px]"></i> 12 Cidades
+                        </span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/10 border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-teal-300 uppercase tracking-wider">Mídia de Busca</span>
+                            <h4 class="text-base font-bold text-white mt-1">Google Ads Contratado</h4>
+                            <p class="text-xs text-slate-300 mt-1">Campanhas ativas de aquisição via Google Ads gerenciadas no ecossistema.</p>
+                        </div>
+                        <span class="mt-4 text-xs font-bold text-teal-300 flex items-center gap-1">
+                            <i class="fa-solid fa-rectangle-ad text-[10px]"></i> Ativas (CPF &amp; CNPJ)
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 2: VALORES INVESTIDOS POR CANAL (CENÁRIO ATUAL DE INVESTIMENTO) -->
+        <section id="investimentos" class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">02. Alocação Financeira</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+                        Cenário Atual de Investimento
+                    </h2>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 font-medium">
+                    Consolidado First Class + Google Ads
+                </div>
+            </div>
+
+            <!-- Breakdown dos Investimentos em Cards Detalhados -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1: FIRST CLASS (DOCTORALIA) -->
+                <div class="glass-card rounded-[2rem] p-6 border-t-4 border-t-teal-600 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-teal-50 text-teal-600 font-extrabold flex items-center justify-center">
+                                    FC
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">First Class (Doctoralia)</h3>
+                                    <p class="text-xs text-slate-500">Visibilidade e Destaque Local na Plataforma</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 mb-4">
+                            <!-- FC JHONAS -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-slate-900 uppercase">FIRST CLASS JHONAS</span>
+                                    <span class="text-xs font-extrabold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-200">~ R$ 4.200 /mês</span>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    <strong>12 Praças Anunciadas:</strong> Belém do Pará, Belo Horizonte, Curitiba, Fortaleza, Goiânia, Londrina, Manaus, Recife, Rio de Janeiro, Salvador, São Paulo e Vitória.
+                                </p>
+                            </div>
+
+                            <!-- FC SINAPSE -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-slate-900 uppercase">FIRST CLASS SINAPSE</span>
+                                    <span class="text-xs font-extrabold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-200">~ R$ 4.200 /mês</span>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    <strong>Teleconsulta + 16 Praças:</strong> Teleconsulta, Aracaju, Blumenau, Campinas, Campo Grande, Florianópolis, Guarulhos, João Pessoa, Joinville, Maceió, Natal, Niterói, Palmas, Patos de Minas, São José do Rio Preto e São Luís.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 bg-slate-100 rounded-2xl text-xs text-slate-600 flex items-center justify-between font-medium">
+                        <span>Total First Class Estimado:</span>
+                        <strong class="text-slate-900 text-sm">~ R$ 8.400 /mês</strong>
+                    </div>
+                </div>
+
+                <!-- Card 2: GOOGLE ADS (MÍDIAS) -->
+                <div class="glass-card rounded-[2rem] p-6 border-t-4 border-t-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-slate-100 text-slate-800 font-extrabold flex items-center justify-center">
+                                    G
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">Google Ads (Mídias)</h3>
+                                    <p class="text-xs text-slate-500">Captura Ativa de Intenção de Busca no Google</p>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-900 text-white">
+                                R$ 15.000 /mês Total
+                            </span>
+                        </div>
+
+                        <div class="space-y-4 mb-4">
+                            <!-- GOOGLE SINAPSE -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-slate-900 uppercase">CAMPANHA GOOGLE SINAPSE</span>
+                                    <span class="text-xs font-extrabold text-slate-800 bg-slate-200 px-2.5 py-0.5 rounded-md">R$ 7.500 /mês</span>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    <strong class="text-teal-700">Florianópolis (Atendimento Presencial)</strong> + Telemedicina em: São Paulo, Goiânia, Campinas, Brasília e Rio de Janeiro.
+                                </p>
+                            </div>
+
+                            <!-- GOOGLE JHONAS -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-slate-900 uppercase">CAMPANHA GOOGLE JHONAS</span>
+                                    <span class="text-xs font-extrabold text-slate-800 bg-slate-200 px-2.5 py-0.5 rounded-md">R$ 7.500 /mês</span>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    <strong>Telemedicina em 7 Praças:</strong> Florianópolis, Salvador, Fortaleza, Recife, Natal, Maceió e Aracaju.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 bg-slate-100 rounded-2xl text-xs text-slate-600 flex items-center justify-between font-medium">
+                        <span>Total Mídia Google Ads:</span>
+                        <strong class="text-slate-900 text-sm">R$ 15.000 /mês</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 3: PROVOCATIVO - DE ONDE VÊM OS PACIENTES? -->
+        <section id="origem-pacientes" class="space-y-6">
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 mb-2">
+                    Pergunta Chave para Discussão
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                    DE ONDE VÊM OS PACIENTES?
+                </h2>
+                <p class="text-sm text-slate-500 mt-2">
+                    Mapear com exatidão a jornada do paciente é a chave para a máxima eficiência.
+                </p>
+            </div>
+
+            <!-- 3 Blocos de Interrogação Estratégica (Itens 1, 2 e 3) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Bloco 01 -->
+                <div class="glass-card rounded-[2rem] p-6 text-center border-t-4 border-t-teal-600 flex flex-col justify-between">
+                    <div>
+                        <span class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 font-extrabold text-xs inline-flex items-center justify-center mb-3">01</span>
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">QUAL CANAL?</h3>
+                        <p class="text-xs text-slate-500 mt-1 mb-4">Origem primária da conversão</p>
+                    </div>
+                    <div class="space-y-2 text-xs text-slate-600 font-medium">
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100">Google Ads</div>
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100">Doctoralia / First Class</div>
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100">Busca Orgânica</div>
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100">Indicação / Direto</div>
+                    </div>
+                </div>
+
+                <!-- Bloco 02 -->
+                <div class="glass-card rounded-[2rem] p-6 text-center border-t-4 border-t-teal-600 flex flex-col justify-between">
+                    <div>
+                        <span class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 font-extrabold text-xs inline-flex items-center justify-center mb-3">02</span>
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">QUAL MODALIDADE?</h3>
+                        <p class="text-xs text-slate-500 mt-1 mb-4">Tipo de atendimento contratado</p>
+                    </div>
+                    <div class="space-y-3 text-xs font-semibold my-auto">
+                        <div class="p-3.5 rounded-xl bg-teal-50 text-teal-800 border border-teal-100">
+                            <i class="fa-solid fa-laptop-medical mr-1.5"></i> Telemedicina
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-100 text-slate-800 border border-slate-200">
+                            <i class="fa-solid fa-user-doctor mr-1.5"></i> Presencial (Florianópolis)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloco 03 -->
+                <div class="glass-card rounded-[2rem] p-6 text-center border-t-4 border-t-teal-600 flex flex-col justify-between">
+                    <div>
+                        <span class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 font-extrabold text-xs inline-flex items-center justify-center mb-3">03</span>
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">QUAL PRAÇA?</h3>
+                        <p class="text-xs text-slate-500 mt-1 mb-4">Origem geográfica exata</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-medium my-auto">
+                        <i class="fa-solid fa-location-dot text-amber-600 mb-1.5 block text-xl"></i>
+                        Mapear qual cidade/estado está efetivamente contratando consultas.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caixa Central Destacada (Frase Atualizada de Complementaridade) -->
+            <div class="glass-card rounded-[2rem] p-8 bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 text-white shadow-2xl relative overflow-hidden border border-teal-500/30">
+                <div class="relative z-10 text-center max-w-3xl mx-auto space-y-3">
+                    <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30 inline-block">
+                        Visão Estratégica de Canais
+                    </span>
+                    <blockquote class="text-xl sm:text-2xl font-bold leading-relaxed text-slate-100">
+                        "Não é um problema sobrepor: os pacientes que buscam na Doctoralia te encontram lá, e os pacientes que buscam no Google também te encontram. <span class="text-teal-300 underline decoration-teal-400">São produtos complementares!</span>"
+                    </blockquote>
+                    <div class="pt-2 text-xs text-slate-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-teal-400"></i>
+                        <span>Cobertura Dupla do Funil de Busca e Reputação</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 4: MATRIZ DE SOBREPOSIÇÃO E OPORTUNIDADE POR PRAÇA -->
+        <section id="sobreposicao" class="space-y-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-3">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">04. Cruzamento Geográfico</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+                        Onde existe sobreposição — e onde existe oportunidade?
+                    </h2>
+                </div>
+                <!-- Legenda da Matriz Atualizada -->
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold">🟢 Complementar</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 font-semibold">🟡 Google/FC</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 font-semibold">⚪ Exclusivo FC</span>
+                </div>
+            </div>
+
+            <!-- Tabelas / Cards de Matriz por Estrutura -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Estrutura SINAPSE (CNPJ) -->
+                <div class="glass-card rounded-[2rem] p-6">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-teal-600"></span>
+                            <h3 class="text-base font-bold text-slate-900">Praças Anunciadas — Sinapse</h3>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500">Google Ads + First Class</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- Florianópolis -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Florianópolis / SC</strong>
+                                <span class="text-slate-500">Google Presencial + First Class Sinapse (Atendimento Presencial)</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 font-bold border border-emerald-200 shrink-0 ml-2">
+                                🟢 Complementar
+                            </span>
+                        </div>
+
+                        <!-- Campinas -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Campinas / SP</strong>
+                                <span class="text-slate-500">Google Telemedicina + First Class Sinapse Ativo</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-800 font-bold border border-amber-200 shrink-0 ml-2">
+                                🟡 Google/FC
+                            </span>
+                        </div>
+
+                        <!-- São Paulo, Goiânia, Brasília, Rio de Janeiro -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">São Paulo, Goiânia, Brasília, Rio de Janeiro</strong>
+                                <span class="text-slate-500">Google Telemedicina + First Class Teleconsultas Sinapse</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-800 font-bold border border-amber-200 shrink-0 ml-2">
+                                🟡 Google/FC
+                            </span>
+                        </div>
+
+                        <!-- DEMAIS PRAÇAS FC SINAPSE -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Aracaju, Blumenau, Campo Grande, Guarulhos, João Pessoa, Joinville, Maceió, Natal, Niterói, Palmas, Patos de Minas, SJ Rio Preto, São Luís</strong>
+                                <span class="text-slate-500">First Class Sinapse Ativo (Sem campanha direta Google Sinapse)</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-slate-200 text-slate-700 font-bold shrink-0 ml-2">
+                                ⚪ Exclusivo FC
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estrutura JHONAS (CPF) -->
+                <div class="glass-card rounded-[2rem] p-6">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-slate-800"></span>
+                            <h3 class="text-base font-bold text-slate-900">Praças Anunciadas — Dr. Jhonas</h3>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500">Google Ads + First Class</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- Salvador, Fortaleza, Recife -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Salvador, Fortaleza, Recife</strong>
+                                <span class="text-slate-500">Google Telemedicina + First Class Jhonas Ativo</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-800 font-bold border border-amber-200 shrink-0 ml-2">
+                                🟡 Google/FC
+                            </span>
+                        </div>
+
+                        <!-- Natal, Maceió, Aracaju -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Natal, Maceió, Aracaju</strong>
+                                <span class="text-slate-500">Google Telemedicina Jhonas + First Class Sinapse Ativo</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-800 font-bold border border-amber-200 shrink-0 ml-2">
+                                🟡 Google/FC
+                            </span>
+                        </div>
+
+                        <!-- Florianópolis (Jhonas) -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Florianópolis / SC</strong>
+                                <span class="text-slate-500">Google Telemedicina Jhonas + Atuação Presencial Sinapse</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 font-bold border border-emerald-200 shrink-0 ml-2">
+                                🟢 Complementar
+                            </span>
+                        </div>
+
+                        <!-- DEMAIS PRAÇAS FC JHONAS -->
+                        <div class="p-3.5 rounded-2xl bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-900 block font-bold text-sm">Belém do Pará, Belo Horizonte, Curitiba, Londrina, Manaus, Rio de Janeiro, São Paulo, Vitória</strong>
+                                <span class="text-slate-500">First Class Jhonas Ativo (Sem campanha direta Google Jhonas)</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-xl bg-slate-200 text-slate-700 font-bold shrink-0 ml-2">
+                                ⚪ Exclusivo FC
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 5: ENCERRAMENTO E PERGUNTA FINAL -->
+        <section id="fechamento-estrategico">
+            <div class="glass-card rounded-[2.5rem] p-8 sm:p-12 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 text-white text-center shadow-2xl relative overflow-hidden border border-teal-500/20">
+                <div class="max-w-3xl mx-auto relative z-10 space-y-4">
+                    <span class="px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-amber-500/20 text-amber-300 border border-amber-500/30 inline-block">
+                        Encerramento Estratégico
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white leading-snug tracking-tight">
+                        "Estamos investindo nos lugares certos, pelos canais certos, para gerar o tipo certo de paciente?"
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+                        Mais do que reduzir investimento, a oportunidade está em entender a contribuição de cada canal e direcionar o orçamento para onde existe maior evidência de geração incremental de pacientes.
+                    </p>
+                    <div class="pt-4">
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition-all shadow-lg hover:shadow-teal-900/50">
+                            <span>Voltar ao topo</span>
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER DA LANDING PAGE -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-800">Sinapse &amp; Dr. Jhonas</span>
+                <span>•</span>
+                <span>Relatório Estratégico Doctoralia &amp; Google Ads</span>
+            </div>
+            <div>
+                Reunião Estratégica (20-30 min)
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

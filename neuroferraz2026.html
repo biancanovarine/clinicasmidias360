@@ -1,462 +1,856 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Executivo 2026 — Clínica NeuroFerraz</title>
+    <title>Relatório Executivo de Performance - Clínica NeuroFerraz | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #070F1E; color: #F1F5F9; }
-        .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        #geoMap { height: 360px; width: 100%; border-radius: 0.75rem; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        }
+        
+        .gradient-amber {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
     </style>
 </head>
-<body class="min-h-screen pb-12">
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                        <i class="fa-solid fa-user-plus mr-1"></i> Onboarding de Projeto
-                    </span>
-                    <span class="text-xs text-slate-400">Consolidado 2026 (01/01 a 16/08)</span>
+    <!-- Navigation Bar (Header Principal) -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    NF
                 </div>
-                <h1 class="text-2xl font-bold text-white mt-1">Clínica NeuroFerraz</h1>
-                <p class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                    <i class="fa-solid fa-location-dot text-cyan-400"></i>
-                    Lago Norte, Brasília - DF | Neurologia & Eletroneuromiografia
-                </p>
-            </div>
-            <div class="flex items-center gap-3 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700/50 text-xs">
                 <div>
-                    <span class="text-slate-400 block">Período Ativo</span>
-                    <span class="font-semibold text-white">7,5 Meses (228 dias)</span>
-                </div>
-                <div class="h-8 w-px bg-slate-700"></div>
-                <div>
-                    <span class="text-slate-400 block">Foco Principal</span>
-                    <span class="font-semibold text-cyan-400">Escala de Consultas & Exames</span>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Clínica NeuroFerraz</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 pulse-dot"></span>
+                            Neurologia & Eletroneuromiografia
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Consolidado (01/01 a 16/08/2026)</p>
                 </div>
             </div>
+
+            <div class="flex items-center gap-4 flex-wrap justify-end">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Turquesa Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">5.0 ★</span>
+                </div>
+            </div>
+
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
 
-        <!-- Context Banner -->
-        <div class="glass-card rounded-2xl p-5 border-l-4 border-l-cyan-500">
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-bullseye text-cyan-400"></i> Resumo de Alinhamento e Trajetória 2026
-            </h2>
-            <p class="text-xs text-slate-300 leading-relaxed mt-1">
-                Relatório executivo desenvolvido para nivelamento de novos integrantes da equipe. Apresenta os volumes totais acumulados e as <strong>médias mensais equivalentes</strong> referentes às campanhas de Neurologia e Eletroneuromiografia no DF.
-            </p>
+        <!-- Sub-header de Metadados -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
+                    Período Analisado: <span class="text-teal-700">01/01 a 16/08/2026 (7,5 Meses)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 3,62</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-amber-200">
+                    🔥 CTR Consolidado: 7,88% (2,48x Superior à Média da Saúde)
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar Relatório</span>
+            </button>
         </div>
 
-        <!-- KPI Grid: Totals + Averages -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
-            <!-- Card 1: Impressões -->
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Alcance em Buscas</span>
-                    <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                        <i class="fa-solid fa-eye"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <div class="text-2xl font-extrabold text-white">142.330</div>
-                    <div class="text-xs text-slate-400">Impressões no Google Ads</div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Média Mensal:</span>
-                    <span class="font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-lg border border-cyan-500/20">
-                        18.977 impr/mês
-                    </span>
-                </div>
+        <!-- SEÇÃO 1: Alcance do Anúncio no Google -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Alta Performance de Atração em Neurologia & Exames</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Alcance do Anúncio no Google</h2>
+                <p class="text-slate-600 text-sm mt-1 max-w-4xl">
+                    Performance de atração ativa de pacientes qualificados em Brasília - DF (Lago Norte, Plano Piloto, Sudoeste, Asa Norte e entorno), com alta intenção de agendamento em Neurologia e Eletroneuromiografia.
+                </p>
             </div>
 
-            <!-- Card 2: Cliques no Anúncio -->
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tráfego Qualificado</span>
-                    <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-                        <i class="fa-solid fa-arrow-pointer"></i>
+            <!-- Highlights 5 Stat Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <!-- Card 1: Impressões Totais -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">142.330</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">18.977 exibições/mês no DF</p>
+                </div>
+
+                <!-- Card 2: Cliques Totais no Google -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Totais no Google</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">11.209</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego de alta intenção direcionado</p>
+                </div>
+
+                <!-- Card 3: CTR de Performance -->
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR de Performance</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">7,88%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ 2,48x Média Saúde (3,17%)</p>
+                </div>
+
+                <!-- Card 4: Cliques Totais no Perfil Doctoralia -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Perfil Doctoralia</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">17.010</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 65,8% originados via Google Ads</span>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <div class="text-2xl font-extrabold text-white">11.209</div>
-                    <div class="text-xs text-slate-400">Cliques Diretos (CTR 7,88%)</div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Média Mensal:</span>
-                    <span class="font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-lg border border-indigo-500/20">
-                        1.495 cliques/mês
-                    </span>
-                </div>
-            </div>
 
-            <!-- Card 3: Cliques no Telefone -->
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Contatos de Telefone</span>
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                        <i class="fa-solid fa-phone"></i>
+                <!-- Card 5: Clique no Telefone -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Clique no Telefone</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-phone-volume text-sm"></i>
+                        </div>
                     </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">5.657</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">59.540 Impr. de chamada nos anúncios</p>
                 </div>
-                <div class="mt-3">
-                    <div class="text-2xl font-extrabold text-white">5.657</div>
-                    <div class="text-xs text-slate-400">Cliques / Ligações Diretas</div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Média Mensal:</span>
-                    <span class="font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-lg border border-emerald-500/20">
-                        754 contatos/mês
-                    </span>
-                </div>
-            </div>
 
-            <!-- Card 4: Investimento Mídia -->
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Investimento em Mídia</span>
-                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
-                        <i class="fa-solid fa-sack-dollar"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <div class="text-2xl font-extrabold text-white">R$ 40.614,33</div>
-                    <div class="text-xs text-slate-400">Google Ads Total (CPC R$ 3,62)</div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Média Mensal:</span>
-                    <span class="font-bold text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-lg border border-amber-500/20">
-                        R$ 5.415,24 /mês
-                    </span>
-                </div>
             </div>
-
-            <!-- Card 5: Visitas Doctoralia -->
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Acessos Doctoralia</span>
-                    <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
-                        <i class="fa-solid fa-user-doctor"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <div class="text-2xl font-extrabold text-white">17.010</div>
-                    <div class="text-xs text-slate-400">Visualizações no Perfil</div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Média Mensal:</span>
-                    <span class="font-bold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-lg border border-blue-500/20">
-                        2.268 acessos/mês
-                    </span>
-                </div>
-            </div>
-
-            <!-- Card 6: Novos Pacientes -->
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pacientes Novos</span>
-                    <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <div class="text-2xl font-extrabold text-white">1.079</div>
-                    <div class="text-xs text-slate-400">Pacientes Novos Atendidos</div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400">Média Mensal:</span>
-                    <span class="font-bold text-purple-400 bg-purple-500/10 px-2.5 py-0.5 rounded-lg border border-purple-500/20">
-                        144 novos/mês
-                    </span>
-                </div>
-            </div>
-
         </section>
 
-        <!-- Chart Section -->
-        <section class="glass-card rounded-2xl p-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <!-- SEÇÃO 2: Benchmark de Eficiência & Domínio de Busca (Posicionada Logo Abaixo) -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Coluna Esquerda (1/3): Gráfico de Benchmark de CTR -->
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 flex flex-col justify-between print-card">
                 <div>
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Evolução Mensal: Agendamentos & Pacientes Novos
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-0.5">Janeiro a 16 de Agosto de 2026 (4.314 agendamentos totais acumulados)</p>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Atração</span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">+148% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900">Benchmark da Área de Saúde</h3>
+                    <p class="text-xs text-slate-500 mt-1">Taxa de cliques (CTR) da Clínica NeuroFerraz comparada à média saudável de mercado da área médica (3,17%).</p>
                 </div>
-                <div class="flex items-center gap-4 text-xs">
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-sm bg-cyan-500 inline-block"></span>
-                        <span class="text-slate-300">Agendamentos Totais</span>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-sm bg-purple-500 inline-block"></span>
-                        <span class="text-slate-300">Pacientes Novos</span>
-                    </div>
+
+                <div class="my-6 relative h-52 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                    <span>O CTR de <strong>7,88%</strong> demonstra atratividade muito superior ao benchmark padrão do setor de saúde (3,17%).</span>
                 </div>
             </div>
-            <div class="h-80 w-full">
-                <canvas id="appointmentsChart"></canvas>
+
+            <!-- Coluna Direita (2/3): Cartão Escuro Share of Voice & Posições -->
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice & Posições de Pesquisa</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Exposição Nobre</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio das Buscas de Neurologia & Eletroneuromiografia no DF</h3>
+                    <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                        A estrutura de leilão garante visibilidade contínua no topo dos resultados do Google para pacientes com alta intenção de agendamento em Brasília.
+                    </p>
+                </div>
+
+                <div class="my-6 space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Top Page (% Área Superior dos Resultados)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">78,8%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 78.8%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5">Garantia de exibição na área nobre em quase 8 de cada 10 pesquisas de pacientes no DF.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                1ª Posição Absoluta (% Topo 1 Absoluto)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">34,5%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-amber h-full rounded-full" style="width: 34.5%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5">Liderança imediata sendo o primeiro anúncio visível em mais de 1/3 de todas as buscas.</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-teal-400"></i>
+                        Edifício Arnaldo Sonda - Lago Norte, Brasília - DF
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
             </div>
+
         </section>
 
-        <!-- Campaigns Table -->
-        <section class="glass-card rounded-2xl p-6">
-            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <i class="fa-brands fa-google text-cyan-400"></i> Desempenho por Campanha (Google Ads)
-            </h3>
+        <!-- SEÇÃO 3: % Ganho em Leilões (Share of Voice) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura Técnica de Leilão</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. % Ganho em Leilões (Share of Voice)</h2>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                    Consolidado Jan a Ago/2026 (7,5 Meses)
+                </div>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-800 text-slate-400 font-semibold uppercase tracking-wider bg-slate-900/50">
-                            <th class="p-3">Campanha</th>
-                            <th class="p-3 text-right">Impressões</th>
-                            <th class="p-3 text-right">Cliques</th>
-                            <th class="p-3 text-right">CTR</th>
-                            <th class="p-3 text-right">CPC Méd.</th>
-                            <th class="p-3 text-right">Custo Total</th>
-                            <th class="p-3 text-right">% Topo Página</th>
-                            <th class="p-3 text-right">% 1ª Posição</th>
-                            <th class="p-3 text-right">Parcela Impr.</th>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Identificação da Campanha</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impr. Chamadas</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Médio</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo Página</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Pos. Absoluta</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Parcela Impr. (Ganho)</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-800/60 text-slate-200">
-                        <tr class="hover:bg-slate-800/40">
-                            <td class="p-3 font-semibold text-white">Especialidade (Neurologia)</td>
-                            <td class="p-3 text-right font-mono">70.838</td>
-                            <td class="p-3 text-right font-mono text-cyan-400 font-bold">4.399</td>
-                            <td class="p-3 text-right font-mono">6,21%</td>
-                            <td class="p-3 text-right font-mono">R$ 3,75</td>
-                            <td class="p-3 text-right font-mono">R$ 16.504,82</td>
-                            <td class="p-3 text-right font-mono">74,93%</td>
-                            <td class="p-3 text-right font-mono">33,23%</td>
-                            <td class="p-3 text-right font-mono">15,58%</td>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                                Especialidade (Neurologia Geral)
+                            </td>
+                            <td class="py-4 px-4 text-right">70.838</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">4.399</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-600">6,21%</td>
+                            <td class="py-4 px-4 text-right">21.565</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,75</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">74,93%</td>
+                            <td class="py-4 px-4 text-right">33,23%</td>
+                            <td class="py-4 px-4 text-right">
+                                <span class="bg-teal-100 text-teal-900 font-bold px-2.5 py-1 rounded-lg border border-teal-200">15,58%</span>
+                            </td>
                         </tr>
-                        <tr class="hover:bg-slate-800/40">
-                            <td class="p-3 font-semibold text-white">Serviços (Eletroneuromiografia)</td>
-                            <td class="p-3 text-right font-mono">64.045</td>
-                            <td class="p-3 text-right font-mono text-cyan-400 font-bold">5.882</td>
-                            <td class="p-3 text-right font-mono text-emerald-400 font-bold">9,18%</td>
-                            <td class="p-3 text-right font-mono">R$ 3,63</td>
-                            <td class="p-3 text-right font-mono">R$ 21.366,42</td>
-                            <td class="p-3 text-right font-mono">82,48%</td>
-                            <td class="p-3 text-right font-mono">31,94%</td>
-                            <td class="p-3 text-right font-mono text-emerald-400 font-bold">42,07%</td>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                                Serviços (Eletroneuromiografia & Polisso.)
+                            </td>
+                            <td class="py-4 px-4 text-right">64.045</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">5.882</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-600">9,18%</td>
+                            <td class="py-4 px-4 text-right">32.592</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,63</td>
+                            <td class="py-4 px-4 text-right font-bold text-indigo-700">82,48%</td>
+                            <td class="py-4 px-4 text-right font-bold text-indigo-700">31,94%</td>
+                            <td class="py-4 px-4 text-right">
+                                <span class="bg-indigo-100 text-indigo-900 font-bold px-2.5 py-1 rounded-lg border border-indigo-200">42,07%</span>
+                            </td>
                         </tr>
-                        <tr class="hover:bg-slate-800/40">
-                            <td class="p-3 font-semibold text-white">Institucional (NeuroFerraz)</td>
-                            <td class="p-3 text-right font-mono">7.447</td>
-                            <td class="p-3 text-right font-mono text-cyan-400 font-bold">928</td>
-                            <td class="p-3 text-right font-mono text-amber-400 font-bold">12,46%</td>
-                            <td class="p-3 text-right font-mono">R$ 2,96</td>
-                            <td class="p-3 text-right font-mono">R$ 2.743,09</td>
-                            <td class="p-3 text-right font-mono">81,56%</td>
-                            <td class="p-3 text-right font-mono text-amber-400 font-bold">68,12%</td>
-                            <td class="p-3 text-right font-mono text-amber-400 font-bold">80,51%</td>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                Institucional (Marca NeuroFerraz)
+                            </td>
+                            <td class="py-4 px-4 text-right">7.447</td>
+                            <td class="py-4 px-4 text-right font-semibold text-slate-900">928</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-600">12,46%</td>
+                            <td class="py-4 px-4 text-right">5.383</td>
+                            <td class="py-4 px-4 text-right font-bold text-emerald-700">R$ 2,96</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">81,56%</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">68,12%</td>
+                            <td class="py-4 px-4 text-right">
+                                <span class="bg-amber-100 text-amber-900 font-black px-2.5 py-1 rounded-lg border border-amber-300">80,51%</span>
+                            </td>
                         </tr>
+
+                        <!-- Total Row -->
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO</td>
+                            <td class="py-4 px-4 text-right">142.330</td>
+                            <td class="py-4 px-4 text-right text-teal-300">11.209</td>
+                            <td class="py-4 px-4 text-right text-amber-300">7,88%</td>
+                            <td class="py-4 px-4 text-right text-teal-200">59.540</td>
+                            <td class="py-4 px-4 text-right text-teal-200">R$ 3,62</td>
+                            <td class="py-4 px-4 text-right">78,8%</td>
+                            <td class="py-4 px-4 text-right">34,5%</td>
+                            <td class="py-4 px-4 text-right rounded-r-xl">
+                                <span class="bg-teal-500 text-slate-950 font-black px-2.5 py-1 rounded-lg">40,9%</span>
+                            </td>
+                        </tr>
+
                     </tbody>
-                    <tfoot>
-                        <tr class="bg-slate-900 font-bold text-white border-t-2 border-slate-700">
-                            <td class="p-3">TOTAL / MÉDIA CONSOLIDADA</td>
-                            <td class="p-3 text-right font-mono text-cyan-400">142.330</td>
-                            <td class="p-3 text-right font-mono text-cyan-400">11.209</td>
-                            <td class="p-3 text-right font-mono text-emerald-400">7,88%</td>
-                            <td class="p-3 text-right font-mono">R$ 3,62</td>
-                            <td class="p-3 text-right font-mono text-amber-400">R$ 40.614,33</td>
-                            <td class="p-3 text-right font-mono">78,68%</td>
-                            <td class="p-3 text-right font-mono">34,92%</td>
-                            <td class="p-3 text-right font-mono text-cyan-400">30,94%</td>
+                </table>
+            </div>
+
+            <div class="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-3">
+                <i class="fa-solid fa-gear text-teal-600 text-base shrink-0 mt-0.5"></i>
+                <div>
+                    <strong class="text-slate-800">Nota de Análise Técnica:</strong> A campanha de <em>Serviços (Eletroneuromiografia)</em> gerou o maior engajamento direto (5.882 cliques com 9,18% de CTR) com excelente taxa de topo (82,48%). A campanha <em>Institucional</em> assegura a proteção da marca com 80,51% de parcela de impressão ao CPC mais econômico do leilão (R$ 2,96).
+                </div>
+            </div>
+
+            <!-- Nota de Exceção Estratégica (Retirada da Polissonografia) -->
+            <div class="mt-3 p-4 rounded-2xl bg-amber-50/90 border border-amber-300 text-xs text-amber-950 flex items-start gap-3 shadow-xs">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base shrink-0 mt-0.5"></i>
+                <div>
+                    <strong class="text-amber-900 font-extrabold uppercase tracking-wider">Nota de Exceção Estratégica:</strong>
+                    <span class="ml-1 text-amber-900">Em <strong>Maio/2026</strong>, foi realizada a interrupção do impulsionamento/anúncios para o exame de <strong>Polissonografia</strong>, reorientando o foco e os recursos do leilão exclusivamente para a captação de consultas em <strong>Neurologia Geral</strong> e exames de <strong>Eletroneuromiografia</strong>.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: Performance de Palavras-Chave -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Diagnóstica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Performance de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Termos de maior volume e taxa de atração (CTR)
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Palavra-Chave</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
                         </tr>
-                        <tr class="bg-slate-900/80 text-cyan-300 italic text-[11px]">
-                            <td class="p-2">Média Mensal (7,5 Meses)</td>
-                            <td class="p-2 text-right font-mono">18.977/mês</td>
-                            <td class="p-2 text-right font-mono">1.495/mês</td>
-                            <td class="p-2 text-right font-mono">—</td>
-                            <td class="p-2 text-right font-mono">—</td>
-                            <td class="p-2 text-right font-mono">R$ 5.415,24/mês</td>
-                            <td class="p-2 text-right font-mono">—</td>
-                            <td class="p-2 text-right font-mono">—</td>
-                            <td class="p-2 text-right font-mono">—</td>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        
+                        <!-- Primeiras Linha com Fundo Turquesa Translúcido (Termo Principal) -->
+                        <tr class="bg-teal-50/80 border-l-4 border-teal-600 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>eletroneuromiografia em brasilia</span>
+                                <span class="bg-teal-200/80 text-teal-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">Exame Principal</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-black text-slate-900">12.334</td>
+                            <td class="py-3.5 px-4 text-right text-teal-700 font-black">1.760</td>
+                            <td class="py-3.5 px-4 text-right text-teal-800 font-black">14,27%</td>
                         </tr>
-                    </tfoot>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">neurologista brasília</td>
+                            <td class="py-3.5 px-4 text-right">13.112</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.328</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">10,13%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/30 font-bold text-slate-900">
+                            <td class="py-3.5 px-4">clinica de eletroneuromiografia brasilia</td>
+                            <td class="py-3.5 px-4 text-right">9.914</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.249</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">12,60%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">neurologista brasília (variação de termo)</td>
+                            <td class="py-3.5 px-4 text-right">20.655</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.186</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-slate-800">5,74%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">eletroneuromiografia</td>
+                            <td class="py-3.5 px-4 text-right">15.451</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-indigo-700">759</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-indigo-900">4,91%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/40 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>neuroferraz / neuro ferraz</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">Marca</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">6.739</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-amber-700">853</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-600">12,66%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">neurologista taguatinga</td>
+                            <td class="py-3.5 px-4 text-right">3.131</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">353</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">11,27%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">polissonografia brasilia / clinica de polissonografia</td>
+                            <td class="py-3.5 px-4 text-right">3.812</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-indigo-700">254</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-indigo-900">6,66%</td>
+                        </tr>
+
+                    </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Keywords & Decision Callout -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card rounded-2xl p-6 border-l-4 border-l-amber-500 flex flex-col justify-between">
+        <!-- SEÇÃO 5: Agendamentos na Doctoralia -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                        Otimização de Conta
-                    </span>
-                    <h4 class="text-base font-bold text-white mt-2 flex items-center gap-2">
-                        <i class="fa-solid fa-filter-circle-xmark text-amber-400"></i> Negativação em Maio/2026
-                    </h4>
-                    <p class="text-xs text-slate-300 leading-relaxed mt-3">
-                        Em <strong>Maio/2026</strong>, alinhamos e executamos a remoção dos termos de <strong>"Polissonografia"</strong> da campanha.
-                    </p>
-                    <p class="text-xs text-slate-400 leading-relaxed mt-2">
-                        <strong>Estratégia:</strong> Concentrar 100% da verba em Neurologia e Eletroneuromiografia para maximizar o retorno direto em agendamentos de alta rentabilidade.
-                    </p>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Evolução Mensal de Consultas & Captação</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Agendamentos na Doctoralia</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto">
+                    Consolidado Mês a Mês (Jan a Ago/2026)
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6 lg:col-span-2">
-                <h4 class="text-base font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-magnifying-glass text-cyan-400"></i> Principais Palavras-Chave (DF)
-                </h4>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-slate-800 text-slate-400 uppercase bg-slate-900/50">
-                                <th class="p-2">Termo de Pesquisa</th>
-                                <th class="p-2 text-right">Impressões</th>
-                                <th class="p-2 text-right">Cliques</th>
-                                <th class="p-2 text-right">CTR</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60 font-mono text-slate-200">
-                            <tr>
-                                <td class="p-2 font-sans font-semibold text-white">eletroneuromiografia em brasilia</td>
-                                <td class="p-2 text-right">12.334</td>
-                                <td class="p-2 text-right text-cyan-400 font-bold">1.760</td>
-                                <td class="p-2 text-right text-emerald-400 font-bold">14,27%</td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 font-sans font-semibold text-white">neurologista brasília</td>
-                                <td class="p-2 text-right">33.767</td>
-                                <td class="p-2 text-right text-cyan-400 font-bold">2.514</td>
-                                <td class="p-2 text-right">7,45%</td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 font-sans font-semibold text-white">clinica de eletroneuromiografia brasilia</td>
-                                <td class="p-2 text-right">9.914</td>
-                                <td class="p-2 text-right text-cyan-400 font-bold">1.249</td>
-                                <td class="p-2 text-right text-emerald-400 font-bold">12,60%</td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 font-sans font-semibold text-amber-300">neuroferraz / neuro ferraz (marca)</td>
-                                <td class="p-2 text-right">6.739</td>
-                                <td class="p-2 text-right text-amber-400 font-bold">853</td>
-                                <td class="p-2 text-right text-amber-400 font-bold">12,66%</td>
-                            </tr>
-                            <tr class="bg-slate-900/40 text-slate-400">
-                                <td class="p-2 font-sans italic">polissonografia brasilia (removida em maio)</td>
-                                <td class="p-2 text-right">3.812</td>
-                                <td class="p-2 text-right">254</td>
-                                <td class="p-2 text-right">6,66%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Gráfico Comparativo Mês a Mês com Valores nos Anúncios/Barras -->
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/80">
+                <div class="h-80 relative">
+                    <canvas id="appointmentsChart"></canvas>
                 </div>
+            </div>
+
+            <!-- Tabela Limpa Mês a Mês -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Mês Analisado</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Agendamentos Totais</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Pacientes Novos (1ª Consulta)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 1 (Janeiro / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">1.048</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">150 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 2 (Fevereiro / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">467</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">106 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 3 (Março / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">574</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">175 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 4 (Abril / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">529</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">174 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 5 (Maio / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">401</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">108 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 6 (Junho / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">533</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">116 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 7 (Julho / 2026)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">541</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">182 novos</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">Mês 8 (Agosto / 2026 - parcial até dia 16)</td>
+                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">221</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">68 novos</td>
+                        </tr>
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO ACUMULADO (7,5 Meses)</td>
+                            <td class="py-4 px-4 text-right text-amber-300 font-black text-lg">4.314</td>
+                            <td class="py-4 px-4 text-right text-teal-300 rounded-r-xl font-black text-base">1.079 Pacientes Novos</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 
-        <!-- Map & Doctoralia -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="glass-card rounded-2xl p-6">
-                <h4 class="text-base font-bold text-white mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-map-location-dot text-cyan-400"></i> Abrangência Geográfica (Lago Norte / DF)
-                </h4>
-                <p class="text-xs text-slate-400 mb-4">Sede: Edifício Arnaldo Sonda, Lago Norte (Raios de 6km, 12km e 20km)</p>
-                <div id="geoMap"></div>
+        <!-- SEÇÃO 6: Reputação Digital & Prova Social -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-teal-600">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota 5.0 ★ Excelente</span>
+                </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
-                <div>
-                    <h4 class="text-base font-bold text-white mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-award text-amber-400"></i> Reputação & Prova Social (Doctoralia)
-                    </h4>
-                    <div class="grid grid-cols-2 gap-4 my-4">
-                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                            <span class="text-xs text-slate-400 block">Opiniões Acumuladas</span>
-                            <span class="text-2xl font-extrabold text-amber-400">2.983</span>
-                            <span class="text-[11px] text-slate-400 block mt-1">Nota máxima 5.0★</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Acumulado -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">2.983</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Acumuladas</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Sólido acervo de autoridade clínica no Distrito Federal.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            Crescimento Recente
                         </div>
-                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                            <span class="text-xs text-slate-400 block">Novas Avaliações (2026)</span>
-                            <span class="text-2xl font-extrabold text-emerald-400">+249</span>
-                            <span class="text-[11px] text-slate-400 block mt-1">Média: ~33 novas/mês</span>
-                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+249 Novas Opiniões</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Avaliações de pacientes recebidas no período analisado.
+                        </p>
                     </div>
-                    <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-800 text-xs">
-                        <div class="flex justify-between font-semibold">
-                            <span class="text-slate-300">Acessos Totais ao Perfil</span>
-                            <span class="text-cyan-400 font-mono">17.010 visitas</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 block mt-1">Média equivalente a 2.268 visitas/mês no DF.</span>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Fortíssimo gatilho de decisão na atração de consultas particulares.
                     </div>
                 </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
-                    <span>A autoridade na Doctoralia impulsiona a conversão dos anúncios pagos.</span>
+            </div>
+
+            <!-- Texto Analítico de Encerramento (Círculo Virtuoso da Prova Social) -->
+            <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 border border-slate-800 text-xs leading-relaxed space-y-3">
+                <div class="flex items-center gap-2 text-amber-400 font-extrabold text-sm">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    O Círculo Virtuoso da Prova Social na Decisão do Paciente
                 </div>
+                <p class="text-slate-300">
+                    Métricas da plataforma comprovam que <strong>70% dos pacientes que acessam o perfil do especialista no Doctoralia consultam diretamente a área de opiniões e depoimentos antes de finalizar o agendamento.</strong>
+                </p>
+                <p class="text-slate-400 text-[11px]">
+                    A união entre o tráfego pago de alta intenção vindo do Google Ads (11.209 cliques e 5.657 cliques no telefone) e o acervo consagrado de <strong>2.983 opiniões nota 5.0★</strong> elimina a hesitação do paciente, transformando a busca em agendamento imediato na Clínica NeuroFerraz.
+                </p>
             </div>
         </section>
 
     </main>
 
-    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-center text-xs text-slate-500 border-t border-slate-800 pt-6">
-        Relatório Executivo 2026 • Clínica NeuroFerraz (Brasília - DF)
+    <!-- Rodapé Corporativo Minimalista -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Doctoralia • Inteligência e Performance em Marketing Médico.</p>
+            <p class="text-[10px] text-slate-400">Relatório exclusivo para uso da Clínica NeuroFerraz (Lago Norte, Brasília - DF).</p>
+        </div>
     </footer>
 
     <script>
         window.onload = function() {
-            // Chart
-            const ctx = document.getElementById('appointmentsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26', 'Jun/26', 'Jul/26', 'Ago/26 (16d)'],
-                    datasets: [
-                        {
-                            label: 'Agendamentos Totais',
-                            data: [1048, 467, 574, 529, 401, 533, 541, 221],
-                            backgroundColor: 'rgba(14, 165, 233, 0.75)',
-                            borderColor: '#0EA5E9',
-                            borderWidth: 1,
-                            borderRadius: 6
-                        },
-                        {
-                            label: 'Pacientes Novos',
-                            data: [150, 106, 175, 174, 108, 116, 182, 68],
-                            backgroundColor: 'rgba(168, 85, 247, 0.85)',
-                            borderColor: '#A855F7',
-                            borderWidth: 1,
-                            borderRadius: 6
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } }
-                    }
-                }
-            });
+            // Register DataLabels Plugin
+            if (typeof ChartDataLabels !== 'undefined') {
+                Chart.register(ChartDataLabels);
+            }
 
-            // Map
-            const lat = -15.7275, lng = -47.8828;
-            const map = L.map('geoMap').setView([lat, lng], 11);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
-            L.marker([lat, lng]).addTo(map).bindPopup("<b>Clínica NeuroFerraz</b><br>Lago Norte - Brasília").openPopup();
-            L.circle([lat, lng], { color: '#38BDF8', fillOpacity: 0.15, radius: 6000 }).addTo(map);
-            L.circle([lat, lng], { color: '#818CF8', fillOpacity: 0.08, radius: 12000 }).addTo(map);
-            L.circle([lat, lng], { color: '#64748B', fillOpacity: 0.03, radius: 20000 }).addTo(map);
+            // Chart.js CTR Benchmark Chart
+            const chartElement = document.getElementById('ctrBenchmarkChart');
+            if (chartElement) {
+                const ctxCtr = chartElement.getContext('2d');
+                
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Média Saúde (3,17%)', 'NeuroFerraz (7,88%)'],
+                        datasets: [{
+                            label: 'Taxa de Cliques (CTR %)',
+                            data: [3.17, 7.88],
+                            backgroundColor: [
+                                '#cbd5e1',
+                                '#d97706'
+                            ],
+                            borderColor: [
+                                '#94a3b8',
+                                '#b45309'
+                            ],
+                            borderWidth: 1.5,
+                            borderRadius: 12,
+                            borderSkipped: false,
+                            barThickness: 38
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            datalabels: { display: false },
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) { return context.parsed.y + '% de CTR'; }
+                                },
+                                backgroundColor: '#0f172a',
+                                titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
+                                bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10,
+                                ticks: {
+                                    callback: function(value) { return value + '%'; },
+                                    font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
+                                    color: '#64748b'
+                                },
+                                grid: { color: '#f1f5f9' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+                                    color: '#334155'
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Chart.js Appointments Chart with Data Values on Top of Bars
+            const apptElement = document.getElementById('appointmentsChart');
+            if (apptElement) {
+                const ctxAppt = apptElement.getContext('2d');
+                new Chart(ctxAppt, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
+                        datasets: [
+                            {
+                                label: 'Agendamentos Totais',
+                                data: [1048, 467, 574, 529, 401, 533, 541, 221],
+                                backgroundColor: '#0d9488',
+                                borderRadius: 8,
+                                borderSkipped: false
+                            },
+                            {
+                                label: 'Pacientes Novos (1ª Consulta)',
+                                data: [150, 106, 175, 174, 108, 116, 182, 68],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 8,
+                                borderSkipped: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: {
+                                top: 25
+                            }
+                        },
+                        plugins: {
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Plus Jakarta Sans',
+                                    size: 10,
+                                    weight: 'bold'
+                                },
+                                formatter: function(value) {
+                                    return value.toLocaleString('pt-BR');
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
+                                    color: '#1e293b',
+                                    usePointStyle: true,
+                                    boxWidth: 8
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#0f172a',
+                                titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
+                                bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 1200,
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
+                                    color: '#64748b'
+                                },
+                                grid: { color: '#f1f5f9' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+                                    color: '#334155'
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
         };
     </script>
 </body>

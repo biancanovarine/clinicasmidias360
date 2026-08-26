@@ -20,32 +20,13 @@
                     },
                     colors: {
                         teal: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            200: '#99f6e4',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            700: '#0f766e',
-                            800: '#115e59',
-                            900: '#134e4a',
-                            950: '#042f2e',
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a', 950: '#042f2e',
                         },
                         amber: {
-                            50: '#fffbeb',
-                            100: '#fef3c7',
-                            200: '#fde68a',
-                            400: '#fbbf24',
-                            500: '#f59e0b',
-                            600: '#d97706',
-                            700: '#b45309',
-                            900: '#78350f',
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f',
                         },
                         indigo: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#312e81',
+                            50: '#eef2ff', 100: '#e0e7ff', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81',
                         }
                     }
                 }
@@ -58,7 +39,10 @@
 
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+    <!-- Leaflet.js CDN for Interactive Geographic Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         body {
@@ -91,6 +75,19 @@
             70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
             100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
         }
+
+        .postit-card {
+            background: #fef9c3;
+            border-left: 6px solid #eab308;
+            box-shadow: 0 10px 15px -3px rgba(234, 179, 8, 0.15), 0 4px 6px -4px rgba(234, 179, 8, 0.1);
+        }
+
+        #geoMap {
+            width: 100%;
+            height: 380px;
+            border-radius: 1.25rem;
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
@@ -111,7 +108,7 @@
                             Neurologia & Eletroneuromiografia
                         </span>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Consolidado (01/01 a 16/08/2026)</p>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Consolidado Mês a Mês (01/01 a 25/05/2026)</p>
                 </div>
             </div>
 
@@ -142,6 +139,11 @@
                     </div>
                     <span class="text-xs font-bold text-teal-800">5.0 ★</span>
                 </div>
+
+                <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Exportar</span>
+                </button>
             </div>
 
         </div>
@@ -149,36 +151,18 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
 
-        <!-- Sub-header de Metadados -->
-        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
-            <div class="flex flex-wrap items-center gap-3">
-                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
-                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
-                    Período Analisado: <span class="text-teal-700">01/01 a 16/08/2026 (7,5 Meses)</span>
-                </div>
-                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
-                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
-                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 3,62</span>
-                </div>
-                <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-amber-200">
-                    🔥 CTR Consolidado: 7,88% (2,48x Superior à Média da Saúde)
-                </div>
-            </div>
-
-            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
-                <i class="fa-solid fa-print"></i>
-                <span>Exportar Relatório</span>
-            </button>
-        </div>
-
         <!-- SEÇÃO 1: Alcance do Anúncio no Google -->
-        <section class="space-y-4">
+        <section class="space-y-6">
             <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Alta Performance de Atração em Neurologia & Exames</span>
-                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Alcance do Anúncio no Google</h2>
-                <p class="text-slate-600 text-sm mt-1 max-w-4xl">
-                    Performance de atração ativa de pacientes qualificados em Brasília - DF (Lago Norte, Plano Piloto, Sudoeste, Asa Norte e entorno), com alta intenção de agendamento em Neurologia e Eletroneuromiografia.
-                </p>
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Atração Ativa em Neurologia e Exames</span>
+                    <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-200/80">
+                        <i class="fa-solid fa-info-circle mr-1"></i>Polissonografia esteve ativa somente até Maio
+                    </span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">
+                    1. Alta Performance de Atração em Neurologia, Eletroneuromiografia e Polissonografia
+                </h2>
             </div>
 
             <!-- Highlights 5 Stat Cards Grid -->
@@ -193,7 +177,7 @@
                         </div>
                     </div>
                     <div class="text-2xl font-black text-slate-900 tracking-tight">142.330</div>
-                    <p class="text-[11px] text-slate-500 mt-2 font-medium">18.977 exibições/mês no DF</p>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Aparições dos anúncios e visibilidade de marca no Google</p>
                 </div>
 
                 <!-- Card 2: Cliques Totais no Google -->
@@ -205,7 +189,7 @@
                         </div>
                     </div>
                     <div class="text-2xl font-black text-teal-700 tracking-tight">11.209</div>
-                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego de alta intenção direcionado</p>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego direcionado para o perfil da Doctoralia</p>
                 </div>
 
                 <!-- Card 3: CTR de Performance -->
@@ -221,10 +205,10 @@
                     <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ 2,48x Média Saúde (3,17%)</p>
                 </div>
 
-                <!-- Card 4: Cliques Totais no Perfil Doctoralia -->
+                <!-- Card 4: Acessos totais ao perfil da Doctoralia -->
                 <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
                     <div class="flex items-center justify-between text-slate-400 mb-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Perfil Doctoralia</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos Perfil Doctoralia</span>
                         <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
                             <i class="fa-solid fa-user-doctor text-sm"></i>
                         </div>
@@ -244,13 +228,90 @@
                         </div>
                     </div>
                     <div class="text-2xl font-black text-emerald-600 tracking-tight">5.657</div>
-                    <p class="text-[11px] text-slate-500 mt-2 font-medium">59.540 Impr. de chamada nos anúncios</p>
+                    <p class="text-[11px] text-slate-600 mt-2 font-medium">
+                        Além dos cliques no telefone, o anúncio exibiu o número de contato <strong>59.540 vezes</strong> nas pesquisas.
+                    </p>
                 </div>
 
             </div>
+
+            <!-- Bloco de Visualização das Copys dos Anúncios -->
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 space-y-4 print-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Comunicação e Redação de Anúncios</span>
+                        <h3 class="text-lg font-black text-slate-900">Anúncios em Exibição no Google (Copys Ativas)</h3>
+                    </div>
+                    <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-3 py-1 rounded-full border border-slate-200">
+                        Resultados Patrocinados
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Ad Copy Mockup 1 (Neurologia Geral) -->
+                    <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5 space-y-2.5 font-sans">
+                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                            <div class="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center text-[10px] font-bold">
+                                <i class="fa-solid fa-stethoscope"></i>
+                            </div>
+                            <div>
+                                <div class="text-slate-900 font-bold text-xs leading-none">doctoralia.com.br</div>
+                                <div class="text-[11px] text-slate-500">https://www.doctoralia.com.br › neurologista › brasília</div>
+                            </div>
+                        </div>
+
+                        <h4 class="text-blue-700 font-bold text-lg hover:underline cursor-pointer leading-snug">
+                            NeuroFerraz | Neurologistas | Brasília | Verificar Serviços
+                        </h4>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Marque o melhor horário para a consulta. Agenda para atendimento presencial. Confira aqui. NeuroFerraz. Verifique os serviços disponíveis e...
+                        </p>
+
+                        <div class="pt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-blue-700 font-medium">
+                            <span class="hover:underline cursor-pointer">Confira a agenda</span> •
+                            <span class="hover:underline cursor-pointer">Horários disponíveis</span> •
+                            <span class="hover:underline cursor-pointer">Consultórios</span> •
+                            <span class="hover:underline cursor-pointer">Experiência</span> •
+                            <span class="hover:underline cursor-pointer">Serviços</span>
+                        </div>
+
+                        <div class="text-[10px] text-slate-400 font-semibold pt-1 border-t border-slate-200/60">
+                            Mais de 1 milhão de visitas no último mês
+                        </div>
+                    </div>
+
+                    <!-- Ad Copy Mockup 2 (Eletroneuromiografia & Polissonografia) -->
+                    <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5 space-y-2.5 font-sans">
+                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                            <div class="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center text-[10px] font-bold">
+                                <i class="fa-solid fa-notes-medical"></i>
+                            </div>
+                            <div>
+                                <div class="text-slate-900 font-bold text-xs leading-none">doctoralia.com.br</div>
+                                <div class="text-[11px] text-slate-500">https://www.doctoralia.com.br › neurologista › brasília</div>
+                            </div>
+                        </div>
+
+                        <h4 class="text-blue-700 font-bold text-lg hover:underline cursor-pointer leading-snug">
+                            NeuroFerraz - Eletroneuromiografia Brasilia
+                        </h4>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Clínica Neuro Ferraz. Polissonografia e Eletroneuromiografia - Brasilia. Marque seu Exame.
+                        </p>
+
+                        <div class="text-[10px] text-slate-400 font-semibold pt-3 border-t border-slate-200/60">
+                            Mais de 1 milhão de visitas no último mês
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
-        <!-- SEÇÃO 2: Benchmark de Eficiência & Domínio de Busca (Posicionada Logo Abaixo) -->
+        <!-- BENCHMARK DE EFICIÊNCIA & SHARE OF VOICE -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- Coluna Esquerda (1/3): Gráfico de Benchmark de CTR -->
@@ -330,300 +391,700 @@
 
         </section>
 
-        <!-- SEÇÃO 3: % Ganho em Leilões (Share of Voice) -->
-        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+        <!-- SEÇÃO 2: Configuração Estrutural & Desempenho Detalhado das Campanhas (Mês a Mês) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura Técnica de Leilão</span>
-                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. % Ganho em Leilões (Share of Voice)</h2>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Desempenho Estrutural de Leilão</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">2. Configuração Estrutural & Desempenho das Campanhas</h2>
                 </div>
-                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
-                    Consolidado Jan a Ago/2026 (7,5 Meses)
-                </div>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs sm:text-sm border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
-                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Identificação da Campanha</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impr. Chamadas</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Médio</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo Página</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Pos. Absoluta</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Parcela Impr. (Ganho)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-                        
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
-                                Especialidade (Neurologia Geral)
-                            </td>
-                            <td class="py-4 px-4 text-right">70.838</td>
-                            <td class="py-4 px-4 text-right font-semibold text-slate-900">4.399</td>
-                            <td class="py-4 px-4 text-right font-bold text-teal-600">6,21%</td>
-                            <td class="py-4 px-4 text-right">21.565</td>
-                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,75</td>
-                            <td class="py-4 px-4 text-right font-bold text-teal-700">74,93%</td>
-                            <td class="py-4 px-4 text-right">33,23%</td>
-                            <td class="py-4 px-4 text-right">
-                                <span class="bg-teal-100 text-teal-900 font-bold px-2.5 py-1 rounded-lg border border-teal-200">15,58%</span>
-                            </td>
-                        </tr>
-
-                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
-                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-                                Serviços (Eletroneuromiografia & Polisso.)
-                            </td>
-                            <td class="py-4 px-4 text-right">64.045</td>
-                            <td class="py-4 px-4 text-right font-semibold text-slate-900">5.882</td>
-                            <td class="py-4 px-4 text-right font-bold text-teal-600">9,18%</td>
-                            <td class="py-4 px-4 text-right">32.592</td>
-                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,63</td>
-                            <td class="py-4 px-4 text-right font-bold text-indigo-700">82,48%</td>
-                            <td class="py-4 px-4 text-right font-bold text-indigo-700">31,94%</td>
-                            <td class="py-4 px-4 text-right">
-                                <span class="bg-indigo-100 text-indigo-900 font-bold px-2.5 py-1 rounded-lg border border-indigo-200">42,07%</span>
-                            </td>
-                        </tr>
-
-                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
-                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                                Institucional (Marca NeuroFerraz)
-                            </td>
-                            <td class="py-4 px-4 text-right">7.447</td>
-                            <td class="py-4 px-4 text-right font-semibold text-slate-900">928</td>
-                            <td class="py-4 px-4 text-right font-bold text-amber-600">12,46%</td>
-                            <td class="py-4 px-4 text-right">5.383</td>
-                            <td class="py-4 px-4 text-right font-bold text-emerald-700">R$ 2,96</td>
-                            <td class="py-4 px-4 text-right font-bold text-amber-700">81,56%</td>
-                            <td class="py-4 px-4 text-right font-bold text-amber-700">68,12%</td>
-                            <td class="py-4 px-4 text-right">
-                                <span class="bg-amber-100 text-amber-900 font-black px-2.5 py-1 rounded-lg border border-amber-300">80,51%</span>
-                            </td>
-                        </tr>
-
-                        <!-- Total Row -->
-                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
-                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO</td>
-                            <td class="py-4 px-4 text-right">142.330</td>
-                            <td class="py-4 px-4 text-right text-teal-300">11.209</td>
-                            <td class="py-4 px-4 text-right text-amber-300">7,88%</td>
-                            <td class="py-4 px-4 text-right text-teal-200">59.540</td>
-                            <td class="py-4 px-4 text-right text-teal-200">R$ 3,62</td>
-                            <td class="py-4 px-4 text-right">78,8%</td>
-                            <td class="py-4 px-4 text-right">34,5%</td>
-                            <td class="py-4 px-4 text-right rounded-r-xl">
-                                <span class="bg-teal-500 text-slate-950 font-black px-2.5 py-1 rounded-lg">40,9%</span>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-3">
-                <i class="fa-solid fa-gear text-teal-600 text-base shrink-0 mt-0.5"></i>
-                <div>
-                    <strong class="text-slate-800">Nota de Análise Técnica:</strong> A campanha de <em>Serviços (Eletroneuromiografia)</em> gerou o maior engajamento direto (5.882 cliques com 9,18% de CTR) com excelente taxa de topo (82,48%). A campanha <em>Institucional</em> assegura a proteção da marca com 80,51% de parcela de impressão ao CPC mais econômico do leilão (R$ 2,96).
+                
+                <!-- Botões de Alternância de Visão (Tabs Executivas) -->
+                <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl self-start md:self-auto no-print">
+                    <button id="btnTabConsolidated" onclick="switchTableTab('consolidated')" class="px-4 py-2 text-xs font-extrabold rounded-xl bg-teal-600 text-white shadow-xs transition-all">
+                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Visão Consolidada por Campanha
+                    </button>
+                    <button id="btnTabMonthly" onclick="switchTableTab('monthly')" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-calendar-days mr-1.5"></i>Detalhamento Mês a Mês
+                    </button>
                 </div>
             </div>
 
-            <!-- Nota de Exceção Estratégica (Retirada da Polissonografia) -->
-            <div class="mt-3 p-4 rounded-2xl bg-amber-50/90 border border-amber-300 text-xs text-amber-950 flex items-start gap-3 shadow-xs">
-                <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base shrink-0 mt-0.5"></i>
-                <div>
-                    <strong class="text-amber-900 font-extrabold uppercase tracking-wider">Nota de Exceção Estratégica:</strong>
-                    <span class="ml-1 text-amber-900">Em <strong>Maio/2026</strong>, foi realizada a interrupção do impulsionamento/anúncios para o exame de <strong>Polissonografia</strong>, reorientando o foco e os recursos do leilão exclusivamente para a captação de consultas em <strong>Neurologia Geral</strong> e exames de <strong>Eletroneuromiografia</strong>.</span>
+            <!-- TAB 1: VISÃO CONSOLIDADA POR CAMPANHA -->
+            <div id="tabConsolidated" class="space-y-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px] font-bold">
+                                <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Impr. Chamadas</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Ligações Tel.</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Méd.</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right font-bold text-slate-900">Custo Total</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">% 1ª Pos.</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Parcela Impr.</th>
+                                <th class="py-3.5 px-4 bg-teal-50 text-right rounded-r-xl font-bold text-teal-900">Conversões</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700 text-xs">
+                            <tr class="hover:bg-teal-50/30 transition-colors">
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900 flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-teal-600 inline-block"></span>
+                                    Especialidade (Neurologia)
+                                </td>
+                                <td class="py-3.5 px-4 text-right font-semibold">73.590</td>
+                                <td class="py-3.5 px-4 text-right font-semibold">4.592</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-teal-600">6,24%</td>
+                                <td class="py-3.5 px-4 text-right">22.466</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-800">117</td>
+                                <td class="py-3.5 px-4 text-right">R$ 3,75</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-900">R$ 17.227,30</td>
+                                <td class="py-3.5 px-4 text-right">74,93%</td>
+                                <td class="py-3.5 px-4 text-right">33,23%</td>
+                                <td class="py-3.5 px-4 text-right font-semibold text-slate-600">15,58%</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-700 bg-teal-50/50">72 conv.</td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/30 transition-colors">
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900 flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                                    Institucional (Marca)
+                                </td>
+                                <td class="py-3.5 px-4 text-right font-semibold">7.938</td>
+                                <td class="py-3.5 px-4 text-right font-semibold">984</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-amber-600">12,39%</td>
+                                <td class="py-3.5 px-4 text-right">5.759</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-800">185</td>
+                                <td class="py-3.5 px-4 text-right">R$ 2,94</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-900">R$ 2.891,90</td>
+                                <td class="py-3.5 px-4 text-right">81,56%</td>
+                                <td class="py-3.5 px-4 text-right">68,12%</td>
+                                <td class="py-3.5 px-4 text-right font-semibold text-amber-700">80,51%</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-700 bg-amber-50/50">60 conv.</td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50/30 transition-colors">
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900 flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span>
+                                    Serviços (Eletroneuromiografia)
+                                </td>
+                                <td class="py-3.5 px-4 text-right font-semibold">66.391</td>
+                                <td class="py-3.5 px-4 text-right font-semibold">6.101</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-indigo-600">9,19%</td>
+                                <td class="py-3.5 px-4 text-right">33.830</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-800">486</td>
+                                <td class="py-3.5 px-4 text-right">R$ 3,61</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-900">R$ 22.049,19</td>
+                                <td class="py-3.5 px-4 text-right">82,48%</td>
+                                <td class="py-3.5 px-4 text-right">31,94%</td>
+                                <td class="py-3.5 px-4 text-right font-semibold text-indigo-700">42,07%</td>
+                                <td class="py-3.5 px-4 text-right font-black text-indigo-700 bg-indigo-50/50">116 conv.</td>
+                            </tr>
+                            <!-- LINHA TOTAL GERAL DA CAMPANHA -->
+                            <tr class="bg-slate-900 text-white font-bold text-xs rounded-xl">
+                                <td class="py-4 px-4 rounded-l-xl font-black text-amber-300 uppercase">TOTAL GERAL CONSOLIDADO</td>
+                                <td class="py-4 px-4 text-right text-slate-200">147.919</td>
+                                <td class="py-4 px-4 text-right text-teal-300 font-black">11.677</td>
+                                <td class="py-4 px-4 text-right text-amber-300 font-black">7,89%</td>
+                                <td class="py-4 px-4 text-right text-slate-300">62.055</td>
+                                <td class="py-4 px-4 text-right text-emerald-300 font-bold">788</td>
+                                <td class="py-4 px-4 text-right text-slate-300">R$ 3,61</td>
+                                <td class="py-4 px-4 text-right text-amber-300 font-black text-sm">R$ 42.168,39</td>
+                                <td class="py-4 px-4 text-right">78,8%</td>
+                                <td class="py-4 px-4 text-right">34,5%</td>
+                                <td class="py-4 px-4 text-right text-teal-200">40,9%</td>
+                                <td class="py-4 px-4 text-right rounded-r-xl">
+                                    <span class="bg-teal-400 text-slate-950 font-black px-2.5 py-1 rounded-lg text-xs">248 Conversões</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
+            <!-- TAB 2: DETALHAMENTO MÊS A MÊS -->
+            <div id="tabMonthly" class="hidden space-y-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px] font-bold">
+                                <th class="py-3 px-3 bg-slate-50 rounded-l-xl">Campanha</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">Impr.</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">Cliques</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">CTR</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">Impr. Chamadas</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">Ligações Tel.</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">CPC Méd.</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right font-bold text-slate-900">Custo (R$)</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">% Topo</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">% 1ª Pos.</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right">Parcela Impr.</th>
+                                <th class="py-3 px-3 bg-slate-50 text-right rounded-r-xl font-bold text-teal-800">Conversões</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700 text-[11px]">
+                            
+                            <!-- BLOCO JANEIRO -->
+                            <tr class="bg-slate-100/80 text-slate-800 font-extrabold text-xs">
+                                <td colspan="12" class="py-2 px-3 bg-slate-200/60 text-slate-900 font-black">
+                                    <i class="fa-regular fa-calendar-check mr-2 text-teal-700"></i>Mês 1 — Janeiro / 2026
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-teal-600 inline-block mr-1.5"></span>Especialidade</td>
+                                <td class="py-2 px-3 text-right">9.931</td>
+                                <td class="py-2 px-3 text-right font-semibold">697</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">7,02%</td>
+                                <td class="py-2 px-3 text-right">3.052</td>
+                                <td class="py-2 px-3 text-right">10</td>
+                                <td class="py-2 px-3 text-right">R$ 3,53</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 2.463,87</td>
+                                <td class="py-2 px-3 text-right">75,67%</td>
+                                <td class="py-2 px-3 text-right">31,78%</td>
+                                <td class="py-2 px-3 text-right">13,96%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">14</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-amber-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block mr-1.5"></span>Institucional</td>
+                                <td class="py-2 px-3 text-right">954</td>
+                                <td class="py-2 px-3 text-right font-semibold">117</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-600">12,26%</td>
+                                <td class="py-2 px-3 text-right">651</td>
+                                <td class="py-2 px-3 text-right">41</td>
+                                <td class="py-2 px-3 text-right">R$ 3,18</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 371,59</td>
+                                <td class="py-2 px-3 text-right">89,72%</td>
+                                <td class="py-2 px-3 text-right">79,26%</td>
+                                <td class="py-2 px-3 text-right">84,60%</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-700">10</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-teal-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-indigo-600 inline-block mr-1.5"></span>Serviços</td>
+                                <td class="py-2 px-3 text-right">9.791</td>
+                                <td class="py-2 px-3 text-right font-semibold">856</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">8,74%</td>
+                                <td class="py-2 px-3 text-right">4.883</td>
+                                <td class="py-2 px-3 text-right">50</td>
+                                <td class="py-2 px-3 text-right">R$ 4,02</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 3.443,39</td>
+                                <td class="py-2 px-3 text-right">83,25%</td>
+                                <td class="py-2 px-3 text-right">31,66%</td>
+                                <td class="py-2 px-3 text-right">39,44%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">16</td>
+                            </tr>
+
+                            <!-- BLOCO FEVEREIRO -->
+                            <tr class="bg-slate-100/80 text-slate-800 font-extrabold text-xs border-t-2 border-slate-200">
+                                <td colspan="12" class="py-2 px-3 bg-slate-200/60 text-slate-900 font-black">
+                                    <i class="fa-regular fa-calendar-check mr-2 text-teal-700"></i>Mês 2 — Fevereiro / 2026
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-teal-600 inline-block mr-1.5"></span>Especialidade</td>
+                                <td class="py-2 px-3 text-right">8.098</td>
+                                <td class="py-2 px-3 text-right font-semibold">498</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">6,15%</td>
+                                <td class="py-2 px-3 text-right">2.217</td>
+                                <td class="py-2 px-3 text-right">10</td>
+                                <td class="py-2 px-3 text-right">R$ 3,95</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 1.967,81</td>
+                                <td class="py-2 px-3 text-right">75,92%</td>
+                                <td class="py-2 px-3 text-right">35,64%</td>
+                                <td class="py-2 px-3 text-right">13,87%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">5</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-amber-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block mr-1.5"></span>Institucional</td>
+                                <td class="py-2 px-3 text-right">926</td>
+                                <td class="py-2 px-3 text-right font-semibold">105</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-600">11,34%</td>
+                                <td class="py-2 px-3 text-right">643</td>
+                                <td class="py-2 px-3 text-right">15</td>
+                                <td class="py-2 px-3 text-right">R$ 3,25</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 340,73</td>
+                                <td class="py-2 px-3 text-right">85,98%</td>
+                                <td class="py-2 px-3 text-right">73,64%</td>
+                                <td class="py-2 px-3 text-right">87,95%</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-700">5</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-teal-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-indigo-600 inline-block mr-1.5"></span>Serviços</td>
+                                <td class="py-2 px-3 text-right">8.778</td>
+                                <td class="py-2 px-3 text-right font-semibold">823</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">9,38%</td>
+                                <td class="py-2 px-3 text-right">4.416</td>
+                                <td class="py-2 px-3 text-right">60</td>
+                                <td class="py-2 px-3 text-right">R$ 3,72</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 3.057,59</td>
+                                <td class="py-2 px-3 text-right">84,90%</td>
+                                <td class="py-2 px-3 text-right">31,26%</td>
+                                <td class="py-2 px-3 text-right">37,96%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">13</td>
+                            </tr>
+
+                            <!-- BLOCO MARÇO -->
+                            <tr class="bg-slate-100/80 text-slate-800 font-extrabold text-xs border-t-2 border-slate-200">
+                                <td colspan="12" class="py-2 px-3 bg-slate-200/60 text-slate-900 font-black">
+                                    <i class="fa-regular fa-calendar-check mr-2 text-teal-700"></i>Mês 3 — Março / 2026
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-teal-600 inline-block mr-1.5"></span>Especialidade</td>
+                                <td class="py-2 px-3 text-right">7.822</td>
+                                <td class="py-2 px-3 text-right font-semibold">480</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">6,14%</td>
+                                <td class="py-2 px-3 text-right">2.188</td>
+                                <td class="py-2 px-3 text-right">12</td>
+                                <td class="py-2 px-3 text-right">R$ 3,70</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 1.775,65</td>
+                                <td class="py-2 px-3 text-right">74,07%</td>
+                                <td class="py-2 px-3 text-right">33,29%</td>
+                                <td class="py-2 px-3 text-right">12,31%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">11</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-amber-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block mr-1.5"></span>Institucional</td>
+                                <td class="py-2 px-3 text-right">1.038</td>
+                                <td class="py-2 px-3 text-right font-semibold">116</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-600">11,18%</td>
+                                <td class="py-2 px-3 text-right">738</td>
+                                <td class="py-2 px-3 text-right">17</td>
+                                <td class="py-2 px-3 text-right">R$ 2,51</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 290,66</td>
+                                <td class="py-2 px-3 text-right">80,62%</td>
+                                <td class="py-2 px-3 text-right">62,89%</td>
+                                <td class="py-2 px-3 text-right">77,91%</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-700">10</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-teal-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-indigo-600 inline-block mr-1.5"></span>Serviços</td>
+                                <td class="py-2 px-3 text-right">10.204</td>
+                                <td class="py-2 px-3 text-right font-semibold">862</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">8,45%</td>
+                                <td class="py-2 px-3 text-right">5.311</td>
+                                <td class="py-2 px-3 text-right">68</td>
+                                <td class="py-2 px-3 text-right">R$ 3,35</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 2.887,93</td>
+                                <td class="py-2 px-3 text-right">81,39%</td>
+                                <td class="py-2 px-3 text-right">27,98%</td>
+                                <td class="py-2 px-3 text-right">37,88%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">23</td>
+                            </tr>
+
+                            <!-- BLOCO ABRIL -->
+                            <tr class="bg-slate-100/80 text-slate-800 font-extrabold text-xs border-t-2 border-slate-200">
+                                <td colspan="12" class="py-2 px-3 bg-slate-200/60 text-slate-900 font-black">
+                                    <i class="fa-regular fa-calendar-check mr-2 text-teal-700"></i>Mês 4 — Abril / 2026
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-teal-600 inline-block mr-1.5"></span>Especialidade</td>
+                                <td class="py-2 px-3 text-right">8.926</td>
+                                <td class="py-2 px-3 text-right font-semibold">627</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">7,02%</td>
+                                <td class="py-2 px-3 text-right">2.414</td>
+                                <td class="py-2 px-3 text-right">15</td>
+                                <td class="py-2 px-3 text-right">R$ 3,66</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 2.292,67</td>
+                                <td class="py-2 px-3 text-right">78,49%</td>
+                                <td class="py-2 px-3 text-right">35,13%</td>
+                                <td class="py-2 px-3 text-right">14,53%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">7</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-amber-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block mr-1.5"></span>Institucional</td>
+                                <td class="py-2 px-3 text-right">1.176</td>
+                                <td class="py-2 px-3 text-right font-semibold">136</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-600">11,56%</td>
+                                <td class="py-2 px-3 text-right">874</td>
+                                <td class="py-2 px-3 text-right">29</td>
+                                <td class="py-2 px-3 text-right">R$ 2,95</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 401,20</td>
+                                <td class="py-2 px-3 text-right">81,70%</td>
+                                <td class="py-2 px-3 text-right">60,61%</td>
+                                <td class="py-2 px-3 text-right">82,79%</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-700">4</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-teal-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-indigo-600 inline-block mr-1.5"></span>Serviços</td>
+                                <td class="py-2 px-3 text-right">8.932</td>
+                                <td class="py-2 px-3 text-right font-semibold">837</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">9,37%</td>
+                                <td class="py-2 px-3 text-right">4.452</td>
+                                <td class="py-2 px-3 text-right">76</td>
+                                <td class="py-2 px-3 text-right">R$ 3,67</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 3.069,74</td>
+                                <td class="py-2 px-3 text-right">84,95%</td>
+                                <td class="py-2 px-3 text-right">29,82%</td>
+                                <td class="py-2 px-3 text-right">36,17%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">14</td>
+                            </tr>
+
+                            <!-- BLOCO MAIO -->
+                            <tr class="bg-slate-100/80 text-slate-800 font-extrabold text-xs border-t-2 border-slate-200">
+                                <td colspan="12" class="py-2 px-3 bg-slate-200/60 text-slate-900 font-black">
+                                    <i class="fa-regular fa-calendar-check mr-2 text-teal-700"></i>Mês 5 — Maio / 2026
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-teal-600 inline-block mr-1.5"></span>Especialidade</td>
+                                <td class="py-2 px-3 text-right">9.227</td>
+                                <td class="py-2 px-3 text-right font-semibold">517</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">5,60%</td>
+                                <td class="py-2 px-3 text-right">2.544</td>
+                                <td class="py-2 px-3 text-right">11</td>
+                                <td class="py-2 px-3 text-right">R$ 3,51</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 1.813,69</td>
+                                <td class="py-2 px-3 text-right">69,69%</td>
+                                <td class="py-2 px-3 text-right">28,78%</td>
+                                <td class="py-2 px-3 text-right">17,06%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">11</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-amber-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block mr-1.5"></span>Institucional</td>
+                                <td class="py-2 px-3 text-right">921</td>
+                                <td class="py-2 px-3 text-right font-semibold">117</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-600">12,70%</td>
+                                <td class="py-2 px-3 text-right">702</td>
+                                <td class="py-2 px-3 text-right">20</td>
+                                <td class="py-2 px-3 text-right">R$ 2,73</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 319,16</td>
+                                <td class="py-2 px-3 text-right">74,69%</td>
+                                <td class="py-2 px-3 text-right">55,04%</td>
+                                <td class="py-2 px-3 text-right">82,39%</td>
+                                <td class="py-2 px-3 text-right font-bold text-amber-700">4</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 bg-teal-50/20">
+                                <td class="py-2 px-3 font-bold text-slate-900"><span class="w-2 h-2 rounded-full bg-indigo-600 inline-block mr-1.5"></span>Serviços</td>
+                                <td class="py-2 px-3 text-right">8.619</td>
+                                <td class="py-2 px-3 text-right font-semibold">708</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-600">8,21%</td>
+                                <td class="py-2 px-3 text-right">4.165</td>
+                                <td class="py-2 px-3 text-right">59</td>
+                                <td class="py-2 px-3 text-right">R$ 3,34</td>
+                                <td class="py-2 px-3 text-right font-bold text-slate-900">R$ 2.365,82</td>
+                                <td class="py-2 px-3 text-right">79,35%</td>
+                                <td class="py-2 px-3 text-right">27,39%</td>
+                                <td class="py-2 px-3 text-right">39,89%</td>
+                                <td class="py-2 px-3 text-right font-bold text-teal-700">12</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Gráfico de Custo Mensal + Post-it de Transparência -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
+                
+                <!-- Gráfico de Custo Mensal -->
+                <div class="lg:col-span-2 bg-slate-50 border border-slate-200/80 rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Demonstrativo de Investimento Mensal</span>
+                        <span class="text-xs text-slate-500 font-semibold">Custo Consolidado Google Ads (R$)</span>
+                    </div>
+                    <div class="h-60 relative">
+                        <canvas id="monthlyCostChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Post-It Note de Transparência Financeira -->
+                <div class="postit-card rounded-2xl p-5 flex flex-col justify-between space-y-3 font-sans">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-amber-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-calculator text-amber-600 text-base"></i>
+                            Análise de Investimento & Transparência
+                        </div>
+                        <h4 class="text-slate-900 font-extrabold text-sm leading-tight">
+                            Composição de Verba e Honorários de Gestão
+                        </h4>
+                        <p class="text-xs text-slate-800 leading-relaxed font-medium">
+                            O pacote contratado da clínica tem o custo global mensal de <strong>R$ 7.000,00</strong>, sendo composto por <strong>R$ 5.250,00 direcionados ao leilão de anúncios do Google Ads</strong> e <strong>R$ 1.750,00 referente aos honorários da Mídias 360 (25%)</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Tarja Informativa de Destaque para Oportunidade de Desconto Progressivo -->
+                    <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white shadow-md shadow-amber-500/20 border border-amber-400 text-xs font-bold leading-snug space-y-1">
+                        <div class="flex items-center gap-1.5 uppercase tracking-wider text-[10px] text-amber-100 font-black">
+                            <i class="fa-solid fa-circle-arrow-up text-amber-200"></i>
+                            Oportunidade de Eficiência Financeira
+                        </div>
+                        <p>
+                            Taxa de gestão reduzida para <strong>20%</strong> nos planos de investimento acima de R$ 7.500/mês (ex: R$ 6.000,00 de saldo para Google Ads e R$ 1.500,00 de mão de obra).
+                        </p>
+                    </div>
+
+                    <div class="space-y-1 pt-2 border-t border-amber-300/80 text-[11px] text-amber-950">
+                        <div class="flex justify-between font-bold">
+                            <span>Média de Mídia Ads Executada:</span>
+                            <span class="font-extrabold text-slate-900">R$ 5.271,00/mês</span>
+                        </div>
+                        <p class="text-[10px] text-amber-900/80 italic leading-snug">
+                            *Nota: Em meses de altíssima demanda como <strong>Janeiro</strong> (mês tradicionalmente forte em procura por consultas e diagnósticos), a verba de mídia foi intencionalmente acelerada para capturar o maior volume de pacientes.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
 
-        <!-- SEÇÃO 4: Performance de Palavras-Chave -->
-        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+        <!-- SEÇÃO 3: Performance Completa de Palavras-Chave -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Diagnóstica</span>
-                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Performance de Palavras-Chave Principais</h2>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Palavras-Chave (Matriz Completa)</h2>
                 </div>
-                <div class="text-xs text-slate-500 font-medium">
-                    Termos de maior volume e taxa de atração (CTR)
+                
+                <!-- Botões de Alternância da Tabela de Palavras-Chave -->
+                <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl self-start md:self-auto no-print">
+                    <button id="btnKwConsolidated" onclick="switchKwTab('top')" class="px-4 py-2 text-xs font-extrabold rounded-xl bg-teal-600 text-white shadow-xs transition-all">
+                        <i class="fa-solid fa-star mr-1.5"></i>Principais Termos por Conversão
+                    </button>
+                    <button id="btnKwFull" onclick="switchKwTab('full')" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-list-check mr-1.5"></i>Lista Completa de Palavras (51 Termos)
+                    </button>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs sm:text-sm border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
-                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Palavra-Chave</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-                        
-                        <!-- Primeiras Linha com Fundo Turquesa Translúcido (Termo Principal) -->
-                        <tr class="bg-teal-50/80 border-l-4 border-teal-600 font-bold text-slate-900">
-                            <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
-                                <span>eletroneuromiografia em brasilia</span>
-                                <span class="bg-teal-200/80 text-teal-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">Exame Principal</span>
-                            </td>
-                            <td class="py-3.5 px-4 text-right font-black text-slate-900">12.334</td>
-                            <td class="py-3.5 px-4 text-right text-teal-700 font-black">1.760</td>
-                            <td class="py-3.5 px-4 text-right text-teal-800 font-black">14,27%</td>
-                        </tr>
+            <!-- TAB 1: RESUMO PRINCIPAIS PALAVRAS-CHAVE -->
+            <div id="tabKwTop" class="space-y-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                                <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Palavra-Chave</th>
+                                <th class="py-3.5 px-4 bg-slate-50">Tipo de Correspondência</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CTR (%)</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Méd.</th>
+                                <th class="py-3.5 px-4 bg-teal-50 text-right rounded-r-xl font-bold text-teal-900">Conversões</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            
+                            <tr class="bg-teal-50/80 border-l-4 border-teal-600 font-bold text-slate-900">
+                                <td class="py-3.5 px-4 flex items-center gap-2">
+                                    <span>eletroneuromiografia em brasilia</span>
+                                    <span class="bg-teal-200/80 text-teal-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">Líder Exames</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência exata</span></td>
+                                <td class="py-3.5 px-4 text-right font-bold">13.004</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-700">1.849</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-800">14,22%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 4,51</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-700 bg-teal-100/50">46 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
-                            <td class="py-3.5 px-4">neurologista brasília</td>
-                            <td class="py-3.5 px-4 text-right">13.112</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.328</td>
-                            <td class="py-3.5 px-4 text-right font-black text-teal-800">10,13%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">neuroferraz</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência exata</span></td>
+                                <td class="py-3.5 px-4 text-right">3.940</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-amber-700">468</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-600">11,88%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 3,09</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-700 bg-amber-50">27 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/30 font-bold text-slate-900">
-                            <td class="py-3.5 px-4">clinica de eletroneuromiografia brasilia</td>
-                            <td class="py-3.5 px-4 text-right">9.914</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.249</td>
-                            <td class="py-3.5 px-4 text-right font-black text-teal-800">12,60%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">clinica de eletroneuromiografia brasilia</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência de frase</span></td>
+                                <td class="py-3.5 px-4 text-right">10.343</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.305</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-800">12,62%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 2,46</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-700 bg-teal-50">26 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
-                            <td class="py-3.5 px-4">neurologista brasília (variação de termo)</td>
-                            <td class="py-3.5 px-4 text-right">20.655</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.186</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-slate-800">5,74%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">neurologista brasília</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência exata</span></td>
+                                <td class="py-3.5 px-4 text-right">13.941</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.416</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-800">10,16%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 5,88</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-700 bg-teal-50">24 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
-                            <td class="py-3.5 px-4">eletroneuromiografia</td>
-                            <td class="py-3.5 px-4 text-right">15.451</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-indigo-700">759</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-indigo-900">4,91%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">neuro ferraz</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência exata</span></td>
+                                <td class="py-3.5 px-4 text-right">1.699</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-amber-700">229</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-600">13,48%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 3,13</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-700 bg-amber-50">18 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/40 font-bold text-slate-900">
-                            <td class="py-3.5 px-4 flex items-center gap-2">
-                                <span>neuroferraz / neuro ferraz</span>
-                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">Marca</span>
-                            </td>
-                            <td class="py-3.5 px-4 text-right">6.739</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-amber-700">853</td>
-                            <td class="py-3.5 px-4 text-right font-black text-amber-600">12,66%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">neurologista brasília</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência de frase</span></td>
+                                <td class="py-3.5 px-4 text-right">21.460</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-teal-700">1.234</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-slate-800">5,75%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 2,40</td>
+                                <td class="py-3.5 px-4 text-right font-black text-teal-700 bg-teal-50">14 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
-                            <td class="py-3.5 px-4">neurologista taguatinga</td>
-                            <td class="py-3.5 px-4 text-right">3.131</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">353</td>
-                            <td class="py-3.5 px-4 text-right font-black text-teal-800">11,27%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">eletroneuromiografia</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência de frase</span></td>
+                                <td class="py-3.5 px-4 text-right">9.246</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-indigo-700">638</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-indigo-900">6,90%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 2,45</td>
+                                <td class="py-3.5 px-4 text-right font-black text-indigo-700 bg-indigo-50">12 conv.</td>
+                            </tr>
 
-                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
-                            <td class="py-3.5 px-4">polissonografia brasilia / clinica de polissonografia</td>
-                            <td class="py-3.5 px-4 text-right">3.812</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-indigo-700">254</td>
-                            <td class="py-3.5 px-4 text-right font-bold text-indigo-900">6,66%</td>
-                        </tr>
+                            <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                                <td class="py-3.5 px-4">neuro ferraz</td>
+                                <td class="py-3.5 px-4 text-slate-600"><span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px]">Correspondência de frase</span></td>
+                                <td class="py-3.5 px-4 text-right">1.512</td>
+                                <td class="py-3.5 px-4 text-right font-bold text-amber-700">199</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-600">13,16%</td>
+                                <td class="py-3.5 px-4 text-right">R$ 2,63</td>
+                                <td class="py-3.5 px-4 text-right font-black text-amber-700 bg-amber-50">9 conv.</td>
+                            </tr>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: MATRIZ COMPLETA DE PALAVRAS-CHAVE (TODAS AS 51 PALAVRAS) -->
+            <div id="tabKwFull" class="hidden space-y-4">
+                <div class="overflow-x-auto max-h-[600px] overflow-y-auto border border-slate-200 rounded-2xl">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="sticky top-0 z-10">
+                            <tr class="border-b border-slate-200 text-slate-600 uppercase tracking-wider text-[10px] font-extrabold bg-slate-100 shadow-xs">
+                                <th class="py-3 px-3">#</th>
+                                <th class="py-3 px-3">Palavra-Chave / Termo</th>
+                                <th class="py-3 px-3">Tipo de Correspondência</th>
+                                <th class="py-3 px-3 text-right">Impr.</th>
+                                <th class="py-3 px-3 text-right">Cliques</th>
+                                <th class="py-3 px-3 text-right">CTR</th>
+                                <th class="py-3 px-3 text-right">CPC Méd.</th>
+                                <th class="py-3 px-3 text-right bg-teal-100/80 font-bold text-teal-900">Conversões</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700 text-[11px]">
+                            
+                            <!-- 1 a 27 (Print 1) -->
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">01</td><td class="py-2 px-3 font-bold text-slate-900">neurologista brasília</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">21.460</td><td class="py-2 px-3 text-right font-semibold">1.234</td><td class="py-2 px-3 text-right">5,75%</td><td class="py-2 px-3 text-right">R$ 2,40</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">14</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">02</td><td class="py-2 px-3 font-bold text-slate-900">eletroneuromiografia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">16.049</td><td class="py-2 px-3 text-right font-semibold">786</td><td class="py-2 px-3 text-right">4,90%</td><td class="py-2 px-3 text-right">R$ 3,18</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">4</td></tr>
+                            <tr class="hover:bg-slate-50 bg-teal-50/20"><td class="py-2 px-3 text-slate-400 font-mono">03</td><td class="py-2 px-3 font-bold text-slate-900">neurologista brasília</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">13.941</td><td class="py-2 px-3 text-right font-semibold">1.416</td><td class="py-2 px-3 text-right font-bold text-teal-700">10,16%</td><td class="py-2 px-3 text-right">R$ 5,88</td><td class="py-2 px-3 text-right font-black text-teal-800 bg-teal-100/50">24</td></tr>
+                            <tr class="hover:bg-slate-50 bg-teal-50/40"><td class="py-2 px-3 text-slate-400 font-mono">04</td><td class="py-2 px-3 font-bold text-slate-900">eletroneuromiografia em brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">13.004</td><td class="py-2 px-3 text-right font-semibold">1.849</td><td class="py-2 px-3 text-right font-bold text-teal-700">14,22%</td><td class="py-2 px-3 text-right">R$ 4,51</td><td class="py-2 px-3 text-right font-black text-teal-800 bg-teal-100/80">46</td></tr>
+                            <tr class="hover:bg-slate-50 bg-teal-50/30"><td class="py-2 px-3 text-slate-400 font-mono">05</td><td class="py-2 px-3 font-bold text-slate-900">clinica de eletroneuromiografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">10.343</td><td class="py-2 px-3 text-right font-semibold">1.305</td><td class="py-2 px-3 text-right font-bold text-teal-700">12,62%</td><td class="py-2 px-3 text-right">R$ 2,46</td><td class="py-2 px-3 text-right font-black text-teal-800 bg-teal-100/60">26</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">06</td><td class="py-2 px-3 font-bold text-slate-900">neurologista</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">9.348</td><td class="py-2 px-3 text-right font-semibold">185</td><td class="py-2 px-3 text-right">1,98%</td><td class="py-2 px-3 text-right">R$ 4,35</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">4</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">07</td><td class="py-2 px-3 font-bold text-slate-900">eletroneuromiografia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">9.246</td><td class="py-2 px-3 text-right font-semibold">638</td><td class="py-2 px-3 text-right">6,90%</td><td class="py-2 px-3 text-right">R$ 2,45</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">12</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">08</td><td class="py-2 px-3 font-bold text-slate-900">neurologistas</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">8.149</td><td class="py-2 px-3 text-right font-semibold">414</td><td class="py-2 px-3 text-right">5,08%</td><td class="py-2 px-3 text-right">R$ 1,90</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">5</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">09</td><td class="py-2 px-3 font-bold text-slate-900">neurologista</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">7.797</td><td class="py-2 px-3 text-right font-semibold">374</td><td class="py-2 px-3 text-right">4,80%</td><td class="py-2 px-3 text-right">R$ 1,80</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">6</td></tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/30"><td class="py-2 px-3 text-slate-400 font-mono">10</td><td class="py-2 px-3 font-bold text-slate-900">neuroferraz</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">3.940</td><td class="py-2 px-3 text-right font-semibold">468</td><td class="py-2 px-3 text-right font-bold text-amber-700">11,88%</td><td class="py-2 px-3 text-right">R$ 3,09</td><td class="py-2 px-3 text-right font-black text-amber-800 bg-amber-100/50">27</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">11</td><td class="py-2 px-3 font-bold text-slate-900">neurologista taguatinga</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">3.304</td><td class="py-2 px-3 text-right font-semibold">372</td><td class="py-2 px-3 text-right font-bold text-teal-700">11,26%</td><td class="py-2 px-3 text-right">R$ 3,82</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">6</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">12</td><td class="py-2 px-3 font-bold text-slate-900">clinica de eletroneuromiografia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">2.730</td><td class="py-2 px-3 text-right font-semibold">343</td><td class="py-2 px-3 text-right font-bold text-teal-700">12,56%</td><td class="py-2 px-3 text-right">R$ 3,36</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">8</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">13</td><td class="py-2 px-3 font-bold text-slate-900">polissonografia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">2.557</td><td class="py-2 px-3 text-right font-semibold">73</td><td class="py-2 px-3 text-right">2,85%</td><td class="py-2 px-3 text-right">R$ 5,86</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">14</td><td class="py-2 px-3 font-bold text-slate-900">neurologistas brasília</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">2.225</td><td class="py-2 px-3 text-right font-semibold">157</td><td class="py-2 px-3 text-right">7,06%</td><td class="py-2 px-3 text-right">R$ 2,62</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">3</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">15</td><td class="py-2 px-3 font-bold text-slate-900">clinica de polissonografia em brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">1.942</td><td class="py-2 px-3 text-right font-semibold">124</td><td class="py-2 px-3 text-right">6,39%</td><td class="py-2 px-3 text-right">R$ 3,81</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">4</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">16</td><td class="py-2 px-3 font-bold text-slate-900">polissonografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">1.870</td><td class="py-2 px-3 text-right font-semibold">130</td><td class="py-2 px-3 text-right">6,95%</td><td class="py-2 px-3 text-right">R$ 7,12</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">17</td><td class="py-2 px-3 font-bold text-slate-900">eletroneuromiografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">1.851</td><td class="py-2 px-3 text-right font-semibold">193</td><td class="py-2 px-3 text-right font-bold text-teal-700">10,43%</td><td class="py-2 px-3 text-right">R$ 5,07</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">1</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">18</td><td class="py-2 px-3 font-bold text-slate-900">eletroneuromiografia em brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">1.718</td><td class="py-2 px-3 text-right font-semibold">254</td><td class="py-2 px-3 text-right font-bold text-teal-700">14,78%</td><td class="py-2 px-3 text-right">R$ 3,12</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/30"><td class="py-2 px-3 text-slate-400 font-mono">19</td><td class="py-2 px-3 font-bold text-slate-900">neuro ferraz</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">1.699</td><td class="py-2 px-3 text-right font-semibold">229</td><td class="py-2 px-3 text-right font-bold text-amber-700">13,48%</td><td class="py-2 px-3 text-right">R$ 3,13</td><td class="py-2 px-3 text-right font-black text-amber-800 bg-amber-100/50">18</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">20</td><td class="py-2 px-3 font-bold text-slate-900">eletroneuromiografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">1.625</td><td class="py-2 px-3 text-right font-semibold">177</td><td class="py-2 px-3 text-right font-bold text-teal-700">10,89%</td><td class="py-2 px-3 text-right">R$ 3,41</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">21</td><td class="py-2 px-3 font-bold text-slate-900">neurologistas</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">1.550</td><td class="py-2 px-3 text-right font-semibold">21</td><td class="py-2 px-3 text-right">1,35%</td><td class="py-2 px-3 text-right">R$ 3,65</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">22</td><td class="py-2 px-3 font-bold text-slate-900">polissonografia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">1.531</td><td class="py-2 px-3 text-right font-semibold">72</td><td class="py-2 px-3 text-right">4,70%</td><td class="py-2 px-3 text-right">R$ 3,80</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">1</td></tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/30"><td class="py-2 px-3 text-slate-400 font-mono">23</td><td class="py-2 px-3 font-bold text-slate-900">neuro ferraz</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">1.512</td><td class="py-2 px-3 text-right font-semibold">199</td><td class="py-2 px-3 text-right font-bold text-amber-700">13,16%</td><td class="py-2 px-3 text-right">R$ 2,63</td><td class="py-2 px-3 text-right font-bold text-amber-800 bg-amber-100/50">9</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">24</td><td class="py-2 px-3 font-bold text-slate-900">neurologia águas claras</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">1.451</td><td class="py-2 px-3 text-right font-semibold">125</td><td class="py-2 px-3 text-right font-bold text-teal-700">8,61%</td><td class="py-2 px-3 text-right">R$ 3,99</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">1</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">25</td><td class="py-2 px-3 font-bold text-slate-900">neurologia brasília</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">940</td><td class="py-2 px-3 text-right font-semibold">76</td><td class="py-2 px-3 text-right font-bold text-teal-700">8,09%</td><td class="py-2 px-3 text-right">R$ 6,10</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">4</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">26</td><td class="py-2 px-3 font-bold text-slate-900">consulta neurologia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">806</td><td class="py-2 px-3 text-right font-semibold">53</td><td class="py-2 px-3 text-right">6,58%</td><td class="py-2 px-3 text-right">R$ 4,45</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/30"><td class="py-2 px-3 text-slate-400 font-mono">27</td><td class="py-2 px-3 font-bold text-slate-900">instituto neuro ferraz</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">744</td><td class="py-2 px-3 text-right font-semibold">82</td><td class="py-2 px-3 text-right font-bold text-amber-700">11,02%</td><td class="py-2 px-3 text-right">R$ 2,40</td><td class="py-2 px-3 text-right font-bold text-amber-800 bg-amber-100/50">6</td></tr>
+
+                            <!-- 28 a 51 (Print 2) -->
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">28</td><td class="py-2 px-3 font-bold text-slate-900">polissonografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">598</td><td class="py-2 px-3 text-right font-semibold">43</td><td class="py-2 px-3 text-right">7,19%</td><td class="py-2 px-3 text-right">R$ 4,00</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">29</td><td class="py-2 px-3 font-bold text-slate-900">polissonografia em brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">492</td><td class="py-2 px-3 text-right font-semibold">43</td><td class="py-2 px-3 text-right font-bold text-teal-700">8,74%</td><td class="py-2 px-3 text-right">R$ 4,81</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">30</td><td class="py-2 px-3 font-bold text-slate-900">neurologia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">422</td><td class="py-2 px-3 text-right font-semibold">21</td><td class="py-2 px-3 text-right">4,98%</td><td class="py-2 px-3 text-right">R$ 2,20</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">2</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">31</td><td class="py-2 px-3 font-bold text-slate-900">neurologista perto de mim</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">397</td><td class="py-2 px-3 text-right font-semibold">19</td><td class="py-2 px-3 text-right">4,79%</td><td class="py-2 px-3 text-right">R$ 3,72</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">32</td><td class="py-2 px-3 font-bold text-slate-900">polissonografia em brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">375</td><td class="py-2 px-3 text-right font-semibold">39</td><td class="py-2 px-3 text-right font-bold text-teal-700">10,40%</td><td class="py-2 px-3 text-right">R$ 6,58</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">3</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">33</td><td class="py-2 px-3 font-bold text-slate-900">neurologista taguatinga</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">372</td><td class="py-2 px-3 text-right font-semibold">19</td><td class="py-2 px-3 text-right">5,11%</td><td class="py-2 px-3 text-right">R$ 2,24</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">34</td><td class="py-2 px-3 font-bold text-slate-900">neurologista guará</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">317</td><td class="py-2 px-3 text-right font-semibold">26</td><td class="py-2 px-3 text-right font-bold text-teal-700">8,20%</td><td class="py-2 px-3 text-right">R$ 4,24</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">35</td><td class="py-2 px-3 font-bold text-slate-900">neurologia brasília</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">316</td><td class="py-2 px-3 text-right font-semibold">12</td><td class="py-2 px-3 text-right">3,80%</td><td class="py-2 px-3 text-right">R$ 1,96</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">36</td><td class="py-2 px-3 font-bold text-slate-900">neurologista águas claras</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">289</td><td class="py-2 px-3 text-right font-semibold">20</td><td class="py-2 px-3 text-right">6,92%</td><td class="py-2 px-3 text-right">R$ 3,16</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">37</td><td class="py-2 px-3 font-bold text-slate-900">neurologia taguatinga</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">234</td><td class="py-2 px-3 text-right font-semibold">26</td><td class="py-2 px-3 text-right font-bold text-teal-700">11,11%</td><td class="py-2 px-3 text-right">R$ 4,20</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">38</td><td class="py-2 px-3 font-bold text-slate-900">clinica de polissonografia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">184</td><td class="py-2 px-3 text-right font-semibold">17</td><td class="py-2 px-3 text-right font-bold text-teal-700">9,24%</td><td class="py-2 px-3 text-right">R$ 5,75</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">39</td><td class="py-2 px-3 font-bold text-slate-900">clinica de eletroneuromiografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">94</td><td class="py-2 px-3 text-right font-semibold">9</td><td class="py-2 px-3 text-right font-bold text-teal-700">9,57%</td><td class="py-2 px-3 text-right">R$ 4,23</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">40</td><td class="py-2 px-3 font-bold text-slate-900">neurologia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">93</td><td class="py-2 px-3 text-right font-semibold">2</td><td class="py-2 px-3 text-right">2,15%</td><td class="py-2 px-3 text-right">R$ 8,31</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">41</td><td class="py-2 px-3 font-bold text-slate-900">neurologista particular</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">82</td><td class="py-2 px-3 text-right font-semibold">11</td><td class="py-2 px-3 text-right font-bold text-teal-700">13,41%</td><td class="py-2 px-3 text-right">R$ 3,62</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">42</td><td class="py-2 px-3 font-bold text-slate-900">clinica de polissonografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">68</td><td class="py-2 px-3 text-right font-semibold">2</td><td class="py-2 px-3 text-right">2,94%</td><td class="py-2 px-3 text-right">R$ 2,04</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">1</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">43</td><td class="py-2 px-3 font-bold text-slate-900">clinica de polissonografia em brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">52</td><td class="py-2 px-3 text-right font-semibold">1</td><td class="py-2 px-3 text-right">1,92%</td><td class="py-2 px-3 text-right">R$ 8,13</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">44</td><td class="py-2 px-3 font-bold text-slate-900">neurologistas taguatinga</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">30</td><td class="py-2 px-3 text-right font-semibold">6</td><td class="py-2 px-3 text-right font-bold text-teal-700">20,00%</td><td class="py-2 px-3 text-right">R$ 6,78</td><td class="py-2 px-3 text-right font-bold text-teal-700 bg-teal-50/50">1</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">45</td><td class="py-2 px-3 font-bold text-slate-900">clinica de polissonografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">28</td><td class="py-2 px-3 text-right font-semibold">1</td><td class="py-2 px-3 text-right">3,57%</td><td class="py-2 px-3 text-right">R$ 7,77</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/30"><td class="py-2 px-3 text-slate-400 font-mono">46</td><td class="py-2 px-3 font-bold text-slate-900">neuroferraz clínica</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">23</td><td class="py-2 px-3 text-right font-semibold">3</td><td class="py-2 px-3 text-right font-bold text-amber-700">13,04%</td><td class="py-2 px-3 text-right">R$ 1,42</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">47</td><td class="py-2 px-3 font-bold text-slate-900">neurologistas brasília</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">22</td><td class="py-2 px-3 text-right font-semibold">1</td><td class="py-2 px-3 text-right">4,55%</td><td class="py-2 px-3 text-right">R$ 10,05</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">48</td><td class="py-2 px-3 font-bold text-slate-900">neurologista plano piloto</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">21</td><td class="py-2 px-3 text-right font-semibold">0</td><td class="py-2 px-3 text-right">0,00%</td><td class="py-2 px-3 text-right">R$ 0,00</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">49</td><td class="py-2 px-3 font-bold text-slate-900">clinica de eletroneuromiografia brasilia</td><td class="py-2 px-3 text-slate-500">Correspondência exata</td><td class="py-2 px-3 text-right">20</td><td class="py-2 px-3 text-right font-semibold">2</td><td class="py-2 px-3 text-right font-bold text-teal-700">10,00%</td><td class="py-2 px-3 text-right">R$ 3,24</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-2 px-3 text-slate-400 font-mono">50</td><td class="py-2 px-3 font-bold text-slate-900">neurologia taguatinga</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">16</td><td class="py-2 px-3 text-right font-semibold">2</td><td class="py-2 px-3 text-right font-bold text-teal-700">12,50%</td><td class="py-2 px-3 text-right">R$ 3,18</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/30"><td class="py-2 px-3 text-slate-400 font-mono">51</td><td class="py-2 px-3 font-bold text-slate-900">neuroferraz</td><td class="py-2 px-3 text-slate-500">Correspondência de frase</td><td class="py-2 px-3 text-right">15</td><td class="py-2 px-3 text-right font-semibold">3</td><td class="py-2 px-3 text-right font-bold text-amber-700">20,00%</td><td class="py-2 px-3 text-right">R$ 1,73</td><td class="py-2 px-3 text-right text-slate-400">0</td></tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- SEÇÃO 5: Agendamentos na Doctoralia -->
+        <!-- SEÇÃO 4: Segmentação Geográfica & Raio de Cobertura -->
         <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Evolução Mensal de Consultas & Captação</span>
-                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Agendamentos na Doctoralia</h2>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Geo-Targeting & Densidade de Conversão</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Segmentação Geográfica & Raio de Cobertura</h2>
                 </div>
-                <div class="text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto">
-                    Consolidado Mês a Mês (Jan a Ago/2026)
-                </div>
-            </div>
-
-            <!-- Gráfico Comparativo Mês a Mês com Valores nos Anúncios/Barras -->
-            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/80">
-                <div class="h-80 relative">
-                    <canvas id="appointmentsChart"></canvas>
+                <div class="flex items-center gap-2 bg-teal-50 text-teal-800 border border-teal-200 px-3.5 py-1.5 rounded-full text-xs font-bold self-start md:self-auto">
+                    <i class="fa-solid fa-location-dot text-teal-600"></i>
+                    Edifício Arnaldo Sonda (Lago Norte, DF)
                 </div>
             </div>
 
-            <!-- Tabela Limpa Mês a Mês -->
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs sm:text-sm border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
-                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Mês Analisado</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right">Agendamentos Totais</th>
-                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Pacientes Novos (1ª Consulta)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 1 (Janeiro / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">1.048</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">150 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 2 (Fevereiro / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">467</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">106 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 3 (Março / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">574</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">175 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 4 (Abril / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">529</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">174 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 5 (Maio / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">401</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">108 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 6 (Junho / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">533</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">116 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 7 (Julho / 2026)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">541</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">182 novos</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3 px-4 font-bold text-slate-900">Mês 8 (Agosto / 2026 - parcial até dia 16)</td>
-                            <td class="py-3 px-4 text-right font-extrabold text-slate-900">221</td>
-                            <td class="py-3 px-4 text-right font-bold text-teal-700">68 novos</td>
-                        </tr>
-                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
-                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO ACUMULADO (7,5 Meses)</td>
-                            <td class="py-4 px-4 text-right text-amber-300 font-black text-lg">4.314</td>
-                            <td class="py-4 px-4 text-right text-teal-300 rounded-r-xl font-black text-base">1.079 Pacientes Novos</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Mapa Interativo Leaflet -->
+            <div class="space-y-4">
+                <div id="geoMap" class="w-full h-80 sm:h-96 rounded-2xl z-10 border border-slate-200"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-sm">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <div class="text-xs text-slate-700 leading-relaxed">
+                            <h4 class="font-extrabold text-slate-900 text-sm mb-1">Núcleo de Maior Conversão (Raio de 6 km)</h4>
+                            <p>
+                                Atualmente, as campanhas registram a <strong>maior densidade de agendamentos e conversões em Neurologia no raio primário de 6 km</strong> ao redor do Edifício Arnaldo Sonda (Lago Norte, Asa Norte, CA 7 e proximidades).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-sm">
+                            <i class="fa-solid fa-compass"></i>
+                        </div>
+                        <div class="text-xs text-slate-700 leading-relaxed">
+                            <h4 class="font-extrabold text-slate-900 text-sm mb-1">Alcance Máximo da Campanha (Raio de 30 km)</h4>
+                            <p>
+                                As campanhas estão configuradas tecnicamente com <strong>raio máximo de cobertura de 30 km</strong>, garantindo captação em todo o Distrito Federal (Plano Piloto, Sudoeste, Taguatinga, Águas Claras e entorno).
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- SEÇÃO 6: Reputação Digital & Prova Social -->
+        <!-- SEÇÃO 5: Reputação Digital & Prova Social na Doctoralia -->
         <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
-                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Reputação Digital & Prova Social na Doctoralia</h2>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Reputação Digital & Prova Social na Doctoralia</h2>
                 </div>
                 <div class="flex items-center gap-1 text-teal-600">
                     <i class="fa-solid fa-star text-sm"></i>
@@ -639,7 +1100,7 @@
                 <!-- Card 1: Acumulado -->
                 <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
                     <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões</span>
-                    <div class="text-4xl font-black text-amber-400 my-2">2.983</div>
+                    <div class="text-4xl font-black text-amber-400 my-2">996</div>
                     <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Acumuladas</p>
                     <p class="text-[11px] text-slate-400 mt-1">Sólido acervo de autoridade clínica no Distrito Federal.</p>
                 </div>
@@ -649,11 +1110,11 @@
                     <div>
                         <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
                             <i class="fa-solid fa-circle-check text-emerald-600"></i>
-                            Crescimento Recente
+                            Crescimento em 2026
                         </div>
-                        <div class="text-3xl font-black text-emerald-950 mt-2">+249 Novas Opiniões</div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+263 Novas Opiniões</div>
                         <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
-                            Avaliações de pacientes recebidas no período analisado.
+                            Avaliações de pacientes recebidas neste ano.
                         </p>
                     </div>
                     <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
@@ -672,7 +1133,7 @@
                     Métricas da plataforma comprovam que <strong>70% dos pacientes que acessam o perfil do especialista no Doctoralia consultam diretamente a área de opiniões e depoimentos antes de finalizar o agendamento.</strong>
                 </p>
                 <p class="text-slate-400 text-[11px]">
-                    A união entre o tráfego pago de alta intenção vindo do Google Ads (11.209 cliques e 5.657 cliques no telefone) e o acervo consagrado de <strong>2.983 opiniões nota 5.0★</strong> elimina a hesitação do paciente, transformando a busca em agendamento imediato na Clínica NeuroFerraz.
+                    A união entre o tráfego pago de alta intenção vindo do Google Ads (11.209 cliques e 5.657 cliques no telefone) e o acervo consagrado de <strong>996 opiniões nota 5.0★</strong> elimina a hesitação do paciente, transformando a busca em agendamento imediato na Clínica NeuroFerraz.
                 </p>
             </div>
         </section>
@@ -693,35 +1154,109 @@
     </footer>
 
     <script>
+        // Função para alternar entre as abas da tabela na Seção 2
+        function switchTableTab(tab) {
+            const tabConsolidated = document.getElementById('tabConsolidated');
+            const tabMonthly = document.getElementById('tabMonthly');
+            const btnConsolidated = document.getElementById('btnTabConsolidated');
+            const btnMonthly = document.getElementById('btnTabMonthly');
+
+            if (tab === 'consolidated') {
+                tabConsolidated.classList.remove('hidden');
+                tabMonthly.classList.add('hidden');
+                btnConsolidated.className = "px-4 py-2 text-xs font-extrabold rounded-xl bg-teal-600 text-white shadow-xs transition-all";
+                btnMonthly.className = "px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+            } else {
+                tabConsolidated.classList.add('hidden');
+                tabMonthly.classList.remove('hidden');
+                btnConsolidated.className = "px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+                btnMonthly.className = "px-4 py-2 text-xs font-extrabold rounded-xl bg-teal-600 text-white shadow-xs transition-all";
+            }
+        }
+
+        // Função para alternar entre as abas de Palavras-Chave na Seção 3
+        function switchKwTab(tab) {
+            const tabKwTop = document.getElementById('tabKwTop');
+            const tabKwFull = document.getElementById('tabKwFull');
+            const btnKwConsolidated = document.getElementById('btnKwConsolidated');
+            const btnKwFull = document.getElementById('btnKwFull');
+
+            if (tab === 'top') {
+                tabKwTop.classList.remove('hidden');
+                tabKwFull.classList.add('hidden');
+                btnKwConsolidated.className = "px-4 py-2 text-xs font-extrabold rounded-xl bg-teal-600 text-white shadow-xs transition-all";
+                btnKwFull.className = "px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+            } else {
+                tabKwTop.classList.add('hidden');
+                tabKwFull.classList.remove('hidden');
+                btnKwConsolidated.className = "px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+                btnKwFull.className = "px-4 py-2 text-xs font-extrabold rounded-xl bg-teal-600 text-white shadow-xs transition-all";
+            }
+        }
+
         window.onload = function() {
-            // Register DataLabels Plugin
-            if (typeof ChartDataLabels !== 'undefined') {
-                Chart.register(ChartDataLabels);
+            // 1. Mapa de Segmentação Geográfica (Leaflet.js)
+            const clinicCoords = [-15.7276, -47.8863]; // Lago Norte CA 7 (Edifício Arnaldo Sonda - Brasília/DF)
+            const mapElem = document.getElementById('geoMap');
+
+            if (mapElem && typeof L !== 'undefined') {
+                const map = L.map('geoMap', {
+                    center: clinicCoords,
+                    zoom: 10,
+                    zoomControl: true,
+                    scrollWheelZoom: false
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+
+                // Raio Máximo da Campanha (30 km)
+                L.circle(clinicCoords, {
+                    color: '#4f46e5',
+                    fillColor: '#818cf8',
+                    fillOpacity: 0.08,
+                    radius: 30000,
+                    dashArray: '6, 6',
+                    weight: 2
+                }).addTo(map);
+
+                // Raio Primário de Maior Conversão (6 km)
+                L.circle(clinicCoords, {
+                    color: '#0d9488',
+                    fillColor: '#14b8a6',
+                    fillOpacity: 0.28,
+                    radius: 6000,
+                    weight: 3
+                }).addTo(map);
+
+                // Marcador Personalizado no Edifício Arnaldo Sonda
+                const customIcon = L.divIcon({
+                    className: 'custom-map-icon',
+                    html: `<div style="background-color: #0d9488; width: 38px; height: 38px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">🏥</div>`,
+                    iconSize: [38, 38],
+                    iconAnchor: [19, 19]
+                });
+
+                L.marker(clinicCoords, { icon: customIcon }).addTo(map)
+                    .bindPopup("<strong>Clínica NeuroFerraz</strong><br>Edifício Arnaldo Sonda - CA 7, Bloco C, Sala 202<br>Lago Norte, Brasília - DF")
+                    .openPopup();
             }
 
-            // Chart.js CTR Benchmark Chart
-            const chartElement = document.getElementById('ctrBenchmarkChart');
-            if (chartElement) {
-                const ctxCtr = chartElement.getContext('2d');
-                
-                new Chart(ctxCtr, {
+            // 2. Chart.js CTR Benchmark Chart
+            const ctxCtrElem = document.getElementById('ctrBenchmarkChart');
+            if (ctxCtrElem) {
+                new Chart(ctxCtrElem, {
                     type: 'bar',
                     data: {
                         labels: ['Média Saúde (3,17%)', 'NeuroFerraz (7,88%)'],
                         datasets: [{
                             label: 'Taxa de Cliques (CTR %)',
                             data: [3.17, 7.88],
-                            backgroundColor: [
-                                '#cbd5e1',
-                                '#d97706'
-                            ],
-                            borderColor: [
-                                '#94a3b8',
-                                '#b45309'
-                            ],
+                            backgroundColor: ['#cbd5e1', '#d97706'],
+                            borderColor: ['#94a3b8', '#b45309'],
                             borderWidth: 1.5,
                             borderRadius: 12,
-                            borderSkipped: false,
                             barThickness: 38
                         }]
                     },
@@ -729,7 +1264,6 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            datalabels: { display: false },
                             legend: { display: false },
                             tooltip: {
                                 callbacks: {
@@ -765,64 +1299,32 @@
                 });
             }
 
-            // Chart.js Appointments Chart with Data Values on Top of Bars
-            const apptElement = document.getElementById('appointmentsChart');
-            if (apptElement) {
-                const ctxAppt = apptElement.getContext('2d');
-                new Chart(ctxAppt, {
+            // 3. Chart.js Monthly Cost Chart
+            const ctxCostElem = document.getElementById('monthlyCostChart');
+            if (ctxCostElem) {
+                new Chart(ctxCostElem, {
                     type: 'bar',
                     data: {
-                        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
-                        datasets: [
-                            {
-                                label: 'Agendamentos Totais',
-                                data: [1048, 467, 574, 529, 401, 533, 541, 221],
-                                backgroundColor: '#0d9488',
-                                borderRadius: 8,
-                                borderSkipped: false
-                            },
-                            {
-                                label: 'Pacientes Novos (1ª Consulta)',
-                                data: [150, 106, 175, 174, 108, 116, 182, 68],
-                                backgroundColor: '#f59e0b',
-                                borderRadius: 8,
-                                borderSkipped: false
-                            }
-                        ]
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago*'],
+                        datasets: [{
+                            label: 'Investimento Google Ads (R$)',
+                            data: [6278.85, 5366.13, 4954.24, 5763.61, 4498.67, 5546.51, 5511.71, 4248.67],
+                            backgroundColor: '#0d9488',
+                            borderRadius: 8,
+                            barThickness: 28
+                        }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        layout: {
-                            padding: {
-                                top: 25
-                            }
-                        },
                         plugins: {
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'top',
-                                color: '#1e293b',
-                                font: {
-                                    family: 'Plus Jakarta Sans',
-                                    size: 10,
-                                    weight: 'bold'
-                                },
-                                formatter: function(value) {
-                                    return value.toLocaleString('pt-BR');
-                                }
-                            },
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    font: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
-                                    color: '#1e293b',
-                                    usePointStyle: true,
-                                    boxWidth: 8
-                                }
-                            },
+                            legend: { display: false },
                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Custo: R$ ' + context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                                    }
+                                },
                                 backgroundColor: '#0f172a',
                                 titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
                                 bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
@@ -833,8 +1335,8 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 1200,
                                 ticks: {
+                                    callback: function(value) { return 'R$ ' + value.toLocaleString('pt-BR'); },
                                     font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
                                     color: '#64748b'
                                 },

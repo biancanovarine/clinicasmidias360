@@ -1,0 +1,798 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Executivo de Performance - Clínica Médica Med Total | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+                        },
+                        emerald: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff', 100: '#e0e7ff', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+        .gradient-teal { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+        .gradient-accent { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
+        #geoMap { width: 100%; height: 400px; border-radius: 1.5rem; z-index: 10; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Header Principal -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    MT
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Clínica Médica Med Total</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 pulse-dot"></span>
+                            Reumatologia
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Consolidado (01/08 a 31/08/2026)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 flex-wrap justify-end">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">5.0 ★</span>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header de Metadados -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
+                    Período: <span class="text-teal-700">01 a 31 de Agosto / 2026</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 5,88</span>
+                </div>
+
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar Relatório</span>
+            </button>
+        </div>
+
+        <!-- SEÇÃO 1: Alcance do Anúncio no Google -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Alta Performance de Atração em Reumatologia Presencial & Online</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Visão Geral Google Ads (Santo André & ABC / Brasil)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">23.473</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Exibições nos leilões do Google</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Diretos</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">983</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego altamente qualificado</p>
+                </div>
+
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR (Cliques)</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">4,19%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">Acima da média de mercado (3,17%)</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos Doctoralia</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">1.048</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 93,8% dos acessos ao perfil vieram das campanhas do Google Ads</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Telefone</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-phone-volume text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">84</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Acionamentos diretos no telefone</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Benchmark de Eficiência & Domínio de Busca -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 flex flex-col justify-between print-card">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Atração</span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">+32% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900">Benchmark da Área de Saúde</h3>
+                    <p class="text-xs text-slate-500 mt-1">Taxa de cliques (CTR) da Med Total comparada à média do setor médico (3,17%).</p>
+                </div>
+
+                <div class="my-6 relative h-48 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                    <span>A campanha de <strong>Especialidade</strong> atingiu impressionantes <strong>9,68% de CTR</strong>, demonstrando altíssima relevância.</span>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice & Posições de Pesquisa</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Destaque de Topo</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio nas Buscas de Reumatologia em Santo André & ABC</h3>
+                </div>
+
+                <div class="my-6 space-y-5">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Top Page (% Área Superior na Campanha Especialidade)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">72,90%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 72.90%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                Top Page (% Área Superior na Campanha Online)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">73,18%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-accent h-full rounded-full" style="width: 73.18%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+                                1ª Posição Absoluta (% Marca Med Total)
+                            </span>
+                            <span class="text-indigo-400 font-extrabold text-base">92,31%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="bg-indigo-500 h-full rounded-full" style="width: 92.31%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-teal-400"></i>
+                        Rua Campos Sales, 582 - Santo André • Mauá • Ribeirão Pires • São Caetano
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 3: Tabela por Campanha no Google Ads -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura de Campanhas no Google Ads</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Leilão por Campanha</h2>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                    Consolidado Agosto/2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Méd.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo Pag.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Posição</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Parc. Impr.</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Online (Reumatologia Telemedicina)
+                            </td>
+                            <td class="py-4 px-4 text-right">18.280</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">471</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-600">2,58%</td>
+                            <td class="py-4 px-4 text-right font-semibold">R$ 8,28</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">73,18%</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">61,85%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">30,76%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Especialidade (Presencial Santo André & ABC)
+                            </td>
+                            <td class="py-4 px-4 text-right">5.085</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">492</td>
+                            <td class="py-4 px-4 text-right font-black text-teal-600">9,68%</td>
+                            <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 3,51</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">72,90%</td>
+                            <td class="py-4 px-4 text-right">45,71%</td>
+                            <td class="py-4 px-4 text-right">&lt; 10%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Institucional (Marca Med Total)
+                            </td>
+                            <td class="py-4 px-4 text-right">108</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">20</td>
+                            <td class="py-4 px-4 text-right font-black text-amber-600">18,52%</td>
+                            <td class="py-4 px-4 text-right font-semibold">R$ 7,59</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">95,38%</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">92,31%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">56,03%</td>
+                        </tr>
+
+                        <!-- Total Row -->
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO</td>
+                            <td class="py-4 px-4 text-right">23.473</td>
+                            <td class="py-4 px-4 text-right text-teal-300">983</td>
+                            <td class="py-4 px-4 text-right text-amber-300">4,19%</td>
+                            <td class="py-4 px-4 text-right text-teal-200">R$ 5,88</td>
+                            <td class="py-4 px-4 text-right">73,2%</td>
+                            <td class="py-4 px-4 text-right">58,7%</td>
+                            <td class="py-4 px-4 text-right rounded-r-xl">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: Palavras-chave -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Diagnóstica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Performance de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Termos de maior volume e taxa de cliques (CTR)
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Palavra-Chave / Termo de Pesquisa</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="bg-teal-50/80 border-l-4 border-teal-600 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>reumatologia santo andré</span>
+                                <span class="bg-teal-200 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Santo André</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-black">172</td>
+                            <td class="py-3.5 px-4 text-right text-teal-700 font-black">18</td>
+                            <td class="py-3.5 px-4 text-right text-teal-800 font-black">10,47%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                            <td class="py-3.5 px-4">reumatologista</td>
+                            <td class="py-3.5 px-4 text-right">633</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">18</td>
+                            <td class="py-3.5 px-4 text-right font-semibold">2,84%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900 bg-teal-50/30">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>reumatologista online</span>
+                                <span class="bg-indigo-100 text-indigo-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Online</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold">79</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">14</td>
+                            <td class="py-3.5 px-4 text-right font-black text-indigo-700">17,72%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900 bg-amber-50/30">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>clínica médica med total</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Marca</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold">37</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-amber-700">8</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-600">21,62%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900 bg-amber-50/30">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>med total / med total clínica médica</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Marca</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold">71</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-amber-700">12</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-600">16,90%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                            <td class="py-3.5 px-4">reumatologistas</td>
+                            <td class="py-3.5 px-4 text-right">46</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">6</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">13,04%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900 bg-teal-50/30">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>consulta reumatologista online / reumatologia online</span>
+                                <span class="bg-indigo-100 text-indigo-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Online</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold">38</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">10</td>
+                            <td class="py-3.5 px-4 text-right font-black text-indigo-700">26,32%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>reumatologista perto de mim</span>
+                                <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Geolocalizado</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold">27</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">5</td>
+                            <td class="py-3.5 px-4 text-right font-black text-teal-800">18,52%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-3.5 px-4">consulta reumatologia online</td>
+                            <td class="py-3.5 px-4 text-right">17</td>
+                            <td class="py-3.5 px-4 text-right font-semibold">4</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">23,53%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Evolução de Agendamentos na Doctoralia -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Evolução Mensal de Consultas & Captação</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Agendamentos na Doctoralia (Jun a Ago/2026)</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto">
+                    Consolidado Trimestral
+                </div>
+            </div>
+
+            <!-- Gráfico Comparativo Mês a Mês -->
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/80">
+                <div class="h-80 relative">
+                    <canvas id="appointmentsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Performance Geográfica -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Geolocalização Estratégica ABC</span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">6. Mapa de Atuação e Raio de Cobertura (Santo André & Região)</h2>
+                <p class="text-xs text-slate-500 mt-1">Raio principal de 10km a partir de Santo André, abrangendo Mauá, Ribeirão Pires e São Caetano do Sul.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-xs space-y-4 print-card">
+                <div id="geoMap"></div>
+
+                <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-base"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="text-xs text-slate-600">
+                        <p class="font-bold text-slate-900 mb-0.5">Endereço Principal:</p>
+                        <p class="text-slate-700 font-medium">Rua Campos Sales, 582, Casa 06, Santo André - SP, 09015-200</p>
+                        <p class="text-slate-500 mt-1">Municípios vizinhos integrados: Mauá • Ribeirão Pires • São Caetano do Sul</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: Doctoralia Prova Social -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">7. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-teal-600">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota 5.0 ★ Excelente</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Acumulado -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">503</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Validadas</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Sólido acervo de autoridade clínica no Grande ABC.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            Crescimento Recente
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+5 Novas Opiniões</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Novas avaliações nota 5.0★ conquistadas no período analisado.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Fortíssimo gatilho de decisão para atração de consultas de Reumatologia.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 8: Acompanhamento de Investimentos & Saldo em Aberto -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Gestão Financeira de Mídia</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">8. Controle de Investimentos & Ciclos de Campanha</h2>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 border border-teal-200 text-xs font-extrabold px-3 py-1.5 rounded-xl">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Acompanhamento desde 24/06</span>
+                </div>
+            </div>
+
+            <!-- Grid de Indicadores Financeiros Consolidados -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Total Previsto / Orçado</span>
+                        <div class="text-2xl font-black text-white mt-2">R$ 9.875,00</div>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-3 font-medium">Soma orçada dos 3 ciclos (2.375 + 3.750 + 3.750)</p>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800">Total Gasto Real</span>
+                        <div class="text-2xl font-black text-amber-700 mt-2">R$ 8.884,11</div>
+                    </div>
+                    <p class="text-[11px] text-amber-900 font-semibold mt-3">628,73 + 4.732,49 + 3.522,89</p>
+                </div>
+
+                <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Saldo Restante (Em Valor)</span>
+                        <div class="text-2xl font-black text-emerald-600 mt-2">R$ 990,89</div>
+                    </div>
+                    <p class="text-[11px] text-emerald-900 font-semibold mt-3">Orçado (9.875,00) - Gasto (8.884,11)</p>
+                </div>
+
+                <div class="bg-teal-500 text-white p-5 rounded-2xl border border-teal-600 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-teal-100">% Saldo Disponível</span>
+                        <div class="text-3xl font-black text-white mt-2">10,03%</div>
+                    </div>
+                    <p class="text-[11px] text-teal-100 font-bold mt-3">Percentual de saldo restante do orçamento</p>
+                </div>
+            </div>
+
+            <!-- Tabela Cronológica de Ciclos -->
+            <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-600 uppercase tracking-wider text-[11px] font-bold bg-slate-50">
+                            <th class="py-3.5 px-4">Ciclo de Veiculação</th>
+                            <th class="py-3.5 px-4 text-center">Status</th>
+                            <th class="py-3.5 px-4 text-right">Orçamento Base</th>
+                            <th class="py-3.5 px-4 text-right">Valor Gasto Real</th>
+                            <th class="py-3.5 px-4 text-right">Saldo Acumulado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-4 font-bold text-slate-900">Ciclo 1: 24/06 a 12/07 (Proporcional)</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-slate-200">Finalizado</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-semibold text-slate-700">R$ 2.375,00</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-slate-900">R$ 628,73</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-emerald-600">+R$ 1.746,27</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-4 font-bold text-slate-900">Ciclo 2: 13/07 a 12/08</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-slate-200">Finalizado</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-semibold text-slate-700">R$ 3.750,00 (+ R$ 1.746,27)</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-slate-900">R$ 4.732,49</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-emerald-600">+R$ 763,78</td>
+                        </tr>
+                        <tr class="bg-amber-50/50 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>Ciclo 3: 13/08 a 12/09</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Atual</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black px-2.5 py-1 rounded-full">⏳ Em Aberto</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-semibold text-slate-700">R$ 3.750,00 (+ R$ 763,78)</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-700 text-base">R$ 3.522,89</td>
+                            <td class="py-3.5 px-4 text-right font-black text-emerald-600 text-base">R$ 990,89</td>
+                        </tr>
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO ACUMULADO</td>
+                            <td class="py-4 px-4 text-center text-teal-300 font-extrabold">—</td>
+                            <td class="py-4 px-4 text-right text-slate-300 font-extrabold">R$ 9.875,00</td>
+                            <td class="py-4 px-4 text-right text-amber-400 font-black text-base">R$ 8.884,11</td>
+                            <td class="py-4 px-4 text-right text-emerald-400 font-black text-base rounded-r-xl">R$ 990,89 (10,03%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400 pb-8">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Relatório exclusivo para Clínica Médica Med Total (Santo André & ABC)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Inline DataLabels Plugin
+        const inlineDataLabels = {
+            id: 'inlineDataLabels',
+            afterDatasetsDraw(chart, args, options) {
+                const { ctx } = chart;
+                ctx.font = 'bold 10px "Plus Jakarta Sans"';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                
+                chart.data.datasets.forEach((dataset, i) => {
+                    if (dataset.type === 'line') return;
+                    
+                    const meta = chart.getDatasetMeta(i);
+                    meta.data.forEach((bar, index) => {
+                        const data = dataset.data[index];
+                        if(data > 0) {
+                            ctx.fillStyle = (i === 0) ? '#0f766e' : '#b45309'; 
+                            ctx.fillText(data, bar.x, bar.y - 4);
+                        }
+                    });
+                });
+            }
+        };
+
+        window.onload = function() {
+            // Leaflet Map Config (Santo André & ABC)
+            const santoAndreCoords = [-23.6582, -46.5312];
+
+            const mapElement = document.getElementById('geoMap');
+            if (mapElement) {
+                const map = L.map('geoMap', { center: santoAndreCoords, zoom: 12, zoomControl: true, scrollWheelZoom: false });
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+
+                // 10km Outer Radius (Coverage)
+                L.circle(santoAndreCoords, { color: '#0d9488', fillColor: '#14b8a6', fillOpacity: 0.1, radius: 10000, dashArray: '6, 6', weight: 1.5 }).addTo(map);
+                
+                // 3km Core Radius
+                L.circle(santoAndreCoords, { color: '#0f766e', fillColor: '#0d9488', fillOpacity: 0.35, radius: 3000, weight: 2.5 }).addTo(map);
+
+                // Custom Marker
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: #0d9488; width: 36px; height: 36px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;"><i class="fa-solid fa-location-dot"></i></div>`,
+                    iconSize: [36, 36], iconAnchor: [18, 18]
+                });
+
+                L.marker(santoAndreCoords, { icon: customIcon }).addTo(map).bindPopup("<b>Clínica Médica Med Total</b><br>R. Campos Sales, 582 - Santo André").openPopup();
+            }
+
+            // CTR Benchmark Chart
+            const ctxCtr = document.getElementById('ctrBenchmarkChart');
+            if (ctxCtr) {
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Média Saúde (3,17%)', 'Med Total (4,19%)', 'Especialidade (9,68%)'],
+                        datasets: [{ data: [3.17, 4.19, 9.68], backgroundColor: ['#cbd5e1', '#d97706', '#0d9488'], borderRadius: 12, barThickness: 32 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 12, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+                });
+            }
+
+            // Doctoralia Appointments Chart (Jun - Aug)
+            const ctxApp = document.getElementById('appointmentsChart');
+            if (ctxApp) {
+                new Chart(ctxApp, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Junho', 'Julho', 'Agosto'],
+                        datasets: [
+                            {
+                                label: 'Agendamentos Totais',
+                                data: [46, 31, 40],
+                                backgroundColor: '#0d9488', borderRadius: 6, barPercentage: 0.5, categoryPercentage: 0.7
+                            },
+                            {
+                                label: 'Pacientes Novos (1ª Consulta)',
+                                data: [4, 7, 7],
+                                backgroundColor: '#f59e0b', borderRadius: 6, barPercentage: 0.5, categoryPercentage: 0.7
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        layout: { padding: { top: 25 } },
+                        plugins: {
+                            legend: { position: 'top', align: 'end', labels: { usePointStyle: true, font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
+                            tooltip: { backgroundColor: '#0f172a', padding: 12, cornerRadius: 8 }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 60, grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#334155' } }
+                        }
+                    },
+                    plugins: [inlineDataLabels]
+                });
+            }
+        };
+    </script>
+</body>
+</html>

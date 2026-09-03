@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dsmile Clínica Odontológica | Relatório Executivo de Performance & Retenção</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js CDN & DataLabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        }
+        
+        .gradient-amber {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        #geoMap {
+            width: 100%;
+            height: 380px;
+            border-radius: 1.5rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Header Fixo -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    DS
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Dsmile Clínica Odontológica</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200">Odontologia & Especialidades</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Consolidado 01/05 a 31/08/2026</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Turquoise Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header Metadata Bar -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-sm border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar text-slate-500"></i>
+                    Período Analisado: <span class="text-teal-700">01/05/2026 - 31/08/2026 (4 Meses)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-holding-dollar text-teal-600"></i>
+                    CPC Médio Ponderado: <span class="text-slate-900 font-black">R$ 2,75</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-amber-200">
+                    🔥 CTR Consolidado: 3,50% (Acima do Benchmark de 3,17%)
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-emerald-200">
+                    💎 Valor Médio de Consulta: R$ 500,00 <span class="text-[10px] font-normal text-emerald-800">(sem procedimentos)</span>
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i>
+                Exportar Relatório
+            </button>
+        </div>
+
+        <!-- SEÇÃO 1: Alcance dos Anúncios no Google Ads -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Atração Ativa & Qualificação de Pacientes</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Alcance dos Anúncios no Google Ads</h2>
+                <p class="text-slate-600 text-sm mt-1 max-w-4xl">
+                    Captação ativa de pacientes com alta intenção em Odontologia Geral, Buco Maxilo, Odontopediatria e Serviços no raio nobre de 7 km (Itaim Bibi, Jardins, Vila Olímpia, Moema e Pinheiros).
+                </p>
+            </div>
+
+            <!-- Top 5 KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <!-- Card 1: Impressões Totais -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">122.850</div>
+                    <p class="text-[11px] text-teal-700 font-bold mt-2">Média de ~30.712 exibições/mês</p>
+                </div>
+
+                <!-- Card 2: Cliques no Google -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques no Google</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">4.299</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Média de ~1.074 visitas/mês</p>
+                </div>
+
+                <!-- Card 3: CTR (Taxa de Cliques) -->
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR (Taxa de Cliques)</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">3,50%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-bold">▲ Acima da média saúde (3,17%)</p>
+                </div>
+
+                <!-- Card 4: Acessos ao Perfil Doctoralia -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos no Perfil</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">4.973</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 86,4% gerados via Google Ads</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Especialidades em Destaque -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Topo de Funil</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-tooth text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">5 Campanhas</div>
+                    <p class="text-[11px] text-emerald-800 font-bold mt-2">Buco, Pediatria, Geral & Serviços</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Performance de Leilões (Share of Voice) & Benchmark -->
+        <section class="space-y-6">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Domínio de Mercado & Eficiência nos Leilões</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">2. Performance de Leilões (Share of Voice) & Presença</h2>
+                <p class="text-slate-600 text-sm mt-1">Análise de competitividade de leilão, custo por clique e exposição qualificada no Itaim Bibi e zonas nobres de SP.</p>
+            </div>
+
+            <!-- Sub-bloco Benchmark e Share of Voice -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Benchmark CTR -->
+                <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-200/60 flex flex-col justify-between print-card">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Atratividade Odontológica</span>
+                            <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Supera o Setor</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Benchmark de CTR (%)</h3>
+                        <p class="text-xs text-slate-500 mt-1">Comparativo da taxa de cliques consolidada da Dsmile frente à média nacional de saúde (3,17%).</p>
+                    </div>
+
+                    <div class="my-6 relative h-44 flex items-center justify-center">
+                        <canvas id="ctrBenchmarkChart"></canvas>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100 text-xs text-slate-600 flex items-start gap-2">
+                        <i class="fa-solid fa-circle-info text-teal-600 shrink-0 mt-0.5"></i>
+                        <span>Campanhas de nicho como <strong>Buco Maxilo (6,34%)</strong> e <strong>Odontopediatria (5,73%)</strong> puxam a qualificação e atraem pacientes de alta conversão.</span>
+                    </div>
+                </div>
+
+                <!-- Dark Card Share of Voice -->
+                <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                    <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Presença de Topo & Blindagem Institucional</span>
+                            <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Destaque Itaim Bibi</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio das Pesquisas Odontológicas em São Paulo</h3>
+                        <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                            Estratégia multisserviço garante presença constante de topo para os pacientes que buscam clínicas conceituadas na Zona Sul e Oeste.
+                        </p>
+                    </div>
+
+                    <div class="my-6 space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                                <span class="flex items-center gap-2 text-slate-200">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                    Top Page (% Exibição na Área Superior - Média Geral)
+                                </span>
+                                <span class="text-teal-400 font-extrabold text-base">60,83%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700/50">
+                                <div class="gradient-teal h-full rounded-full" style="width: 60.83%"></div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1.5">Em Odontopediatria e Buco Maxilo, a exibição no topo supera <strong>75% a 77%</strong>.</p>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                                <span class="flex items-center gap-2 text-slate-200">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                    Presença de Marca (Institucional - 1ª Posição Absoluta)
+                                </span>
+                                <span class="text-amber-400 font-extrabold text-base">69,72%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700/50">
+                                <div class="gradient-amber h-full rounded-full" style="width: 69.72%"></div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1.5">Blindagem absoluta contra clínicas concorrentes quando pesquisam pelo nome Dsmile.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-teal-400"></i>
+                            Clínica: Rua Bandeira Paulista, 726/133 - Itaim Bibi, São Paulo - SP
+                        </span>
+                        <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela Executiva de Campanhas -->
+            <div class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">Tabela de Ganho em Leilões (Share of Voice) por Campanha</h3>
+                        <p class="text-xs text-slate-500">Métricas consolidadas do Google Ads divididas por frentes de atendimento.</p>
+                    </div>
+                    <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                        Consolidado 01/05 a 31/08/2026
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                                <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Médio</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Top Page (% Sup.)</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Posição Abs.</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">Parcela Impr.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                                    Odontologia
+                                </td>
+                                <td class="py-4 px-4 text-right">83.037</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-900">2.856</td>
+                                <td class="py-4 px-4 text-right font-bold text-teal-600">3,44%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 2,52</td>
+                                <td class="py-4 px-4 text-right font-bold text-teal-700">58,83%</td>
+                                <td class="py-4 px-4 text-right">18,59%</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-500">&lt; 10%</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
+                                    Serviços
+                                </td>
+                                <td class="py-4 px-4 text-right">25.309</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-900">545</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-700">2,15%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,72</td>
+                                <td class="py-4 px-4 text-right font-bold text-teal-700">58,23%</td>
+                                <td class="py-4 px-4 text-right">15,22%</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-700">14,34%</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+                                    Buco Maxilo
+                                </td>
+                                <td class="py-4 px-4 text-right">7.915</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-900">502</td>
+                                <td class="py-4 px-4 text-right font-black text-teal-700">6,34%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,65</td>
+                                <td class="py-4 px-4 text-right font-black text-teal-800">75,85%</td>
+                                <td class="py-4 px-4 text-right font-bold text-amber-700">35,74%</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-500">&lt; 10%</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                                    Odontopediatria
+                                </td>
+                                <td class="py-4 px-4 text-right">6.383</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-900">366</td>
+                                <td class="py-4 px-4 text-right font-black text-teal-700">5,73%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3,52</td>
+                                <td class="py-4 px-4 text-right font-black text-teal-800">77,41%</td>
+                                <td class="py-4 px-4 text-right font-bold text-amber-700">24,55%</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-700">10,68%</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                    Institucional
+                                </td>
+                                <td class="py-4 px-4 text-right">206</td>
+                                <td class="py-4 px-4 text-right font-semibold text-slate-900">30</td>
+                                <td class="py-4 px-4 text-right font-black text-amber-700">14,56%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 4,50</td>
+                                <td class="py-4 px-4 text-right font-black text-amber-800">75,35%</td>
+                                <td class="py-4 px-4 text-right font-black text-amber-900">69,72%</td>
+                                <td class="py-4 px-4 text-right">
+                                    <span class="bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-lg border border-amber-300">44,24%</span>
+                                </td>
+                            </tr>
+
+                            <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                                <td class="py-4 px-4 rounded-l-xl">Total Consolidado Acumulado</td>
+                                <td class="py-4 px-4 text-right">122.850</td>
+                                <td class="py-4 px-4 text-right text-teal-300">4.299</td>
+                                <td class="py-4 px-4 text-right text-amber-300">3,50%</td>
+                                <td class="py-4 px-4 text-right text-teal-200">R$ 2,75</td>
+                                <td class="py-4 px-4 text-right">60,83%</td>
+                                <td class="py-4 px-4 text-right">20,11%</td>
+                                <td class="py-4 px-4 text-right rounded-r-xl">
+                                    <span class="bg-teal-500 text-slate-950 font-black px-2.5 py-1 rounded-lg">~12% médio</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Nota Técnica de Leilão -->
+                <div class="mt-4 p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs text-slate-700 flex items-start gap-3">
+                    <i class="fa-solid fa-shield-halved text-emerald-600 shrink-0 mt-0.5 text-base"></i>
+                    <div>
+                        <strong class="text-emerald-950 text-sm block mb-0.5">Análise de Eficiência Estratégica:</strong>
+                        Com <strong>4.299 cliques no período</strong> e CPC médio altamente competitivo de R$ 2,75 para a região do Itaim Bibi, as campanhas especializadas de <em>Buco Maxilo (6,34% CTR)</em> e <em>Odontopediatria (5,73% CTR)</em> garantem mais de <strong>75% de presença no topo das buscas</strong>, filtrando leads de alto ticket.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: Performance de Palavras-Chave Principais -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Odontológica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Termos com maior volume e engajamento no raio de 7 km (Itaim Bibi e proximidades)
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3 px-4 bg-slate-50 rounded-l-xl">Palavra-Chave / Termo de Pesquisa</th>
+                            <th class="py-3 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        
+                        <!-- Termo Líder - Destaque Turquesa Translúcido -->
+                        <tr class="bg-teal-50/80 border-l-4 border-teal-600 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>odontologico sp</span>
+                                <span class="bg-teal-200/80 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-2">Pilar Líder</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-black text-slate-900">21.307</td>
+                            <td class="py-3.5 px-4 text-right text-teal-700 font-black">740</td>
+                            <td class="py-3.5 px-4 text-right text-teal-800 font-black">3,47%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">dentistas sp</td>
+                            <td class="py-3.5 px-4 text-right">17.306</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">583</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800">3,37%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4">dentista</td>
+                            <td class="py-3.5 px-4 text-right">17.952</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">580</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800">3,23%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/40 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>cirurgião buco-maxilo-facial são paulo</span>
+                                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-2">Alto Ticket</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">4.131</td>
+                            <td class="py-3.5 px-4 text-right font-black text-emerald-700">267</td>
+                            <td class="py-3.5 px-4 text-right font-black text-emerald-800">6,46%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold text-slate-900">
+                            <td class="py-3.5 px-4">dentistas são paulo</td>
+                            <td class="py-3.5 px-4 text-right">4.626</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">174</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800">3,76%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>odontopediatras são paulo</span>
+                                <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full ml-2">Pediatria</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">2.284</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-indigo-700">149</td>
+                            <td class="py-3.5 px-4 text-right font-black text-indigo-800">6,52%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-medium text-slate-900">
+                            <td class="py-3.5 px-4">invisalign</td>
+                            <td class="py-3.5 px-4 text-right">12.880</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">139</td>
+                            <td class="py-3.5 px-4 text-right text-slate-600">1,08%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold text-slate-900">
+                            <td class="py-3.5 px-4">placa de bruxismo</td>
+                            <td class="py-3.5 px-4 text-right">5.458</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">124</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">2,27%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold text-slate-900">
+                            <td class="py-3.5 px-4">odontologica são paulo</td>
+                            <td class="py-3.5 px-4 text-right">3.191</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">105</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800">3,29%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold text-slate-900">
+                            <td class="py-3.5 px-4">cirurgiões buco-maxilo-faciais</td>
+                            <td class="py-3.5 px-4 text-right">1.953</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">97</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800">4,97%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors font-semibold text-slate-900">
+                            <td class="py-3.5 px-4">implante dentário sp</td>
+                            <td class="py-3.5 px-4 text-right">977</td>
+                            <td class="py-3.5 px-4 text-right font-bold text-teal-700">61</td>
+                            <td class="py-3.5 px-4 text-right font-black text-emerald-600">6,24%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/30 font-bold text-slate-900">
+                            <td class="py-3.5 px-4 flex items-center gap-2">
+                                <span>dsmile clínica odontológica</span>
+                                <span class="bg-amber-200/80 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-2">Marca</span>
+                            </td>
+                            <td class="py-3.5 px-4 text-right">197</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-700">28</td>
+                            <td class="py-3.5 px-4 text-right font-black text-amber-800">14,21%</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: Agendamentos na Doctoralia & Análise Estratégica -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 space-y-6 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Evolução Histórica & Retomada Pós-Início de Mídia</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Agendamentos na Doctoralia & Impacto do Tráfego Pago</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto">
+                    Histórico Janeiro a Agosto/2026 (Campanha Iniciada em 01/05)
+                </div>
+            </div>
+
+            <!-- Gráfico Horizontal Interativo e Lúdico -->
+            <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5 sm:p-6 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Comparativo Mensal: Agendamentos Totais vs Pacientes Novos</span>
+                    <div class="flex items-center gap-4 text-xs font-bold">
+                        <span class="flex items-center gap-1.5 text-teal-700">
+                            <span class="w-3 h-3 rounded-md bg-teal-600 inline-block"></span> Agendamentos Totais
+                        </span>
+                        <span class="flex items-center gap-1.5 text-amber-700">
+                            <span class="w-3 h-3 rounded-md bg-amber-500 inline-block"></span> Pacientes Novos
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="relative h-80 sm:h-96 w-full">
+                    <canvas id="appointmentsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Contextualização Crítica: Saída da Dra. Mayara vs Início dos Anúncios -->
+            <div class="p-5 rounded-2xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-950 space-y-2">
+                <div class="flex items-center gap-2 font-extrabold text-amber-900 text-sm">
+                    <i class="fa-solid fa-chart-line text-amber-600"></i>
+                    <span>Diagnóstico da Curva de Agendamentos (O Efeito Tráfego Pago na Retomada):</span>
+                </div>
+                <p class="leading-relaxed">
+                    Em <strong>Fevereiro</strong>, encerrou-se a atuação da Dra. Mayara na clínica — profissional cuja agenda representava historicamente <strong>60% do volume total de atendimentos</strong> da Dsmile. O impacto direto foi observado na queda de 130 agendamentos (fev) para 104 (mar) e 80 (abr).
+                </p>
+                <p class="leading-relaxed font-semibold">
+                    A partir de <strong>01/05</strong>, com o início das campanhas no Google Ads, a clínica estancou a retração e iniciou uma curva sólida de reaquecimento: o volume saltou para <strong>105 (mai), 98 (jun), 100 (jul)</strong> e atingiu <strong>131 agendamentos em agosto</strong> — recompondo o patamar histórico de janeiro (139), agora impulsionado por captação multiespecialidades.
+                </p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Performance Geográfica & Raio de Cobertura -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                        Geolocalização Estratégica
+                    </span>
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        Itaim Bibi / São Paulo - SP (Raio Ativo de 7 km)
+                    </span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">5. Performance Geográfica & Raio de Cobertura</h2>
+                <p class="text-xs text-slate-500 mt-1">Mapeamento da clínica na Rua Bandeira Paulista com hipersegmentação para captação dos bairros de maior poder aquisitivo da capital.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Mapa Interativo Leaflet -->
+                <div class="lg:col-span-2 bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm space-y-4 print-card">
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <div>
+                            <h3 class="font-black text-slate-900 text-base">Sede da Dsmile & Área de Cobertura Ativa</h3>
+                            <p class="text-xs text-slate-500">Rua Bandeira Paulista, 726/133 - Itaim Bibi, São Paulo - SP</p>
+                        </div>
+                        <div class="flex items-center gap-3 text-[10px] font-bold">
+                            <span class="flex items-center gap-1 text-teal-700">
+                                <span class="w-3 h-3 rounded-full bg-teal-500 border border-teal-700 inline-block"></span> Núcleo Principal (3 km)
+                            </span>
+                            <span class="flex items-center gap-1 text-indigo-700">
+                                <span class="w-3 h-3 rounded-full bg-indigo-500 border border-indigo-700 inline-block"></span> Raio Total de Campanha (7 km)
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- MAP CONTAINER -->
+                    <div id="geoMap"></div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-sm">
+                            📍
+                        </div>
+                        <div class="text-xs text-slate-600">
+                            <p class="font-bold text-slate-900 mb-0.5">Endereço da Clínica:</p>
+                            <p class="text-slate-700 font-medium">Rua Bandeira Paulista, 726 - Conjunto 133, Itaim Bibi, São Paulo - SP, CEP 04532-012</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detalhamento Geográfico VIP -->
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 rounded-[2rem] p-7 text-white flex flex-col justify-between space-y-6 shadow-xl print-card">
+                    <div class="space-y-4">
+                        <span class="bg-amber-400/20 text-amber-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-amber-400/30">Zonas Nobres de SP</span>
+                        <h3 class="text-xl font-black text-white leading-snug">Captação nos Bairros de Maior Renda Per Capita</h3>
+                        
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-teal-900/50 p-3.5 rounded-2xl border border-teal-500/30">
+                                <span class="text-amber-300 font-bold block mb-1">Núcleo Imediato (Raio 3 km):</span>
+                                <p class="text-slate-300 text-[11px] leading-relaxed">
+                                    Concentração no <strong>Itaim Bibi, Jardins, Vila Nova Conceição e Vila Olímpia</strong>.
+                                </p>
+                            </div>
+
+                            <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700">
+                                <span class="text-teal-300 font-bold block mb-1">Raio de Cobertura Atual (7 km):</span>
+                                <p class="text-slate-300 text-[11px] leading-relaxed">
+                                    Abrange <strong>Moema, Pinheiros, Brooklin, Bela Vista, Paraíso e Perdizes</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700/80 text-[11px] text-slate-400">
+                        <strong>Estratégia Local:</strong> Estar posicionado no Itaim Bibi com raio de 7 km garante fluxo contínuo de executivos e famílias de altíssima renda.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Reputação Digital & Prova Social -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Prova Social Impecável</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-amber-500">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota Máxima 5.0★</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Opiniões Acumuladas -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">353</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações Positivas Consolidadas (Nota 5.0★)</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Um dos perfis odontológicos mais bem avaliados e consolidados de São Paulo.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>
+                            Ritmo de Avaliações no Período
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+20 Novas Opiniões 5.0★</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Crescimento constante reforçando a confiança e convertendo visitantes em agendamentos.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 353 avaliações constituem uma barreira competitiva intransponível frente à concorrência.
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 leading-relaxed">
+                <strong class="text-slate-900">Análise da Aliança Anúncios + Doctoralia:</strong> 
+                Com <strong>4.973 acessos ao perfil</strong> (onde 86,4% vêm dos anúncios), as 353 avaliações 5 estrelas são o fator decisor para que o paciente escolha a Dsmile ao invés de buscar outra clínica. Pesquisas comportamentais mostram que mais de 70% dos usuários leem depoimentos antes de finalizar o agendamento odontológico.
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: Plano de Continuidade & Cenários de Investimento -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-slate-200/60 space-y-6 print-card">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estratégia de Retenção & Sustentabilidade</span>
+                <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">7. Plano de Continuidade — Cenários de Investimento</h2>
+                <p class="text-slate-500 text-xs sm:text-sm mt-1">
+                    Cenários desenhados para proteger a estabilidade da agenda da Dsmile com flexibilidade orçamentária.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+                
+                <!-- Card Plano A: Manter -->
+                <div class="bg-white rounded-[2rem] p-6 border-2 border-teal-600 shadow-sm flex flex-col justify-between space-y-6 relative hover:shadow-md transition-all">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-black text-slate-900">Plano A · Manter</h3>
+                            <span class="bg-teal-100 text-teal-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full">Recomendado</span>
+                        </div>
+                        
+                        <div>
+                            <div class="text-3xl font-black text-slate-900">R$ 4.000<span class="text-xs text-slate-400 font-medium">/mês</span></div>
+                        </div>
+
+                        <ul class="space-y-2 text-xs font-semibold text-slate-700 pt-2 border-t border-slate-100">
+                            <li class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                                    Google Ads:
+                                </span>
+                                <span class="font-bold text-slate-900">R$ 2.800</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    Consultoria / Fee:
+                                </span>
+                                <span class="font-bold text-slate-900">R$ 1.200</span>
+                            </li>
+                        </ul>
+
+                        <p class="text-xs text-slate-500 leading-relaxed pt-2">
+                            Preserva a potência total de captação que recompôs a agenda em agosto (131 agendamentos), garantindo presença de topo em todas as 5 campanhas ativas.
+                        </p>
+                    </div>
+
+                    <div class="bg-teal-50/80 p-3.5 rounded-2xl border border-teal-100 text-[11px] text-teal-900 font-medium">
+                        ✨ Mantém a liderança consolidada no Itaim Bibi e expansão de procedimentos de alto valor.
+                    </div>
+                </div>
+
+                <!-- Card Plano B: Redução 1 -->
+                <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-6 relative hover:border-slate-300 transition-all">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-black text-slate-800">Plano B · Ajuste 1</h3>
+                            <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-2.5 py-1 rounded-full">Redução Suave</span>
+                        </div>
+                        
+                        <div>
+                            <div class="text-3xl font-black text-slate-800">R$ 3.500<span class="text-xs text-slate-400 font-medium">/mês</span></div>
+                        </div>
+
+                        <ul class="space-y-2 text-xs font-semibold text-slate-600 pt-2 border-t border-slate-100">
+                            <li class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    Google Ads:
+                                </span>
+                                <span class="font-bold text-slate-800">R$ 2.450</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                                    Consultoria / Fee:
+                                </span>
+                                <span class="font-bold text-slate-800">R$ 1.050</span>
+                            </li>
+                        </ul>
+
+                        <div class="space-y-2 text-xs">
+                            <p class="text-amber-800 font-bold text-[11px]">
+                                Estimativa: -12,5% em verba e volume de cliques mensais.
+                            </p>
+                            <p class="text-slate-500 text-[11px] leading-relaxed">
+                                Ajuste intermediário que mantém a cobertura das principais especialidades, exigindo pequenas compensações de foco geográfico.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 text-[11px] text-slate-600 font-medium">
+                        ⚠️ Ajuste moderado com impacto controlado na captação.
+                    </div>
+                </div>
+
+                <!-- Card Plano C: Redução 2 -->
+                <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-6 relative hover:border-slate-300 transition-all">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-black text-slate-800">Plano C · Ajuste 2</h3>
+                            <span class="bg-amber-50 text-amber-900 border border-amber-200 text-[10px] font-bold px-2.5 py-1 rounded-full">Redução Enxuta</span>
+                        </div>
+                        
+                        <div>
+                            <div class="text-3xl font-black text-slate-800">R$ 3.000<span class="text-xs text-slate-400 font-medium">/mês</span></div>
+                        </div>
+
+                        <ul class="space-y-2 text-xs font-semibold text-slate-600 pt-2 border-t border-slate-100">
+                            <li class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    Google Ads:
+                                </span>
+                                <span class="font-bold text-slate-800">R$ 2.100</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                                    Consultoria / Fee:
+                                </span>
+                                <span class="font-bold text-slate-800">R$ 900</span>
+                            </li>
+                        </ul>
+
+                        <div class="space-y-2 text-xs">
+                            <p class="text-amber-900 font-bold text-[11px]">
+                                Estimativa: -25% em verba direta de mídia no Google Ads.
+                            </p>
+                            <p class="text-slate-500 text-[11px] leading-relaxed">
+                                Formato econômico que requer hiperfoco nas campanhas de maior margem (Buco Maxilo e Pediatria), reduzindo a exposição em termos amplos de Odontologia Geral.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50/60 p-3.5 rounded-2xl border border-amber-100 text-[11px] text-amber-950 font-medium">
+                        🛡️ Preserva a conta ativa blindando a marca e procedimentos VIP.
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="text-[10px] text-slate-400 font-medium">
+                * Estimativas baseadas no CPC médio ponderado (R$ 2,75) e CTR consolidado (3,50%) do período analisado (01/05 a 31/08/2026).
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Rodapé Corporativo Minimalista -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Consultoria de Performance e Inteligência de Marketing Médico & Odontológico.</p>
+            <p class="text-[10px] text-slate-400">Relatório exclusivo para uso da Dsmile Clínica Odontológica.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            // Register DataLabels Plugin
+            if (typeof ChartDataLabels !== 'undefined') {
+                Chart.register(ChartDataLabels);
+            }
+
+            // 1. LEAFLET MAP INITIALIZATION
+            // Rua Bandeira Paulista, 726 - Itaim Bibi, São Paulo (-23.5852, -46.6781 aprox)
+            const itaimCoords = [-23.5852, -46.6781];
+            
+            const mapElement = document.getElementById('geoMap');
+            if (mapElement) {
+                const map = L.map('geoMap', {
+                    center: itaimCoords,
+                    zoom: 12,
+                    zoomControl: true,
+                    scrollWheelZoom: false
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                // 7km outer coverage circle (raio ativo de campanha)
+                const circle7km = L.circle(itaimCoords, {
+                    color: '#64748b',
+                    fillColor: '#94a3b8',
+                    fillOpacity: 0.08,
+                    radius: 7000,
+                    dashArray: '6, 6',
+                    weight: 1.5
+                }).addTo(map);
+                circle7km.bindPopup("<b>Raio de Atuação Atual (7 km)</b><br>Itaim Bibi, Jardins, Vila Olímpia, Moema, Pinheiros e Brooklin.");
+
+                // 3km core radius
+                const circle3km = L.circle(itaimCoords, {
+                    color: '#0d9488',
+                    fillColor: '#14b8a6',
+                    fillOpacity: 0.28,
+                    radius: 3000,
+                    weight: 3
+                }).addTo(map);
+                circle3km.bindPopup("<b>Núcleo Nobre (3 km)</b><br>Itaim Bibi, Vila Nova Conceição, Jardins e Vila Olímpia.");
+
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: #0d9488; width: 36px; height: 36px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">🦷</div>`,
+                    iconSize: [36, 36],
+                    iconAnchor: [18, 18]
+                });
+
+                const marker = L.marker(itaimCoords, { icon: customIcon }).addTo(map);
+                marker.bindPopup(`
+                    <div style="font-family: sans-serif; font-size: 12px; padding: 2px;">
+                        <strong style="color: #0d9488; font-size: 13px;">Dsmile Clínica Odontológica</strong><br>
+                        <span>Rua Bandeira Paulista, 726/133</span><br>
+                        <span style="color: #64748b;">Itaim Bibi, São Paulo - SP</span>
+                    </div>
+                `).openPopup();
+            }
+
+            // 2. CHART.JS CTR BENCHMARK CHART
+            const chartCtrElement = document.getElementById('ctrBenchmarkChart');
+            if (chartCtrElement) {
+                const ctxCtr = chartCtrElement.getContext('2d');
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Média do Setor (3,17%)', 'Dsmile Consolidado (3,50%)'],
+                        datasets: [{
+                            label: 'CTR %',
+                            data: [3.17, 3.50],
+                            backgroundColor: ['#cbd5e1', '#0d9488'],
+                            borderColor: ['#94a3b8', '#0f766e'],
+                            borderWidth: 1.5,
+                            borderRadius: 12,
+                            barThickness: 38
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                formatter: function(value) { return value + '%'; },
+                                font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 11 },
+                                color: '#0f172a'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5.5,
+                                ticks: { callback: function(val) { return val + '%'; } },
+                                grid: { color: '#f1f5f9' }
+                            },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // 3. CHART.JS APPOINTMENTS CHART (HORIZONTAL LÚDICO)
+            const chartAppElement = document.getElementById('appointmentsChart');
+            if (chartAppElement) {
+                const ctxApp = chartAppElement.getContext('2d');
+                new Chart(ctxApp, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Janeiro',
+                            'Fevereiro (Saída Dra. Mayara)',
+                            'Março (Retração)',
+                            'Abril (Fundo)',
+                            'Maio (Início Google Ads)',
+                            'Junho',
+                            'Julho',
+                            'Agosto (Recuperação Total)'
+                        ],
+                        datasets: [
+                            {
+                                label: 'Agendamentos Totais',
+                                data: [139, 130, 104, 80, 105, 98, 100, 131],
+                                backgroundColor: '#0d9488',
+                                borderRadius: 6,
+                                barThickness: 14
+                            },
+                            {
+                                label: 'Pacientes Novos',
+                                data: [19, 16, 12, 10, 12, 9, 18, 17],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 6,
+                                barThickness: 14
+                            }
+                        ]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'right',
+                                formatter: function(value) { return value; },
+                                font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 10 },
+                                color: '#1e293b'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 155,
+                                grid: { color: '#f1f5f9' }
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 10 },
+                                    color: '#0f172a'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Performance - CENNDOR</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; height: 280px; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 bg-teal-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/20">
+                    CE
+                </div>
+                <div>
+                    <span class="font-black text-slate-900 text-xl block leading-tight">Clínica CENNDOR</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Google Partner Badge -->
+                <div class="hidden sm:flex items-center gap-2 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                    </svg>
+                    <span class="text-xs font-bold text-slate-700">Google Partner</span>
+                </div>
+                <!-- Doctoralia VIP Badge -->
+                <div class="flex items-center gap-1.5 bg-teal-50 px-3.5 py-2 rounded-xl border border-teal-100">
+                    <span class="text-amber-500 text-sm font-black">★★★★★</span>
+                    <span class="text-[10px] font-black text-teal-900 uppercase tracking-wider">Doctoralia VIP</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+        <!-- SUB-HEADER DE METADADOS -->
+        <section class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                        Relatório Executivo Autointerpretativo
+                    </span>
+                    <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        Período: 01/08/2026 - 31/08/2026
+                    </span>
+                </div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Performance Mídias 360 & Doctoralia</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Análise consolidada de tráfego, reputação e aquisição de pacientes para a Clínica CENNDOR</p>
+            </div>
+
+            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                <!-- Highlight CPC Médio -->
+                <div class="bg-gradient-to-br from-teal-900 to-slate-900 text-white px-5 py-3 rounded-2xl text-left border border-teal-800 shadow-md">
+                    <p class="text-[9px] font-bold text-teal-300 uppercase tracking-widest">CPC Médio Consolidado</p>
+                    <p class="text-xl font-black text-amber-400">R$ 2,98</p>
+                </div>
+
+                <button onclick="window.print()" class="no-print bg-slate-900 text-white px-5 py-3.5 rounded-2xl text-xs font-bold shadow-xl shadow-slate-900/10 hover:bg-slate-800 transition-all flex items-center gap-2">
+                    <span>Exportar Relatório</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 1: ALCANCE DO ANÚNCIO NO GOOGLE -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Alcance do Anúncio no Google & Doctoralia</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Apresenta o volume total de vezes que sua marca foi exibida nos resultados de pesquisa, a quantidade de acessos gerados para os seus canais, a taxa de interesse dos usuários (CTR) e os contatos diretos por telefone.
+                </div>
+            </div>
+
+            <!-- Grid de 5 Cartões Destaque -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-2">
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Impressões Totais</p>
+                    <h3 class="text-2xl font-black text-slate-900">34.550</h3>
+                    <p class="text-[10px] font-bold text-teal-600">Pesquisas Exibidas no Google</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cliques Diretos</p>
+                    <h3 class="text-2xl font-black text-slate-900">1.616</h3>
+                    <p class="text-[10px] font-bold text-teal-700">Tráfego Qualificado Gerado</p>
+                </div>
+
+                <div class="bg-amber-50 p-5 rounded-[2rem] border border-amber-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-amber-800 uppercase tracking-widest">CTR de Performance</p>
+                    <h3 class="text-2xl font-black text-amber-600">5,20%</h3>
+                    <p class="text-[10px] font-bold text-amber-700">▲ Média de Mercado: 3,17%</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Acessos Totais Perfil</p>
+                    <h3 class="text-2xl font-black text-slate-900">1.927</h3>
+                    <p class="text-[10px] font-bold text-teal-800">Visualizações na Doctoralia</p>
+                </div>
+
+                <div class="bg-teal-600 p-5 rounded-[2rem] shadow-lg shadow-teal-600/20 text-white space-y-1.5">
+                    <p class="text-[10px] font-black text-teal-200 uppercase tracking-widest">Cliques no Telefone</p>
+                    <h3 class="text-2xl font-black">140</h3>
+                    <p class="text-[10px] font-bold text-teal-100">Contatos Diretos Iniciados</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: BENCHMARK DE EFICIÊNCIA & DOMÍNIO DE BUSCA -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">2. Benchmark de Eficiência & Domínio de Busca</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Compara a taxa de atração (CTR) dos seus anúncios com a média praticada no mercado da saúde e demonstra o percentual de vezes em que sua clínica apareceu nas posições nobres de topo do Google.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                <!-- Coluna Esquerda 1/3: Gráfico CTR vs Benchmark -->
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
+                    <div>
+                        <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Atração Notável</span>
+                        <h3 class="text-lg font-black text-slate-900 mt-2">CTR Consolidado vs Mercado</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Média padrão do setor de saúde é 3,17%.</p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="ctrBenchmarkChart"></canvas>
+                    </div>
+
+                    <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 text-[11px] text-teal-900">
+                        <strong>Performance:</strong> Seus anúncios atingiram a taxa de <strong>5,20% de CTR</strong> (1,64x superior à média de mercado).
+                    </div>
+                </div>
+
+                <!-- Coluna Direita 2/3: Share of Voice -->
+                <div class="lg:col-span-2 bg-slate-900 rounded-[2rem] p-8 text-white flex flex-col justify-between space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="bg-teal-500/20 text-teal-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-teal-500/30">Share of Voice</span>
+                            <span class="text-xs font-bold text-slate-400">Dominância no Leilão de Busca</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white mt-3">Exibição nas Posições Principais do Google</h3>
+                        <p class="text-xs text-slate-400 mt-1">Visibilidade alcançada nos blocos de destaque durante o mês de Agosto.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Top 3 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-slate-300">Top 3 (Exibição no Topo da Página)</span>
+                                <span class="text-teal-400 text-sm font-black">67,39%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 p-0.5 border border-slate-700">
+                                <div class="bg-gradient-to-r from-teal-500 to-teal-400 h-2 rounded-full" style="width: 67.39%"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-400">Presença no bloco superior em mais de 2 de cada 3 pesquisas efetuadas.</p>
+                        </div>
+
+                        <!-- Top 1 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-slate-300">Top 1 (1ª Posição Absoluta no Google)</span>
+                                <span class="text-amber-400 text-sm font-black">19,16%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 p-0.5 border border-slate-700">
+                                <div class="bg-gradient-to-r from-amber-500 to-amber-400 h-2 rounded-full" style="width: 19.16%"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-400">Primeira posição isolada do leilão em cerca de 1/5 de todas as pesquisas.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700/80 text-xs text-slate-300">
+                        <strong>Parcela de Exibição Mantida:</strong> <span class="text-amber-400 font-bold">31,00% de participação de leilão</span> mantida ao longo de todo o período.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: TABELA DE CONSOLIDAÇÃO DE MÍDIA -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">3. Consolidação Geral de Mídia Paga</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Reúne o detalhamento técnico do investimento no Google Ads. Vale destacar que a <strong>Parcela de Impressão Google (31,00%)</strong> representa o percentual exato que a clínica está ganhando em relação ao total de leilões disponíveis para a sua região de atuação.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-200/80 shadow-sm overflow-hidden overflow-x-auto mt-2">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200/80 text-slate-400 font-bold uppercase tracking-widest">
+                            <th class="px-6 py-4">Campanha</th>
+                            <th class="px-6 py-4 text-right">Impressões</th>
+                            <th class="px-6 py-4 text-right">Cliques</th>
+                            <th class="px-6 py-4 text-right">CTR (%)</th>
+                            <th class="px-6 py-4 text-right font-bold text-slate-700">CPC Médio</th>
+                            <th class="px-6 py-4 text-right bg-teal-50/50 text-teal-800">% Impr. Topo</th>
+                            <th class="px-6 py-4 text-right bg-teal-50/50 text-teal-800">% 1ª Posição</th>
+                            <th class="px-6 py-4 text-right font-bold text-amber-700 rounded-r-xl">Parcela Impr. Google</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium">
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/20">
+                            <td class="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                                Anúncios de Busca - Clínica CENNDOR
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">34.550</td>
+                            <td class="px-6 py-4 text-right font-black text-teal-700">1.616</td>
+                            <td class="px-6 py-4 text-right font-black text-teal-600">5,20%</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-800">R$ 2,98</td>
+                            <td class="px-6 py-4 text-right font-bold text-teal-800">67,39%</td>
+                            <td class="px-6 py-4 text-right font-bold text-amber-600">19,16%</td>
+                            <td class="px-6 py-4 text-right font-bold text-teal-800">31,00%</td>
+                        </tr>
+                        <tr class="bg-slate-900 text-white font-bold">
+                            <td class="px-6 py-4 rounded-l-xl">Total Consolidado Mídias 360</td>
+                            <td class="px-6 py-4 text-right">34.550</td>
+                            <td class="px-6 py-4 text-right text-teal-400 font-black">1.616</td>
+                            <td class="px-6 py-4 text-right text-amber-400 font-black">5,20%</td>
+                            <td class="px-6 py-4 text-right text-teal-300">R$ 2,98</td>
+                            <td class="px-6 py-4 text-right">67,39%</td>
+                            <td class="px-6 py-4 text-right">19,16%</td>
+                            <td class="px-6 py-4 text-right text-teal-300 rounded-r-xl">31,00% Ganhos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: ORIGEM E CANAIS DE AGENDAMENTO -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">4. Origem e Canais de Agendamento</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Contabiliza o volume total de consultas efetivamente marcadas no mês de Agosto, identificando quantas foram confirmadas via equipe de recepção, quantas ocorreram por agendamento online e o total de novos pacientes atraídos.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <span class="text-[10px] font-black text-teal-600 uppercase tracking-widest">Recepção & Telefone</span>
+                    <h3 class="text-xl font-bold text-slate-900">Agendamentos pela Secretária</h3>
+                    <p class="text-4xl font-black text-teal-700 my-1">207</p>
+                    <p class="text-[11px] text-slate-500">Consultas marcadas e confirmadas pela equipe.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest">Plataforma Web</span>
+                    <h3 class="text-xl font-bold text-slate-900">Agendamento Online</h3>
+                    <p class="text-4xl font-black text-amber-600 my-1">124</p>
+                    <p class="text-[11px] text-slate-500">Marcações efetuadas diretamente pelos pacientes no site.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+                    <span class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Crescimento da Base</span>
+                    <h3 class="text-xl font-bold text-slate-900">Pacientes Novos</h3>
+                    <p class="text-4xl font-black text-emerald-600 my-1">91</p>
+                    <p class="text-[11px] text-slate-500">Primeiros atendimentos realizados em Agosto.</p>
+                </div>
+            </div>
+
+            <!-- Observação de Cruzamento de Cliques no Telefone x Secretária -->
+            <div class="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl text-xs text-amber-950 flex items-start gap-3">
+                <span class="text-base shrink-0">📞</span>
+                <p class="leading-relaxed">
+                    <strong>Observação sobre os canais:</strong> Tendo em vista o registro de <strong>140 cliques diretos no telefone</strong> provenientes do Google Ads no período, inferimos que uma fatia expressiva dos pacientes vindos dos anúncios também foi atendida e contabilizada diretamente nos <strong>207 agendamentos realizados pela secretária</strong>.
+                </p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: REPUTAÇÃO DIGITAL -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">5. Reputação Digital</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Avalia a validação social da clínica perante os usuários. Sabemos que <strong>70% dos pacientes que navegam até o perfil acessam ativamente a seção de opiniões</strong> — um fator determinante e de altíssimo impacto para elevar a taxa de conversão final do paciente em consulta.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8 pt-6">
+                <div class="space-y-3 flex-1">
+                    <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Prova Social Ativa</span>
+                    <h3 class="text-xl font-black text-slate-900">Crescimento de Avaliações Positivas</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                        A prova social é o principal motor de decisão do paciente. Com 1.927 acessos ao perfil na Doctoralia no mês de Agosto, o recebimento contínuo de novas avaliações consolida a reputação da clínica e favorece a conversão dos 91 novos pacientes.
+                    </p>
+                    <div class="flex items-center gap-1 text-amber-500 pt-1">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <span class="text-xs font-bold text-slate-800 ml-1">5.0 Excelência no Atendimento</span>
+                    </div>
+                </div>
+
+                <div class="bg-teal-900 border border-teal-800 text-white p-8 rounded-[2rem] text-center shrink-0 w-full md:w-64 shadow-xl">
+                    <span class="text-[10px] text-teal-300 font-extrabold uppercase tracking-widest block mb-1">Doctoralia</span>
+                    <div class="text-5xl font-black text-amber-400 my-1">23</div>
+                    <span class="text-xs text-teal-100 font-semibold block mt-1">Opiniões Novas no Mês</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ DE PÁGINA -->
+    <footer class="bg-white border-t border-slate-200/80 py-8 text-center">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Mídias 360 - Doctoralia</p>
+        <p class="text-[10px] text-slate-400 italic">Consultoria & Gestão Estratégica de Performance Médica</p>
+    </footer>
+
+    <!-- SCRIPTS DE CHART.JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // CTR Chart
+            const ctxCtr = document.getElementById('ctrBenchmarkChart').getContext('2d');
+            new Chart(ctxCtr, {
+                type: 'bar',
+                data: {
+                    labels: ['CENNDOR', 'Benchmark Mercado'],
+                    datasets: [{
+                        label: 'CTR (%)',
+                        data: [5.20, 3.17],
+                        backgroundColor: [
+                            'rgba(13, 148, 136, 0.9)',
+                            'rgba(217, 119, 6, 0.4)'
+                        ],
+                        borderColor: [
+                            '#0d9488',
+                            '#d97706'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toFixed(2) + '% CTR';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 8,
+                            ticks: { callback: v => v + '%' },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

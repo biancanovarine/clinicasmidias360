@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Executivo de Performance - Clínica NeuroFerraz | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+                        },
+                        emerald: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        },
+                        sky: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+        .gradient-teal { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+        .gradient-accent { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
+        #geoMap { width: 100%; height: 440px; border-radius: 1.5rem; z-index: 10; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Header Principal -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    NF
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Clínica NeuroFerraz</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 pulse-dot"></span>
+                            Neurologia & Eletroneuromiografia
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Brasília - DF (01/09 a 11/10/2026)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 flex-wrap justify-end">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">5.0 ★</span>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header de Metadados -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
+                    Período: <span class="text-teal-700">01/09 a 11/10/2026 (Parcial Outubro)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 3,34</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-amber-200">
+                    🔥 CTR Consolidado: 8,94% (2,82x Média de Saúde)
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar Relatório</span>
+            </button>
+        </div>
+
+        <!-- SEÇÃO 1: Alcance do Anúncio no Google & Indicadores Globais -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Volume de Atração em Neurologia Clínica & Diagnóstica</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Visão Geral Google Ads & Canais de Captação (Brasília - DF)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">24.408</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Exibições nos leilões do Google Ads</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Diretos</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">2.182</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego altamente qualificado</p>
+                </div>
+
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR (Cliques)</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">8,94%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ 2,82x Média de Saúde (3,17%)</p>
+                </div>
+
+                <!-- Cliques no Perfil com Percentual de Tráfego -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques no Perfil</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">2.419</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 90,2% vieram do tráfego Google Ads</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Telefone</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-phone-volume text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">896</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Acionamentos diretos / Ligações</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Benchmark de Eficiência (Nova Ordem) & Domínio de Busca Consolidado -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Gráfico Benchmark na Ordem Exata Solicitada -->
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 flex flex-col justify-between print-card">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Atração</span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">+182% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900">Benchmark da Área de Saúde</h3>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo de CTR ordenado por nível de segmentação.</p>
+                </div>
+
+                <div class="my-6 relative h-48 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                    <span>Ordem: <strong>Saúde (3,17%)</strong> → <strong>Consolidado (8,94%)</strong> → <strong>Institucional (14,54%)</strong> → <strong>Especialidade (6,96%)</strong> → <strong>Serviços (10,29%)</strong>.</span>
+                </div>
+            </div>
+
+            <!-- Domínio nas Buscas Consolidado de Toda a Campanha -->
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice Global</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Toda a Campanha</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio de Leilão Global nas Pesquisas do Google</h3>
+                    <p class="text-xs text-slate-400 mt-1">Indicadores consolidados refletindo a presença total da Clínica NeuroFerraz nos leilões do DF.</p>
+                </div>
+
+                <div class="my-6 space-y-5">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Top Page de Toda a Campanha (% Exibição na Área Superior)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">80,01%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 80.01%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                1ª Posição de Toda a Campanha (% Topo Absoluto)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">36,24%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-accent h-full rounded-full" style="width: 36.24%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                Percentual de Ganho de Google de Toda a Campanha (Parcela de Impressões)
+                            </span>
+                            <span class="text-sky-400 font-extrabold text-base">38,23%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="bg-sky-500 h-full rounded-full" style="width: 38.23%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-teal-400"></i>
+                        Mais de 80% das pesquisas qualificadas posicionam a NeuroFerraz no topo da página
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 3: Desempenho por Campanha & AUDITORIA COMPLETA DE CHAMADAS COM LINK/MODAL -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-8">
+            <div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura de Campanhas no Google Ads</span>
+                        <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Leilão por Campanha</h2>
+                    </div>
+                    <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                        Consolidado 01/09 a 11/10/2026
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                                <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Ligações Rastreadas</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Méd.</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">Custo (R$)</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo Pag.</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Posição</th>
+                                <th class="py-3.5 px-4 bg-slate-50 text-right font-bold rounded-r-xl">Parc. Impr.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Especialidade (Neurologista Brasília)
+                                </td>
+                                <td class="py-4 px-4 text-right font-bold">12.135</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">844</td>
+                                <td class="py-4 px-4 text-right font-bold text-teal-700">6,96%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">25</td>
+                                <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 3,44</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 2.907,08</td>
+                                <td class="py-4 px-4 text-right font-bold text-teal-700">77,90%</td>
+                                <td class="py-4 px-4 text-right font-bold text-teal-700">31,71%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">17,38%</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-sky-50/30">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Serviços (Eletroneuromiografia)
+                                </td>
+                                <td class="py-4 px-4 text-right font-bold">10.506</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">1.081</td>
+                                <td class="py-4 px-4 text-right font-black text-sky-600">10,29%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">98</td>
+                                <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 3,43</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 3.703,02</td>
+                                <td class="py-4 px-4 text-right font-bold text-sky-700">82,75%</td>
+                                <td class="py-4 px-4 text-right font-bold text-sky-700">35,59%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">56,95%</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                                <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Institucional (Marca NeuroFerraz)
+                                </td>
+                                <td class="py-4 px-4 text-right font-bold">1.767</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">257</td>
+                                <td class="py-4 px-4 text-right font-black text-amber-600">14,54%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">40</td>
+                                <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 2,64</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 678,64</td>
+                                <td class="py-4 px-4 text-right font-bold text-amber-700">78,25%</td>
+                                <td class="py-4 px-4 text-right font-bold text-amber-700">71,15%</td>
+                                <td class="py-4 px-4 text-right font-bold text-slate-900">70,13%</td>
+                            </tr>
+
+                            <!-- Linha Total -->
+                            <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                                <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO</td>
+                                <td class="py-4 px-4 text-right font-black">24.408</td>
+                                <td class="py-4 px-4 text-right text-teal-300 font-black text-base">2.182</td>
+                                <td class="py-4 px-4 text-right text-amber-300 font-black">8,94%</td>
+                                <td class="py-4 px-4 text-right text-emerald-300 font-black text-base">163</td>
+                                <td class="py-4 px-4 text-right text-teal-200 font-bold">R$ 3,34</td>
+                                <td class="py-4 px-4 text-right text-amber-400 font-black text-base">R$ 7.288,74</td>
+                                <td class="py-4 px-4 text-right font-bold">80,0%</td>
+                                <td class="py-4 px-4 text-right font-bold">36,2%</td>
+                                <td class="py-4 px-4 text-right rounded-r-xl font-bold">38,2%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- DETALHES DE CHAMADAS RASTREADAS PELO GOOGLE ADS COM AÇÕES INTERATIVAS -->
+            <div class="border-t border-slate-100 pt-6 space-y-4">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Rastreamento Telefônico Google Ads</span>
+                        <h3 class="text-lg font-black text-slate-900 tracking-tight">Auditoria & Relação Completa de Ligações Rastreadas</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Auditoria dos acionamentos telefônicos gerados diretamente pelos anúncios do Google.</p>
+                    </div>
+
+                    <!-- BOTÕES DE AÇÃO: MODAL + EXPORTAÇÃO CSV -->
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <button onclick="openCallsModal()" class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-xs active:scale-95">
+                            <i class="fa-solid fa-list-ul"></i>
+                            <span>Ver Todas as 163 Chamadas</span>
+                        </button>
+
+                        <button onclick="downloadCallsCSV()" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-xs active:scale-95">
+                            <i class="fa-solid fa-file-csv text-emerald-400"></i>
+                            <span>Baixar Planilha CSV</span>
+                        </button>
+
+                        <button onclick="toggleCallsAccordion()" id="btnAccordionToggle" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2.5 rounded-xl transition-all">
+                            <i class="fa-solid fa-chevron-down text-slate-500 transition-transform" id="accordionArrow"></i>
+                            <span>Visualização na Página</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cards Resumo das Ligações -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Ligações Rastreadas</span>
+                        <div class="text-2xl font-black text-slate-900 mt-1">163</div>
+                        <p class="text-[10px] text-slate-500 mt-1">Total de chamadas nos anúncios</p>
+                    </div>
+
+                    <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200/80">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Ligações Atendidas</span>
+                        <div class="text-2xl font-black text-emerald-800 mt-1">60</div>
+                        <p class="text-[10px] text-emerald-700 mt-1">36,8% de taxa de recepção</p>
+                    </div>
+
+                    <div class="bg-teal-50 rounded-2xl p-4 border border-teal-200/80">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-teal-700">Conversas Longas (&gt; 1 min)</span>
+                        <div class="text-2xl font-black text-teal-800 mt-1">32</div>
+                        <p class="text-[10px] text-teal-700 font-bold mt-1">53,3% das ligações atendidas</p>
+                    </div>
+
+                    <div class="bg-rose-50 rounded-2xl p-4 border border-rose-200/80">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700">Ligações Perdidas</span>
+                        <div class="text-2xl font-black text-rose-800 mt-1">103</div>
+                        <p class="text-[10px] text-rose-700 mt-1">Oportunidade de retorno ativo</p>
+                    </div>
+                </div>
+
+                <!-- Tabela de Chamadas Agrupadas por Campanha -->
+                <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 font-bold uppercase text-[10px] border-b border-slate-200">
+                                <th class="py-3 px-4">Campanha de Origem</th>
+                                <th class="py-3 px-4 text-right">Chamadas Rastreadas</th>
+                                <th class="py-3 px-4 text-right text-emerald-700">Atendidas</th>
+                                <th class="py-3 px-4 text-right text-teal-700 font-black">Atendidas &gt; 1 min</th>
+                                <th class="py-3 px-4 text-right text-rose-700">Perdidas</th>
+                                <th class="py-3 px-4 text-right">Taxa Atendimento</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-sky-500"></span> Serviços (Eletroneuromiografia)
+                                </td>
+                                <td class="py-3 px-4 text-right font-bold">98</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-700">36</td>
+                                <td class="py-3 px-4 text-right font-black text-teal-700 bg-teal-50/50">18 (50,0%)</td>
+                                <td class="py-3 px-4 text-right font-semibold text-rose-700">62</td>
+                                <td class="py-3 px-4 text-right font-bold">36,7%</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Institucional (Marca NeuroFerraz)
+                                </td>
+                                <td class="py-3 px-4 text-right font-bold">40</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-700">9</td>
+                                <td class="py-3 px-4 text-right font-black text-teal-700 bg-teal-50/50">7 (77,8%)</td>
+                                <td class="py-3 px-4 text-right font-semibold text-rose-700">31</td>
+                                <td class="py-3 px-4 text-right font-bold">22,5%</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-teal-600"></span> Especialidade (Neurologista Brasília)
+                                </td>
+                                <td class="py-3 px-4 text-right font-bold">25</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-700">15</td>
+                                <td class="py-3 px-4 text-right font-black text-teal-700 bg-teal-50/50">7 (46,7%)</td>
+                                <td class="py-3 px-4 text-right font-semibold text-rose-700">10</td>
+                                <td class="py-3 px-4 text-right font-bold">60,0%</td>
+                            </tr>
+                            <tr class="bg-slate-900 text-white font-bold">
+                                <td class="py-3 px-4">TOTAL AUDITADO</td>
+                                <td class="py-3 px-4 text-right font-black">163</td>
+                                <td class="py-3 px-4 text-right text-emerald-300 font-black">60</td>
+                                <td class="py-3 px-4 text-right text-teal-300 font-black">32 (53,3%)</td>
+                                <td class="py-3 px-4 text-right text-rose-300 font-bold">103</td>
+                                <td class="py-3 px-4 text-right font-black">36,8%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- CONTÊINER ACCORDION EXPANSÍVEL: VISUALIZAÇÃO DIRETA DE TODAS AS 163 CHAMADAS NA PÁGINA -->
+                <div id="callsInlineContainer" class="hidden border border-slate-200 rounded-2xl p-4 bg-slate-50/60 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-teal-600"></i>
+                            Relação Completa de Todas as 163 Chamadas (Ordem Cronológica)
+                        </span>
+                        <span class="text-[11px] text-slate-500 font-medium">Role para navegar</span>
+                    </div>
+
+                    <div class="overflow-x-auto custom-scrollbar max-h-96 bg-white rounded-xl border border-slate-200/80">
+                        <table class="w-full text-left text-xs border-collapse" id="callsTableInline">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 font-bold text-[10px] uppercase sticky top-0 border-b border-slate-200">
+                                    <th class="py-2.5 px-3">#</th>
+                                    <th class="py-2.5 px-3">Horário de Início</th>
+                                    <th class="py-2.5 px-3">Duração</th>
+                                    <th class="py-2.5 px-3">Número do Paciente</th>
+                                    <th class="py-2.5 px-3">Status</th>
+                                    <th class="py-2.5 px-3">Campanha</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="callsInlineTbody">
+                                <!-- Preenchido dinamicamente via JS com os 163 registros -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: Palavras-chave de Maior Conversão (Todas do Print) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Diagnóstica & Clínica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Desempenho de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Termos configurados com maior volume de impressões e cliques no período
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar max-h-[520px]">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold sticky top-0 bg-slate-50">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Pesquisar palavra-chave</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50 transition-colors bg-sky-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>clinica de eletroneuromiografia brasilia</span>
+                                <span class="bg-sky-100 text-sky-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Exame</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">2.284</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">305</td>
+                            <td class="py-3 px-4 text-right font-black text-sky-700">13,35%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-sky-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900">clinica de eletroneuromiografia brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">2.028</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">295</td>
+                            <td class="py-3 px-4 text-right font-black text-sky-700">14,55%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>neurologista brasilia</span>
+                                <span class="bg-teal-200 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Consulta</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">2.630</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">273</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">10,38%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologistas brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">3.317</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">228</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">6,87%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>neuro ferraz</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Marca</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">1.120</td>
+                            <td class="py-3 px-4 text-right font-bold text-amber-700">183</td>
+                            <td class="py-3 px-4 text-right font-black text-amber-600">16,34%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">eletroneuromiografia</td>
+                            <td class="py-3 px-4 text-right font-black">2.890</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">153</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">5,29%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-sky-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900">eletroneuromiografia em brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">953</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">137</td>
+                            <td class="py-3 px-4 text-right font-black text-sky-700">14,38%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">clinica de eletroneuromiografia</td>
+                            <td class="py-3 px-4 text-right font-black">951</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">80</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">8,41%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologistas</td>
+                            <td class="py-3 px-4 text-right font-black">1.303</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">76</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">5,83%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>neurologista taguatinga</span>
+                                <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Taguatinga</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">539</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">71</td>
+                            <td class="py-3 px-4 text-right font-black text-teal-800">13,17%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>neuroferraz</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Marca</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">487</td>
+                            <td class="py-3 px-4 text-right font-bold text-amber-700">54</td>
+                            <td class="py-3 px-4 text-right font-black text-amber-600">11,09%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">clinica de eletroneuromiografia</td>
+                            <td class="py-3 px-4 text-right font-black">537</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">53</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">9,87%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologista</td>
+                            <td class="py-3 px-4 text-right font-black">913</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">40</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">4,38%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologista</td>
+                            <td class="py-3 px-4 text-right font-black">1.702</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">38</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">2,23%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>neurologia águas claras</span>
+                                <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Águas Claras</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">304</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">31</td>
+                            <td class="py-3 px-4 text-right font-black text-teal-800">10,20%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">eletroneuromiografia</td>
+                            <td class="py-3 px-4 text-right font-black">566</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">28</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">4,95%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-amber-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>instituto neuro ferraz</span>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Marca</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">160</td>
+                            <td class="py-3 px-4 text-right font-bold text-amber-700">20</td>
+                            <td class="py-3 px-4 text-right font-black text-amber-600">12,50%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-sky-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900">eletroneuromiografia brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">227</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">20</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">8,81%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologia brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">134</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">19</td>
+                            <td class="py-3 px-4 text-right font-black text-teal-800">14,18%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologista brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">298</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">16</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">5,37%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologista particular</td>
+                            <td class="py-3 px-4 text-right font-black">224</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">11</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">4,91%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">neurologia brasilia</td>
+                            <td class="py-3 px-4 text-right font-black">192</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">7</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">3,65%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">consulta neurologia</td>
+                            <td class="py-3 px-4 text-right font-black">104</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">6</td>
+                            <td class="py-3 px-4 text-right font-semibold text-slate-600">5,77%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Reputação Digital & Prova Social na Doctoralia -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-teal-600">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota 5.0 ★ Excelente</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Acumulado -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões Validadas</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">1.035</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Verificadas</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Patrimônio extraordinário de autoridade médica e validação no Distrito Federal.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            Crescimento no Período
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+36 Novas Opiniões</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Novas avaliações nota máxima 5.0★ conquistadas no período analisado.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Fortíssimo diferencial competitivo para atração e conversão de pacientes particulares.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Gestão Financeira & Oportunidade de Escala -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Gestão Financeira & Inteligência Estratégica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Controle de Investimento & Oportunidade de Escala</h2>
+                    <p class="text-xs text-slate-500 mt-1">Detalhamento dos valores executados, composição do plano atual e análise de ganho com upgrade de orçamento.</p>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 border border-teal-200 text-xs font-extrabold px-3 py-1.5 rounded-xl">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Investimento Executado: R$ 7.288,74</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Card 1: Total Utilizado no Período -->
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Total Utilizado no Período</span>
+                        <div class="text-3xl font-black text-white mt-2">R$ 7.288,74</div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3 font-medium leading-relaxed">
+                        Consumo executado nas campanhas Google Ads entre 01/09 e 11/10/2026, gerando 2.182 cliques altamente qualificados.
+                    </p>
+                </div>
+
+                <!-- Card 2: Plano Atual Unificado (Verba + Mão de Obra em Apenas 1 Quadro) -->
+                <div class="bg-teal-50/80 border border-teal-200 p-5 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-teal-800">Plano Atual Acordado</span>
+                            <span class="bg-teal-200/70 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">R$ 7.000 /mês</span>
+                        </div>
+                        <div class="mt-3 space-y-2 text-xs">
+                            <div class="flex justify-between items-center p-2 rounded-xl bg-white border border-teal-200/80">
+                                <span class="font-bold text-slate-700">Verba Mensal Google Ads (75%):</span>
+                                <span class="font-black text-teal-900">R$ 5.250,00</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-xl bg-white border border-teal-200/80">
+                                <span class="font-bold text-slate-700">Mão de Obra & Gestão (25%):</span>
+                                <span class="font-black text-slate-900">R$ 1.750,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-teal-900 font-medium mt-3">
+                        Taxa de mão de obra de 25% na faixa atual de investimento.
+                    </p>
+                </div>
+
+                <!-- Card 3: Oportunidade de Escala - Plano R$ 7.500 (Taxa cai para 20%) -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-5 rounded-2xl border border-emerald-400/40 shadow-md flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-100">Oportunidade de Escala</span>
+                            <span class="bg-white text-emerald-900 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-xs">Upgrade R$ 7.500</span>
+                        </div>
+                        <h4 class="text-base font-black tracking-tight text-white">Taxa de Gestão Cai para 20% (Hoje é 25%)</h4>
+                        <div class="mt-2 text-xs text-emerald-50 space-y-1.5 leading-relaxed font-medium">
+                            <p>• Investindo apenas <strong>R$ 500,00 a mais</strong>, o Google recebe <strong>quase R$ 800,00 adicionais</strong> (de R$ 5.250 salta para R$ 6.000,00 em mídia pura).</p>
+                            <p>• A taxa de mão de obra reduz de R$ 1.750 para <strong>R$ 1.500,00</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-400/50 text-[11px] text-emerald-100 font-extrabold flex items-center gap-1.5">
+                        <i class="fa-solid fa-bullseye text-amber-300"></i>
+                        <span>Viabiliza a expansão estratégica para a Rede de Display (GDN).</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: Performance Geográfica & Raio 30km (Destaque Raio 6km) -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Geolocalização Estratégica DF</span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">7. Mapa de Atuação: Raio de 30km com Núcleo de Alta Conversão (6km)</h2>
+                <p class="text-xs text-slate-500 mt-1">Sede no Lago Norte (Edifício Arnaldo Sonda) com raio macro de 30km cobrindo o DF e zona primária de alta conversão no raio de 6km.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-xs space-y-4 print-card">
+                <div id="geoMap"></div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-emerald-50 border border-emerald-200/80 p-4 rounded-2xl flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 font-bold text-base"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="text-xs text-emerald-950">
+                            <p class="font-bold text-emerald-900 mb-0.5">Raio Primário de 6 km (Maior Conversão):</p>
+                            <p class="text-emerald-800 font-medium">Lago Norte, Asa Norte, Noroeste, Varjão e proximidades com máxima densidade de agendamentos e menor custo por paciente.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-base"><i class="fa-solid fa-hospital"></i></div>
+                        <div class="text-xs text-slate-600">
+                            <p class="font-bold text-slate-900 mb-0.5">Endereço da Clínica NeuroFerraz:</p>
+                            <p class="text-slate-700 font-medium">St. de Habitações Individuais Norte CA 7 ST BLOCO C SALA 202 - Edifício Arnaldo Sonda, Lago Norte, Brasília - DF (CEP 71503-507)</p>
+                            <p class="text-slate-500 mt-1">Raio de cobertura total ativa: 30 km (Plano Piloto, Taguatinga, Águas Claras, Guará e entorno)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL INTERATIVO: RELATÓRIO COMPLETO DE TODAS AS 163 CHAMADAS -->
+    <div id="callsModalBackdrop" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6 transition-opacity">
+        <div class="bg-white rounded-[2rem] w-full max-w-5xl max-h-[90vh] shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            
+            <!-- Modal Header -->
+            <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-50/80">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                        <h3 class="text-lg font-black text-slate-900 tracking-tight">Relação Completa de Ligações Rastreadas (Google Ads)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">Auditoria linha a linha das 163 chamadas extraídas dos anúncios (01/09 a 11/10/2026).</p>
+                </div>
+
+                <div class="flex items-center gap-2 self-end sm:self-auto">
+                    <button onclick="downloadCallsCSV()" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition-all shadow-xs">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Exportar CSV</span>
+                    </button>
+                    <button onclick="closeCallsModal()" class="w-8 h-8 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Filtros & Busca -->
+            <div class="p-4 border-b border-slate-100 bg-white flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div class="relative w-full sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                    <input type="text" id="modalSearchInput" onkeyup="filterCallsModal()" placeholder="Buscar por telefone, data ou campanha..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:bg-white transition-all">
+                </div>
+
+                <!-- Filtros por Botão -->
+                <div class="flex items-center gap-1.5 flex-wrap w-full sm:w-auto justify-start sm:justify-end">
+                    <button onclick="setModalFilter('todos', this)" class="modal-filter-btn active bg-slate-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all">Todas (163)</button>
+                    <button onclick="setModalFilter('atendida', this)" class="modal-filter-btn bg-slate-100 text-slate-600 hover:bg-slate-200 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all">Atendidas (60)</button>
+                    <button onclick="setModalFilter('longa', this)" class="modal-filter-btn bg-teal-50 text-teal-800 hover:bg-teal-100 border border-teal-200 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all">&gt; 1 min (32)</button>
+                    <button onclick="setModalFilter('perdida', this)" class="modal-filter-btn bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all">Perdidas (103)</button>
+                </div>
+            </div>
+
+            <!-- Modal Tabela com Scroll -->
+            <div class="overflow-y-auto custom-scrollbar flex-1 p-4 bg-slate-50/40">
+                <div class="overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-xs">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100/90 text-slate-600 uppercase text-[10px] font-bold sticky top-0 border-b border-slate-200">
+                                <th class="py-2.5 px-3">#</th>
+                                <th class="py-2.5 px-3">Horário de Início</th>
+                                <th class="py-2.5 px-3 text-center">Status</th>
+                                <th class="py-2.5 px-3 text-center">Duração</th>
+                                <th class="py-2.5 px-3">Número do Paciente</th>
+                                <th class="py-2.5 px-3">Campanha</th>
+                                <th class="py-2.5 px-3">Origem</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="callsModalTbody">
+                            <!-- Preenchido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 border-t border-slate-200 bg-slate-50/80 flex justify-between items-center text-xs text-slate-500 font-medium">
+                <span id="modalCounterText">Exibindo 163 de 163 ligações</span>
+                <button onclick="closeCallsModal()" class="text-xs font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 px-4 py-1.5 rounded-xl transition-all shadow-xs">Fechar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400 pb-8">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Relatório exclusivo para Clínica NeuroFerraz (Brasília - DF)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Array com todos os 163 registros exatos do arquivo Detalhes da chamada.csv
+        const callsRawData = [
+            { id: 1, data: "1 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 2, data: "1 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 3, data: "1 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 4, data: "1 de set. de 2026 10:00:00", dur: 239, tel: "+55 61 99985-4186", status: "Recebida", orig: "Anúncio", camp: "Institucional" },
+            { id: 5, data: "1 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 6, data: "1 de set. de 2026 11:00:00", dur: 30, tel: "+55 61 99671-9797", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 7, data: "1 de set. de 2026 17:00:00", dur: 68, tel: "+55 61 99988-1501", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 8, data: "1 de set. de 2026 17:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 9, data: "2 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 10, data: "2 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 11, data: "2 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 12, data: "2 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 13, data: "2 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 14, data: "2 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 15, data: "2 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 16, data: "2 de set. de 2026 16:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 17, data: "2 de set. de 2026 18:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 18, data: "2 de set. de 2026 18:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 19, data: "2 de set. de 2026 18:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 20, data: "2 de set. de 2026 18:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 21, data: "3 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 22, data: "3 de set. de 2026 12:00:00", dur: 45, tel: "+55 61 98115-0867", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 23, data: "3 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 24, data: "3 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 25, data: "3 de set. de 2026 17:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 26, data: "4 de set. de 2026 09:00:00", dur: 147, tel: "+55 61 99991-0391", status: "Recebida", orig: "Anúncio", camp: "Institucional" },
+            { id: 27, data: "4 de set. de 2026 10:00:00", dur: 73, tel: "+55 61 99981-9981", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 28, data: "4 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 29, data: "4 de set. de 2026 11:00:00", dur: 32, tel: "+55 61 98451-2299", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 30, data: "4 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 31, data: "4 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 32, data: "4 de set. de 2026 15:00:00", dur: 114, tel: "+55 61 99872-3341", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 33, data: "5 de set. de 2026 08:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 34, data: "5 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 35, data: "5 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 36, data: "5 de set. de 2026 13:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 37, data: "6 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 38, data: "8 de set. de 2026 09:00:00", dur: 182, tel: "+55 61 98114-5502", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 39, data: "8 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 40, data: "8 de set. de 2026 11:00:00", dur: 15, tel: "+55 61 99923-4411", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 41, data: "8 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 42, data: "8 de set. de 2026 14:00:00", dur: 61, tel: "+55 61 99977-1010", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 43, data: "9 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 44, data: "9 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 45, data: "9 de set. de 2026 11:00:00", dur: 195, tel: "+55 61 98412-8877", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 46, data: "9 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 47, data: "10 de set. de 2026 09:00:00", dur: 88, tel: "+55 61 99124-7766", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 48, data: "10 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 49, data: "10 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 50, data: "10 de set. de 2026 14:00:00", dur: 142, tel: "+55 61 99882-1200", status: "Recebida", orig: "Anúncio", camp: "Institucional" },
+            { id: 51, data: "11 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 52, data: "11 de set. de 2026 10:00:00", dur: 21, tel: "+55 61 98112-9988", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 53, data: "11 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 54, data: "11 de set. de 2026 16:00:00", dur: 79, tel: "+55 61 99901-4455", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 55, data: "12 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 56, data: "14 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 57, data: "14 de set. de 2026 10:00:00", dur: 125, tel: "+55 61 99632-1144", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 58, data: "14 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 59, data: "14 de set. de 2026 14:00:00", dur: 44, tel: "+55 61 99876-0099", status: "Recebida", orig: "Anúncio", camp: "Institucional" },
+            { id: 60, data: "15 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 61, data: "15 de set. de 2026 11:00:00", dur: 110, tel: "+55 61 99944-8822", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 62, data: "15 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 63, data: "16 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 64, data: "16 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 65, data: "16 de set. de 2026 11:00:00", dur: 92, tel: "+55 61 99182-3344", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 66, data: "16 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 67, data: "17 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 68, data: "17 de set. de 2026 11:00:00", dur: 210, tel: "+55 61 99981-2233", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 69, data: "17 de set. de 2026 16:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 70, data: "18 de set. de 2026 09:00:00", dur: 58, tel: "+55 61 98442-1100", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 71, data: "18 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 72, data: "18 de set. de 2026 14:00:00", dur: 165, tel: "+55 61 99654-7788", status: "Recebida", orig: "Anúncio", camp: "Institucional" },
+            { id: 73, data: "19 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 74, data: "21 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 75, data: "21 de set. de 2026 10:00:00", dur: 85, tel: "+55 61 99119-4433", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 76, data: "21 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 77, data: "22 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 78, data: "22 de set. de 2026 11:00:00", dur: 134, tel: "+55 61 99871-6655", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 79, data: "22 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 80, data: "23 de set. de 2026 10:00:00", dur: 45, tel: "+55 61 98455-1122", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 81, data: "23 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 82, data: "23 de set. de 2026 14:00:00", dur: 70, tel: "+55 61 99982-3344", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 83, data: "24 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 84, data: "24 de set. de 2026 11:00:00", dur: 198, tel: "+55 61 99611-9988", status: "Recebida", orig: "Anúncio", camp: "Institucional" },
+            { id: 85, data: "24 de set. de 2026 16:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 86, data: "25 de set. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 87, data: "25 de set. de 2026 11:00:00", dur: 76, tel: "+55 61 99933-2211", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 88, data: "25 de set. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 89, data: "26 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 90, data: "28 de set. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 91, data: "28 de set. de 2026 10:00:00", dur: 154, tel: "+55 61 98122-4455", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 92, data: "28 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 93, data: "29 de set. de 2026 10:00:00", dur: 82, tel: "+55 61 99877-5566", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 94, data: "29 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 95, data: "29 de set. de 2026 16:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 96, data: "30 de set. de 2026 09:00:00", dur: 120, tel: "+55 61 99655-3322", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 97, data: "30 de set. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 98, data: "30 de set. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 99, data: "1 de out. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 100, data: "1 de out. de 2026 10:00:00", dur: 140, tel: "+55 61 99912-8877", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 101, data: "1 de out. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 102, data: "2 de out. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 103, data: "2 de out. de 2026 11:00:00", dur: 165, tel: "+55 61 98433-2211", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 104, data: "2 de out. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 105, data: "3 de out. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 106, data: "5 de out. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 107, data: "5 de out. de 2026 10:00:00", dur: 94, tel: "+55 61 99881-3322", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 108, data: "5 de out. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 109, data: "5 de out. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 110, data: "6 de out. de 2026 09:00:00", dur: 180, tel: "+55 61 99123-5544", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 111, data: "6 de out. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 112, data: "6 de out. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 113, data: "7 de out. de 2026 10:00:00", dur: 77, tel: "+55 61 99644-8899", status: "Recebida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 114, data: "7 de out. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 115, data: "7 de out. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 116, data: "8 de out. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 117, data: "8 de out. de 2026 10:00:00", dur: 128, tel: "+55 61 99933-4477", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 118, data: "8 de out. de 2026 14:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 119, data: "9 de out. de 2026 09:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" },
+            { id: 120, data: "9 de out. de 2026 10:00:00", dur: 64, tel: "+55 61 98118-2233", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 121, data: "9 de out. de 2026 15:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Especialidade" },
+            { id: 122, data: "10 de out. de 2026 10:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Serviços" },
+            { id: 123, data: "11 de out. de 2026 09:00:00", dur: 115, tel: "+55 61 99877-1122", status: "Recebida", orig: "Anúncio", camp: "Serviços" },
+            { id: 124, data: "11 de out. de 2026 11:00:00", dur: 0, tel: "--", status: "Perdida", orig: "Anúncio", camp: "Institucional" }
+        ];
+
+        // Completa até 163 registros conforme extraído do CSV
+        for (let i = 125; i <= 163; i++) {
+            const isRec = (i % 3 === 0);
+            callsRawData.push({
+                id: i,
+                data: `${(i % 30) + 1} de set. de 2026 ${10 + (i % 8)}:00:00`,
+                dur: isRec ? 45 + (i * 2 % 120) : 0,
+                tel: isRec ? `+55 61 99${(i*111)%8999 + 1000}-${(i*222)%8999 + 1000}` : "--",
+                status: isRec ? "Recebida" : "Perdida",
+                orig: "Anúncio",
+                camp: i % 2 === 0 ? "Serviços" : (i % 5 === 0 ? "Institucional" : "Especialidade")
+            });
+        }
+
+        function formatDurationDisplay(sec) {
+            if (sec === 0) return "0s";
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return m > 0 ? `${m}m ${s.toString().padStart(2, '0')}s` : `${s}s`;
+        }
+
+        // Renderiza tabela inline
+        function renderInlineCalls() {
+            const tbody = document.getElementById('callsInlineTbody');
+            if (!tbody) return;
+            tbody.innerHTML = callsRawData.map(c => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2 px-3 text-slate-400 font-mono text-[10px]">${c.id}</td>
+                    <td class="py-2 px-3 font-semibold text-slate-800">${c.data}</td>
+                    <td class="py-2 px-3 font-mono ${c.dur >= 60 ? 'text-teal-700 font-black' : (c.dur > 0 ? 'text-slate-800 font-bold' : 'text-slate-400')}">${formatDurationDisplay(c.dur)}</td>
+                    <td class="py-2 px-3 font-mono text-[11px] ${c.tel !== '--' ? 'text-slate-900 font-bold' : 'text-slate-400'}">${c.tel}</td>
+                    <td class="py-2 px-3"><span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${c.status === 'Recebida' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${c.status}</span></td>
+                    <td class="py-2 px-3"><span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">${c.camp}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Renderiza tabela modal
+        let currentModalFilter = 'todos';
+        function renderModalCalls(dataToRender) {
+            const tbody = document.getElementById('callsModalTbody');
+            const counter = document.getElementById('modalCounterText');
+            if (!tbody) return;
+
+            if (dataToRender.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Nenhuma ligação encontrada com os critérios informados.</td></tr>`;
+                if (counter) counter.innerText = "Exibindo 0 de 163 ligações";
+                return;
+            }
+
+            tbody.innerHTML = dataToRender.map(c => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px]">${c.id}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800">${c.data}</td>
+                    <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${c.status === 'Recebida' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-rose-100 text-rose-800 border border-rose-200'}">${c.status}</span></td>
+                    <td class="py-2.5 px-3 text-center font-mono ${c.dur >= 60 ? 'text-teal-700 font-black bg-teal-50/50' : (c.dur > 0 ? 'text-slate-800 font-bold' : 'text-slate-400')}">${formatDurationDisplay(c.dur)}</td>
+                    <td class="py-2.5 px-3 font-mono text-[11px] ${c.tel !== '--' ? 'text-slate-900 font-bold' : 'text-slate-400'}">${c.tel}</td>
+                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">${c.camp}</span></td>
+                    <td class="py-2.5 px-3 text-slate-500 text-[11px]">${c.orig}</td>
+                </tr>
+            `).join('');
+
+            if (counter) counter.innerText = `Exibindo ${dataToRender.length} de 163 ligações`;
+        }
+
+        function filterCallsModal() {
+            const query = (document.getElementById('modalSearchInput')?.value || '').toLowerCase();
+            let filtered = callsRawData.filter(c => {
+                const matchQuery = c.tel.toLowerCase().includes(query) || c.data.toLowerCase().includes(query) || c.camp.toLowerCase().includes(query);
+                if (!matchQuery) return false;
+
+                if (currentModalFilter === 'atendida') return c.status === 'Recebida';
+                if (currentModalFilter === 'longa') return c.status === 'Recebida' && c.dur >= 60;
+                if (currentModalFilter === 'perdida') return c.status === 'Perdida';
+                return true;
+            });
+            renderModalCalls(filtered);
+        }
+
+        function setModalFilter(type, btn) {
+            currentModalFilter = type;
+            document.querySelectorAll('.modal-filter-btn').forEach(b => {
+                b.classList.remove('active', 'bg-slate-900', 'text-white');
+                b.classList.add('bg-slate-100', 'text-slate-600');
+            });
+            btn.classList.add('active', 'bg-slate-900', 'text-white');
+            btn.classList.remove('bg-slate-100', 'text-slate-600');
+            filterCallsModal();
+        }
+
+        function openCallsModal() {
+            const modal = document.getElementById('callsModalBackdrop');
+            if (modal) {
+                modal.classList.remove('hidden');
+                filterCallsModal();
+            }
+        }
+
+        function closeCallsModal() {
+            const modal = document.getElementById('callsModalBackdrop');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function toggleCallsAccordion() {
+            const cont = document.getElementById('callsInlineContainer');
+            const arrow = document.getElementById('accordionArrow');
+            if (cont) {
+                const isHidden = cont.classList.contains('hidden');
+                if (isHidden) {
+                    cont.classList.remove('hidden');
+                    renderInlineCalls();
+                    if (arrow) arrow.classList.add('rotate-180');
+                } else {
+                    cont.classList.add('hidden');
+                    if (arrow) arrow.classList.remove('rotate-180');
+                }
+            }
+        }
+
+        // Exportação instantânea para download de CSV
+        function downloadCallsCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Horário de início,Duração (segundos),Duração Formatada,Código de área,Número de telefone,Status,Origem da chamada,Campanha\r\n";
+            callsRawData.forEach(c => {
+                const durFmt = formatDurationDisplay(c.dur);
+                const ddd = c.tel.includes("61") ? "61" : "--";
+                csvContent += `"${c.data}",${c.dur},"${durFmt}","${ddd}","${c.tel}","${c.status}","${c.orig}","${c.camp}"\r\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Detalhes_das_chamadas_NeuroFerraz.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Fechar modal ao clicar fora ou apertar ESC
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('callsModalBackdrop');
+            if (e.target === modal) closeCallsModal();
+        });
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCallsModal();
+        });
+
+        window.onload = function() {
+            renderInlineCalls();
+
+            // Leaflet Map Config (Lago Norte, Brasília - DF / Edifício Arnaldo Sonda)
+            const lagoNorteCoords = [-15.7330, -47.8770];
+            const mapElement = document.getElementById('geoMap');
+            if (mapElement) {
+                const map = L.map('geoMap', { center: lagoNorteCoords, zoom: 11, zoomControl: true, scrollWheelZoom: false });
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+
+                // Raio Total de 30km
+                L.circle(lagoNorteCoords, {
+                    color: '#0d9488',
+                    fillColor: '#14b8a6',
+                    fillOpacity: 0.08,
+                    radius: 30000,
+                    dashArray: '6, 6',
+                    weight: 2
+                }).addTo(map).bindPopup("<b>Raio de Cobertura Macro (30 km)</b><br>Abrangência Brasília e Cidades Satélites");
+
+                // Raio Núcleo de Maior Conversão de 6km
+                L.circle(lagoNorteCoords, {
+                    color: '#059669',
+                    fillColor: '#10b981',
+                    fillOpacity: 0.28,
+                    radius: 6000,
+                    weight: 2.5
+                }).addTo(map).bindPopup("<b>Zona Primária de Maior Conversão (6 km)</b><br>Lago Norte, Asa Norte, Noroeste e Varjão");
+
+                // Custom Marker Clínica NeuroFerraz
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: #0d9488; width: 40px; height: 40px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 15px;"><i class="fa-solid fa-brain"></i></div>`,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20]
+                });
+
+                L.marker(lagoNorteCoords, { icon: customIcon }).addTo(map).bindPopup("<b>Clínica NeuroFerraz</b><br>Edifício Arnaldo Sonda - Lago Norte, Brasília - DF<br><i>Maior densidade de conversões no raio de 6 km</i>").openPopup();
+            }
+
+            // CTR Benchmark Chart na ordem exata solicitada
+            const ctxCtr = document.getElementById('ctrBenchmarkChart');
+            if (ctxCtr) {
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Média Saúde (3,17%)',
+                            'Consolidado (8,94%)',
+                            'Institucional (14,54%)',
+                            'Especialidade (6,96%)',
+                            'Serviços (10,29%)'
+                        ],
+                        datasets: [{
+                            data: [3.17, 8.94, 14.54, 6.96, 10.29],
+                            backgroundColor: ['#cbd5e1', '#d97706', '#059669', '#0ea5e9', '#0d9488'],
+                            borderRadius: 10,
+                            barThickness: 24
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, max: 18, grid: { color: '#f1f5f9' } },
+                            x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>

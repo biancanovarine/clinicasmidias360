@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Executivo de Performance - Clínica Soft & Dra. Laís Fraga | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+                        },
+                        emerald: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        },
+                        sky: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+        .gradient-teal { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+        .gradient-accent { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
+        #geoMap { width: 100%; height: 430px; border-radius: 1.5rem; z-index: 10; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Cabeçalho Principal -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    CS
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Clínica Soft & Dra. Laís Fraga</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 pulse-dot"></span>
+                            Endocrinologia • Psiquiatria • Ginecologia
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Performance de Mídia • Paraíso, São Paulo - SP (01/09 a 15/10/2026)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 flex-wrap justify-end">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">5.0 ★</span>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header de Metadados -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
+                    Período: <span class="text-teal-700">01/09 a 15/10/2026 (Consolidado 45 Dias)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 2,12</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-amber-200">
+                    🔥 CTR Consolidado: 5,15% (1,62x Média de Saúde de 3,17%)
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar Relatório</span>
+            </button>
+        </div>
+
+        <!-- SEÇÃO 1: Alcance do Anúncio no Google & Indicadores Globais + Tarja de Distribuição -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Alta Densidade em Medicina Especializada no Paraíso</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Visão Geral Google Ads & Canais de Captação (São Paulo - SP)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">58.919</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Exibições nos leilões do Google Ads</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Diretos</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">3.033</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego de alta intenção médica</p>
+                </div>
+
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR Consolidado</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">5,15%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ Acima da Média de Saúde (3,17%)</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos Doctoralia</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">3.454</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 87,8% direcionado pelo Google</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Telefone</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-phone-volume text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">267</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Contactos e chamadas diretas</p>
+                </div>
+
+            </div>
+
+            <!-- TARJA: DISTRIBUIÇÃO DO TRÁFEGO DO ADS (LAÍS vs SOFT) -->
+            <div class="bg-[#0b2926] text-white rounded-[2rem] p-5 sm:p-6 shadow-md border border-teal-800/40 flex flex-col lg:flex-row lg:items-center justify-between gap-5 print-card">
+                <div class="space-y-1.5 max-w-2xl">
+                    <span class="inline-block bg-teal-900/80 text-teal-300 border border-teal-500/40 text-[10px] font-extrabold uppercase px-3 py-0.5 rounded-full tracking-wider">
+                        DISTRIBUIÇÃO DO TRÁFEGO DO ADS
+                    </span>
+                    <h3 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                        Direcionamento Estratégico por Marca & Profissional
+                    </h3>
+                    <p class="text-xs text-slate-300 font-medium leading-relaxed">
+                        Dos <strong>3.033 cliques diretos</strong> vindos da campanha no Google Ads no período analisado, o tráfego foi distribuído estrategicamente entre o perfil da profissional e a estrutura clínica:
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap shrink-0">
+                    <!-- Card Dra. Laís Fraga -->
+                    <div class="bg-[#10202e] border border-sky-900/60 rounded-2xl px-5 py-3.5 min-w-[170px] shadow-xs">
+                        <span class="text-[11px] font-bold text-slate-400 block mb-0.5">Dra. Laís Fraga</span>
+                        <div class="text-xl sm:text-2xl font-black text-teal-400 tracking-tight">
+                            584 cliques <span class="text-xs font-semibold text-slate-300">(19,3%)</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Clínica Soft -->
+                    <div class="bg-[#10202e] border border-amber-900/50 rounded-2xl px-5 py-3.5 min-w-[170px] shadow-xs">
+                        <span class="text-[11px] font-bold text-slate-400 block mb-0.5">Clínica Soft</span>
+                        <div class="text-xl sm:text-2xl font-black text-amber-400 tracking-tight">
+                            2.449 cliques <span class="text-xs font-semibold text-slate-300">(80,7%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Benchmark de Eficiência & Domínio de Busca -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Gráfico de Benchmark: Média Saúde vs Consolidado -->
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 flex flex-col justify-between print-card">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Atração</span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">+62,5% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900">Benchmark da Área de Saúde</h3>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo de CTR entre a média de referência médica (3,17%) e o consolidado das campanhas (5,15%).</p>
+                </div>
+
+                <div class="my-6 relative h-48 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                    <span>O CTR consolidado de <strong>5,15%</strong> supera a média de saúde (3,17%), com destaque para a campanha <strong>Online (14,03%)</strong> e <strong>Institucional (12,34%)</strong>.</span>
+                </div>
+            </div>
+
+            <!-- Domínio nas Buscas (Share of Voice em SP) -->
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice & Posições de Pesquisa</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Destaque Paraíso & Jardins</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio nas Buscas de Endocrinologia, Psiquiatria e Telemedicina</h3>
+                    <p class="text-xs text-slate-400 mt-1">Presença destacada nos leilões do Google em São Paulo dentro do raio de 12km.</p>
+                </div>
+
+                <div class="my-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Top Page Ponderado (% Exibição na Área Superior de Busca)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">65,31%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 65.31%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                Top Page na Campanha Online / Telemedicina (Dra. Laís)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">91,88%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-accent h-full rounded-full" style="width: 91.88%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                1ª Posição Absoluta (% Marca Institucional Soft)
+                            </span>
+                            <span class="text-sky-400 font-extrabold text-base">47,83%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="bg-sky-500 h-full rounded-full" style="width: 47.83%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-teal-400"></i>
+                        R. Teixeira da Silva, 34, Cj. 63 - Paraíso / São Paulo - SP
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 3: Desempenho de Leilão por Campanha no Google Ads (Ajustada sem Chamadas e Custo) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura de Campanhas no Google Ads</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Leilão por Segmentação & Especialidade</h2>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                    Consolidado 01/09 a 15/10/2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-3 bg-slate-50 rounded-l-xl">Campanha</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right">CTR</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right">CPC Méd.</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right">% Topo Pag.</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right">% 1ª Pos.</th>
+                            <th class="py-3.5 px-3 bg-slate-50 text-right font-bold rounded-r-xl">Parc. Impr.</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-teal-600"></span> Especialidade (Lais)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-bold">8.248</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">417</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">5,06%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 3,99</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">74,50%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">19,10%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">10,58%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-teal-500"></span> Serviços (Laís)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-bold">679</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">27</td>
+                            <td class="py-3.5 px-3 text-right font-semibold">3,98%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 1,74</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">75,33%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">20,15%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">16,57%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/20">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> Online (Lais)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-bold">670</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">94</td>
+                            <td class="py-3.5 px-3 text-right font-black text-amber-600">14,03%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 4,79</td>
+                            <td class="py-3.5 px-3 text-right font-black text-amber-600">91,88%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">15,34%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">34,18%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-teal-500"></span> Serviços (Laís)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-bold">296</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">27</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">9,12%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 1,99</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">75,36%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">11,37%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">12,12%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/20">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-teal-700"></span> Institucional (Lais)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-bold">154</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">19</td>
+                            <td class="py-3.5 px-3 text-right font-black text-teal-700">12,34%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 0,97</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">66,98%</td>
+                            <td class="py-3.5 px-3 text-right font-black text-teal-700">37,74%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">46,61%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-emerald-50/20">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Endocrinologia (Soft)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-black">29.625</td>
+                            <td class="py-3.5 px-3 text-right font-black text-slate-900">1.469</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">4,96%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 1,71</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">63,57%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">22,35%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">&lt; 10%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-indigo-50/20">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-indigo-600"></span> Psiquiatria (Soft)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-black">19.213</td>
+                            <td class="py-3.5 px-3 text-right font-black text-slate-900">978</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-indigo-700">5,09%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 1,73</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-indigo-700">62,60%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-indigo-700">24,79%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">&lt; 10%</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-slate-500"></span> Institucional (Soft)
+                            </td>
+                            <td class="py-3.5 px-3 text-right font-bold">34</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">2</td>
+                            <td class="py-3.5 px-3 text-right font-semibold">5,88%</td>
+                            <td class="py-3.5 px-3 text-right font-semibold text-emerald-700">R$ 1,68</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-teal-700">60,87%</td>
+                            <td class="py-3.5 px-3 text-right font-black text-teal-700">47,83%</td>
+                            <td class="py-3.5 px-3 text-right font-bold text-slate-900">35,38%</td>
+                        </tr>
+
+                        <!-- Linha Total Consolidado -->
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-3 rounded-l-xl">TOTAL CONSOLIDADO</td>
+                            <td class="py-4 px-3 text-right font-black">58.919</td>
+                            <td class="py-4 px-3 text-right text-teal-300 font-black text-base">3.033</td>
+                            <td class="py-4 px-3 text-right text-amber-300 font-black">5,15%</td>
+                            <td class="py-4 px-4 text-right text-teal-200 font-bold">R$ 2,12</td>
+                            <td class="py-4 px-3 text-right font-bold">65,3%</td>
+                            <td class="py-4 px-3 text-right font-bold">22,6%</td>
+                            <td class="py-4 px-3 text-right rounded-r-xl font-bold">9,7%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: Palavras-chave de Maior Conversão -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Clínica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Desempenho de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Relação completa das 32 palavras-chave ativadas nas campanhas
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar max-h-[520px]">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold sticky top-0 bg-slate-50">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Pesquisar palavra-chave</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="keywordsTbody">
+                        <!-- Preenchido via JS com as 32 palavras-chave -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Histórico de Agendamentos (Maio em Diante) & Evolução por Profissional -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Evolução Mensal de Consultas & Captação (Doctoralia 2026)</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Histórico de Agendamentos e Desempenho por Especialista</h2>
+                    <p class="text-xs text-slate-500 mt-1">Acompanhamento contínuo dos agendamentos a partir de Maio de 2026 até 15 de Outubro.</p>
+                </div>
+                <div class="text-xs text-slate-700 font-bold bg-teal-50 border border-teal-200 px-3.5 py-1.5 rounded-xl self-start md:self-auto flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-check text-teal-600"></i>
+                    <span>Pico de Consultas em Julho: 394 Agendamentos</span>
+                </div>
+            </div>
+
+            <!-- Gráfico de Agendamentos Totais & Novos Pacientes (Maio a Outubro) -->
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/80">
+                <div class="h-80 relative">
+                    <canvas id="appointmentsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- TABELA: EVOLUÇÃO DE AGENDAMENTOS POR ESPECIALISTA (ABAIXO DO GRÁFICO) -->
+            <div class="space-y-3 pt-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Desempenho Individual por Especialista</span>
+                        <h3 class="text-base font-black text-slate-900 tracking-tight">Evolução de Agendamentos por Profissional (Maio a 15 de Outubro)</h3>
+                    </div>
+                    <span class="text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-xl self-start sm:self-auto">
+                        Total Auditado: <strong class="text-slate-900">1.930 consultas</strong>
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 font-bold uppercase text-[10px] border-b border-slate-200">
+                                <th class="py-3 px-3">Especialista</th>
+                                <th class="py-3 px-2 text-right">05-Maio</th>
+                                <th class="py-3 px-2 text-right">06-Junho</th>
+                                <th class="py-3 px-2 text-right">07-Julho</th>
+                                <th class="py-3 px-2 text-right">08-Agosto</th>
+                                <th class="py-3 px-2 text-right">09-Setembro</th>
+                                <th class="py-3 px-2 text-right bg-amber-50/60 text-amber-900">10-Outubro (até 15)</th>
+                                <th class="py-3 px-3 text-right bg-teal-50 text-teal-900 font-black rounded-r-xl">Total Geral</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-teal-600"></span> Alysson Emannuel Vieira
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">11</td>
+                                <td class="py-3 px-2 text-right font-semibold">21</td>
+                                <td class="py-3 px-2 text-right font-bold text-teal-700">23</td>
+                                <td class="py-3 px-2 text-right font-semibold">20</td>
+                                <td class="py-3 px-2 text-right font-semibold">18</td>
+                                <td class="py-3 px-2 text-right font-semibold bg-amber-50/40">17</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">110</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Barbara Leão
+                                </td>
+                                <td class="py-3 px-2 text-right font-bold text-teal-700">25</td>
+                                <td class="py-3 px-2 text-right font-semibold">17</td>
+                                <td class="py-3 px-2 text-right font-bold text-teal-700">25</td>
+                                <td class="py-3 px-2 text-right font-semibold">19</td>
+                                <td class="py-3 px-2 text-right font-semibold">20</td>
+                                <td class="py-3 px-2 text-right font-semibold bg-amber-50/40">9</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">115</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span> Carolina Silveira
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">1</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold">—</td>
+                                <td class="py-3 px-2 text-right font-semibold">3</td>
+                                <td class="py-3 px-2 text-right font-semibold">2</td>
+                                <td class="py-3 px-2 text-right font-semibold">2</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold bg-amber-50/40">—</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">8</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span> Fernanda Amorim
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">3</td>
+                                <td class="py-3 px-2 text-right font-semibold">2</td>
+                                <td class="py-3 px-2 text-right font-semibold">7</td>
+                                <td class="py-3 px-2 text-right font-semibold">4</td>
+                                <td class="py-3 px-2 text-right font-semibold">4</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold bg-amber-50/40">—</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">20</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Gabriella Galdino Vilela Dourado
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">9</td>
+                                <td class="py-3 px-2 text-right font-bold text-teal-700">11</td>
+                                <td class="py-3 px-2 text-right font-semibold">5</td>
+                                <td class="py-3 px-2 text-right font-semibold">1</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold">—</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold bg-amber-50/40">—</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">26</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span> José Humberto Guimarães
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">1</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold">—</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold">—</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold">—</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold">—</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold bg-amber-50/40">—</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">1</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-teal-700"></span> Laís Fraga
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">200</td>
+                                <td class="py-3 px-2 text-right font-semibold">183</td>
+                                <td class="py-3 px-2 text-right font-black text-teal-700 text-xs">225</td>
+                                <td class="py-3 px-2 text-right font-semibold">184</td>
+                                <td class="py-3 px-2 text-right font-black text-teal-700 text-xs">221</td>
+                                <td class="py-3 px-2 text-right font-bold text-amber-700 bg-amber-50/40">77</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-800 bg-teal-100/50 text-sm">1.090</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span> Lorenna Oliveira Menezes
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">2</td>
+                                <td class="py-3 px-2 text-right font-semibold">2</td>
+                                <td class="py-3 px-2 text-right font-semibold">3</td>
+                                <td class="py-3 px-2 text-right font-semibold">2</td>
+                                <td class="py-3 px-2 text-right font-semibold">1</td>
+                                <td class="py-3 px-2 text-right text-slate-400 font-semibold bg-amber-50/40">—</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">10</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-sky-500"></span> Mariana de Mattos Baratojo
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">7</td>
+                                <td class="py-3 px-2 text-right font-semibold">8</td>
+                                <td class="py-3 px-2 text-right font-semibold">6</td>
+                                <td class="py-3 px-2 text-right font-semibold">10</td>
+                                <td class="py-3 px-2 text-right font-bold text-teal-700">11</td>
+                                <td class="py-3 px-2 text-right font-semibold bg-amber-50/40">3</td>
+                                <td class="py-3 px-3 text-right font-black text-teal-700 bg-teal-50/40 text-xs">45</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/20">
+                                <td class="py-3 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-amber-600"></span> Raphaella Gomes
+                                </td>
+                                <td class="py-3 px-2 text-right font-semibold">75</td>
+                                <td class="py-3 px-2 text-right font-black text-teal-700 text-xs">141</td>
+                                <td class="py-3 px-2 text-right font-semibold">97</td>
+                                <td class="py-3 px-2 text-right font-semibold">104</td>
+                                <td class="py-3 px-2 text-right font-semibold">49</td>
+                                <td class="py-3 px-2 text-right font-semibold bg-amber-50/40">39</td>
+                                <td class="py-3 px-3 text-right font-black text-amber-700 bg-amber-50/50 text-xs">505</td>
+                            </tr>
+                            <tr class="bg-slate-900 text-white font-bold">
+                                <td class="py-3.5 px-3">Total por Mês</td>
+                                <td class="py-3.5 px-2 text-right font-black text-xs">334</td>
+                                <td class="py-3.5 px-2 text-right font-black text-xs text-teal-300">385</td>
+                                <td class="py-3.5 px-2 text-right font-black text-xs text-teal-300">394</td>
+                                <td class="py-3.5 px-2 text-right font-black text-xs">346</td>
+                                <td class="py-3.5 px-2 text-right font-black text-xs">326</td>
+                                <td class="py-3.5 px-2 text-right font-black text-xs text-amber-300">145</td>
+                                <td class="py-3.5 px-3 text-right font-black text-sm text-teal-300 bg-slate-800">1.930</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Reputação Digital & Prova Social na Doctoralia -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-teal-600">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota 5.0 ★ Excelente</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Acumulado -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões Validadas</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">212</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Verificadas</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Reconhecimento contínuo de excelência clínica e acolhimento multidisciplinar.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            Crescimento no Período
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+24 Novas Opiniões</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Novas avaliações com nota máxima 5.0★ conquistadas no período analisado, reforçando a taxa de conversão em agendamentos de primeiras consultas.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Forte validação na tomada de decisão dos pacientes em São Paulo e consultas online.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: Geolocalização & Raio de Atuação (12km) -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Geolocalização Estratégica São Paulo</span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">7. Mapa de Atuação: Consultório e Raio de Cobertura (12km)</h2>
+                <p class="text-xs text-slate-500 mt-1">Sede no Paraíso (R. Teixeira da Silva, 34) com raio otimizado de 12km concentrando o público de maior poder aquisitivo e conversão.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-xs space-y-4 print-card">
+                <div id="geoMap"></div>
+
+                <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-base"><i class="fa-solid fa-hospital"></i></div>
+                    <div class="text-xs text-slate-600">
+                        <p class="font-bold text-slate-900 mb-0.5">Endereço da Clínica Soft & Dra. Laís Fraga:</p>
+                        <p class="text-slate-700 font-medium">R. Teixeira da Silva, 34, Cj. 63 - Paraíso / São Paulo - SP (CEP 04002-030)</p>
+                        <p class="text-slate-500 mt-1">Raio de abrangência presencial: <strong>12 km</strong> • Paraíso, Jardins, Bela Vista, Vila Mariana, Moema, Itaim Bibi, Pinheiros e Centro Expandido (além da cobertura nacional via Telemedicina)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400 pb-8">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Relatório exclusivo para Clínica Soft & Dra. Laís Fraga (São Paulo - SP)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Transcrição integral das 32 palavras-chave do print fornecido
+        const keywordsData = [
+            { termo: "endocrinologista são paulo", impr: 20847, cliq: 1048, ctr: "5,03%" },
+            { termo: "psiquiatras sp", impr: 8518, cliq: 449, ctr: "5,27%" },
+            { termo: "endocrinologistas sp", impr: 3854, cliq: 213, ctr: "5,53%" },
+            { termo: "consulta psiquiatra sp", impr: 4337, cliq: 210, ctr: "4,84%" },
+            { termo: "endocrinologista são paulo", impr: 2206, cliq: 128, ctr: "5,80%" },
+            { termo: "endocrinologista são paulo", impr: 1137, cliq: 110, ctr: "9,67%" },
+            { termo: "endocrinologistas", impr: 2179, cliq: 90, ctr: "4,13%" },
+            { termo: "psiquiatras", impr: 1860, cliq: 86, ctr: "4,62%" },
+            { termo: "endocrinologista sp", impr: 776, cliq: 84, ctr: "10,82%" },
+            { termo: "endocrinologista", impr: 3444, cliq: 59, ctr: "1,71%" },
+            { termo: "psiquiatras são paulo", impr: 1060, cliq: 58, ctr: "5,47%" },
+            { termo: "psiquiatra", impr: 1224, cliq: 57, ctr: "4,66%" },
+            { termo: "consulta psiquiatra", impr: 917, cliq: 39, ctr: "4,25%" },
+            { termo: "endocrinologista sp", impr: 710, cliq: 36, ctr: "5,07%" },
+            { termo: "endocrinologista online", impr: 220, cliq: 35, ctr: "15,91%" },
+            { termo: "psiquiatra sp", impr: 513, cliq: 35, ctr: "6,82%" },
+            { termo: "consulta endocrinologista online", impr: 130, cliq: 21, ctr: "16,15%" },
+            { termo: "são paulo psiquiatra", impr: 341, cliq: 21, ctr: "6,16%" },
+            { termo: "endocrinologista telemedicina", impr: 129, cliq: 18, ctr: "13,95%" },
+            { termo: "são paulo endocrinologista", impr: 477, cliq: 17, ctr: "3,56%" },
+            { termo: "lais fraga", impr: 121, cliq: 16, ctr: "13,22%" },
+            { termo: "endocrinologista", impr: 482, cliq: 14, ctr: "2,90%" },
+            { termo: "médico especialista em diabetes", impr: 301, cliq: 14, ctr: "4,65%" },
+            { termo: "endocrinologista", impr: 231, cliq: 11, ctr: "4,76%" },
+            { termo: "endocrinologia e metabologia", impr: 154, cliq: 11, ctr: "7,14%" },
+            { termo: "endocrinologia e metabologia são paulo", impr: 247, cliq: 11, ctr: "4,45%" },
+            { termo: "psiquiatria são paulo", impr: 261, cliq: 11, ctr: "4,21%" },
+            { termo: "endocrinologista vila mariana", impr: 162, cliq: 9, ctr: "5,56%" },
+            { termo: "médico especialista em diabetes sp", impr: 49, cliq: 9, ctr: "18,37%" },
+            { termo: "endocrinologia e metabologia sp", impr: 112, cliq: 8, ctr: "7,14%" },
+            { termo: "endocrinologista online", impr: 54, cliq: 7, ctr: "12,96%" },
+            { termo: "endocrinologista perto de mim", impr: 78, cliq: 7, ctr: "8,97%" }
+        ];
+
+        function renderKeywords() {
+            const kwTbody = document.getElementById('keywordsTbody');
+            if (!kwTbody) return;
+            kwTbody.innerHTML = keywordsData.map((k, idx) => `
+                <tr class="hover:bg-slate-50 transition-colors ${idx < 6 ? 'bg-teal-50/20' : ''}">
+                    <td class="py-3 px-4 font-bold text-slate-900">${k.termo}</td>
+                    <td class="py-3 px-4 text-right font-black">${k.impr.toLocaleString('pt-BR')}</td>
+                    <td class="py-3 px-4 text-right font-bold text-teal-700">${k.cliq.toLocaleString('pt-BR')}</td>
+                    <td class="py-3 px-4 text-right font-black text-teal-800">${k.ctr}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Plugin customizado para rótulos de dados em barras verticais
+        const chartDataLabelsPlugin = {
+            id: 'chartDataLabelsPlugin',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                ctx.save();
+                ctx.font = 'bold 9px "Plus Jakarta Sans"';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    if (!meta || !meta.data || dataset.hidden) return;
+                    
+                    meta.data.forEach((bar, index) => {
+                        const val = dataset.data[index];
+                        if (typeof val === 'number' && val > 0 && bar && typeof bar.x === 'number' && typeof bar.y === 'number') {
+                            ctx.fillStyle = (i === 0) ? '#0f766e' : '#b45309';
+                            const formatted = val.toLocaleString('pt-BR');
+                            ctx.fillText(formatted, bar.x, bar.y - 3);
+                        }
+                    });
+                });
+                ctx.restore();
+            }
+        };
+
+        window.onload = function() {
+            renderKeywords();
+
+            // Leaflet Map Config no Paraíso (São Paulo) com RAIO DE 12 KM
+            const paraisoCoords = [-23.5707, -46.6477];
+            const mapElement = document.getElementById('geoMap');
+
+            if (mapElement && typeof L !== 'undefined') {
+                try {
+                    const map = L.map('geoMap', { center: paraisoCoords, zoom: 12, zoomControl: true, scrollWheelZoom: false });
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap'
+                    }).addTo(map);
+
+                    // Raio Ajustado de 12km (12.000m)
+                    L.circle(paraisoCoords, {
+                        color: '#0d9488',
+                        fillColor: '#14b8a6',
+                        fillOpacity: 0.20,
+                        radius: 12000,
+                        weight: 2.5
+                    }).addTo(map).bindPopup("<b>Raio Otimizado de Cobertura (12 km)</b><br>Paraíso, Jardins, Vila Mariana, Moema e Centro Expandido");
+
+                    // Custom Marker Clínica Soft & Dra. Laís Fraga
+                    const customIcon = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div style="background-color: #0d9488; width: 40px; height: 40px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 15px;"><i class="fa-solid fa-stethoscope"></i></div>`,
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 20]
+                    });
+
+                    L.marker(paraisoCoords, { icon: customIcon }).addTo(map).bindPopup("<b>Clínica Soft & Dra. Laís Fraga</b><br>R. Teixeira da Silva, 34 - Paraíso, SP<br><i>Raio Presencial: 12 km</i>").openPopup();
+                } catch (e) {
+                    console.error("Erro no Leaflet Map:", e);
+                }
+            }
+
+            // CTR Benchmark Chart (Apenas Média Saúde vs Consolidado)
+            const ctxCtr = document.getElementById('ctrBenchmarkChart');
+            if (ctxCtr && typeof Chart !== 'undefined') {
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Média Saúde (3,17%)',
+                            'Consolidado Soft & Laís (5,15%)'
+                        ],
+                        datasets: [{
+                            data: [3.17, 5.15],
+                            backgroundColor: ['#cbd5e1', '#0d9488'],
+                            borderRadius: 12,
+                            barThickness: 36
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, max: 8, grid: { color: '#f1f5f9' } },
+                            x: { grid: { display: false }, ticks: { font: { size: 11, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico de Agendamentos (Maio em diante)
+            const ctxApp = document.getElementById('appointmentsChart');
+            if (ctxApp && typeof Chart !== 'undefined') {
+                new Chart(ctxApp, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro (até 15)'],
+                        datasets: [
+                            {
+                                label: 'Agendamentos Totais',
+                                data: [280, 385, 394, 346, 326, 145],
+                                backgroundColor: '#0d9488',
+                                borderRadius: 6,
+                                barPercentage: 0.5,
+                                categoryPercentage: 0.7
+                            },
+                            {
+                                label: 'Pacientes Novos (1ª Consulta)',
+                                data: [42, 54, 51, 40, 43, 24],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 6,
+                                barPercentage: 0.5,
+                                categoryPercentage: 0.7
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        layout: { padding: { top: 25 } },
+                        plugins: {
+                            legend: { position: 'top', align: 'end', labels: { usePointStyle: true, font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
+                            tooltip: { backgroundColor: '#0f172a', padding: 12, cornerRadius: 8 }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 450, grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#334155' } }
+                        }
+                    },
+                    plugins: [chartDataLabelsPlugin]
+                });
+            }
+        };
+    </script>
+</body>
+</html>

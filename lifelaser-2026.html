@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Executivo Anual de Performance - Clínica de Dermatologia Life Laser | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+                        },
+                        emerald: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        },
+                        sky: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+        .gradient-teal { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+        .gradient-accent { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
+        #geoMap { width: 100%; height: 430px; border-radius: 1.5rem; z-index: 10; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Header Principal -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    LL
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Clínica de Dermatologia Life Laser</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 pulse-dot"></span>
+                            Dermatologia Clínica & Laser
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo Anual Consolidado • Belo Horizonte - MG (01/01 a 30/09/2026)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 flex-wrap justify-end">
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- First Class Badge -->
+                <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-300 px-3 py-1.5 rounded-xl shadow-xs">
+                    <i class="fa-solid fa-crown text-amber-500 text-xs"></i>
+                    <span class="text-xs font-black text-amber-900 uppercase tracking-wider">First Class</span>
+                </div>
+
+                <!-- Doctoralia Badge with Stars -->
+                <div class="flex items-center gap-2 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">5.0 ★</span>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header de Metadados -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
+                    Período: <span class="text-teal-700">01 de Janeiro a 30 de Setembro / 2026 (Consolidado 9 Meses)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+                    CPC Médio Consolidado: <span class="text-slate-900 font-black">R$ 2,62</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-amber-200">
+                    🔥 CTR Anual: 9,86% (3,11x Média de Saúde)
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-emerald-200">
+                    🎯 887 Conversões no Ano
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar Relatório</span>
+            </button>
+        </div>
+
+        <!-- SEÇÃO 1: Alcance do Anúncio no Google & Indicadores Globais do Ano -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Volume Total de Atração & Presença Digital (Ano de 2026)</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Visão Geral Consolidada do Ano (Belo Horizonte - MG)</h2>
+            </div>
+
+            <!-- Grid de 5 Cards Limpos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">155.103</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Exibições nos leilões do Google Ads</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Diretos</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">15.299</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Tráfego qualificado de pacientes</p>
+                </div>
+
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR Consolidado</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">9,86%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ 3,11x Média de Saúde (3,17%)</p>
+                </div>
+
+                <!-- Card de Acessos Doctoralia Limpo -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos Doctoralia</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">59.575</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">
+                            🎯 25,7% via Google Ads
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Cliques Telefone -->
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Telefone</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-phone-volume text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">7.486</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Acionamentos e chamadas diretas</p>
+                </div>
+
+            </div>
+
+            <!-- TARJA EM DESTAQUE: VALORIZAÇÃO DO BUSCADOR GOOGLE & DOCTORALIA FIRST CLASS -->
+            <div class="bg-gradient-to-r from-teal-950 via-slate-900 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-sm border border-teal-500/30 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-400/30 flex items-center justify-center shrink-0 font-bold text-lg">
+                    <i class="fa-brands fa-google text-teal-400"></i>
+                </div>
+                <div class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                    São mais de <strong class="text-teal-300 font-bold">15.299 acessos direcionados pelo maior buscador universal do mundo (Google)</strong>. Essa exposição massiva gera um forte reconhecimento de marca (<em>branding</em>): milhares de pacientes viram o anúncio no Google e pesquisaram diretamente pelo nome da clínica, potencializando os acessos orgânicos impulsionados pelo selo <span class="inline-flex items-center gap-1 text-amber-300 font-black bg-amber-400/10 px-2 py-0.5 rounded-md border border-amber-400/20"><i class="fa-solid fa-crown text-amber-400 text-xs"></i> First Class</span>.
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: EVOLUÇÃO EM VISIBILIDADE MÊS A MÊS (3 CORES COM RÓTULOS DE DADOS) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Crescimento de Alcance & Cruzamento de Canais</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">Evolução Mensal de Visibilidade (Google Ads & Doctoralia)</h2>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo direto mês a mês das impressões, visitas ao perfil da Doctoralia e cliques direcionados do Google Ads.</p>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-xl">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Verde: Impressões Google
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Laranja: Acessos Doctoralia
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-sky-800 bg-sky-50 border border-sky-200 px-3 py-1 rounded-xl">
+                        <span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span> Azul: Cliques Google
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/80">
+                <div class="h-96 relative">
+                    <canvas id="visibilityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Benchmark de Eficiência & Domínio de Busca -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 flex flex-col justify-between print-card">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Atração</span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">+211% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900">Benchmark da Área de Saúde</h3>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo de CTR entre a média de referência do setor de saúde (3,17%) e o consolidado anual da clínica (9,86%).</p>
+                </div>
+
+                <div class="my-6 relative h-48 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                    <span>O CTR consolidado anual de <strong>9,86%</strong> supera em mais de <strong>3 vezes</strong> a taxa média do Google para saúde (3,17%).</span>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice & Posições de Pesquisa (Ano Todo)</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Liderança em BH</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio nas Buscas de Dermatologia e Procedimentos a Laser</h3>
+                    <p class="text-xs text-slate-400 mt-1">Métricas ponderadas de leilão acumuladas de Janeiro a Setembro de 2026.</p>
+                </div>
+
+                <div class="my-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Top Page Ponderado (% Exibição na Área Superior)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">73,95%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 73.95%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                1ª Posição Absoluta (% Marca Life Laser)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">70,53%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-accent h-full rounded-full" style="width: 70.53%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                Parcela de Impressões no Google (Toda a Campanha Consolidada)
+                            </span>
+                            <span class="text-sky-400 font-extrabold text-base">22,82%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="bg-sky-500 h-full rounded-full" style="width: 22.82%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Observação de Entrega de Leilão -->
+                    <div class="text-[11px] text-slate-300 bg-slate-800/80 p-3 rounded-xl border border-slate-700/60 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-teal-400 mr-1.5"></i>
+                        <strong>Observação sobre Entrega de Leilão:</strong> Este índice de <strong>22,82%</strong> representa a fatia real conquistada sobre <em>todas as buscas ativas</em> por dermatologia e tratamentos a laser realizadas na sua região de cobertura em Belo Horizonte e entorno. Ou seja, de todo o volume de pesquisas existente na região, a Life Laser ganhou e entregou quase 1 em cada 4 leilões gerais do Google, assegurando hegemonia competitiva de presença.
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-teal-400"></i>
+                        Rua Cláudio Manoel, 48 - Bairro Funcionários, Belo Horizonte - MG
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 3: Desempenho por Campanha no Ano Todo com Observação de Conversões & Interação Telefônica -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Consolidado das Campanhas (Janeiro a Setembro/2026)</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Leilão por Campanha no Ano</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Visão consolidada anual das 3 frentes com abertura mês a mês sob demanda.</p>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button onclick="openMonthlyModal()" class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-xs active:scale-95">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>Ver Detalhado Mês a Mês</span>
+                    </button>
+                    <button onclick="toggleMonthlyAccordion()" id="btnMonthlyToggle" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl transition-all">
+                        <i class="fa-solid fa-chevron-down text-slate-500 transition-transform" id="accordionMonthlyArrow"></i>
+                        <span>Visualizar na Página</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabela Resumo Consolidado do Ano -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Méd.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Custo Total</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo Pag.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Posição</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right font-bold">Parc. Impr.</th>
+                            <th class="py-3.5 px-4 bg-emerald-50 text-emerald-900 text-right rounded-r-xl font-black">Conversões</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Especialidade (Dermatologia BH)
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold">73.922</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">7.457</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">10,09%</td>
+                            <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 4,21</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 31.372,86</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">84,18%</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">36,80%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">26,84%</td>
+                            <td class="py-4 px-4 text-right font-black text-emerald-600 bg-emerald-50/30 text-base">360</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-sky-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Serviços / Procedimentos
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold">69.504</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">5.469</td>
+                            <td class="py-4 px-4 text-right font-black text-sky-600">7,87%</td>
+                            <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 1,25</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 6.830,19</td>
+                            <td class="py-4 px-4 text-right font-bold text-sky-700">63,62%</td>
+                            <td class="py-4 px-4 text-right font-bold text-sky-700">15,19%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">10,79%</td>
+                            <td class="py-4 px-4 text-right font-black text-emerald-600 bg-emerald-50/30 text-base">189</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-amber-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Institucional (Marca Life Laser)
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold">11.677</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">2.373</td>
+                            <td class="py-4 px-4 text-right font-black text-amber-600">20,32%</td>
+                            <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 0,79</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">R$ 1.884,94</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">70,53%</td>
+                            <td class="py-4 px-4 text-right font-bold text-amber-700">49,53%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">68,92%</td>
+                            <td class="py-4 px-4 text-right font-black text-emerald-600 bg-emerald-50/30 text-base">338</td>
+                        </tr>
+
+                        <!-- Linha Total Consolidado do Ano -->
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO ANUAL</td>
+                            <td class="py-4 px-4 text-right font-black">155.103</td>
+                            <td class="py-4 px-4 text-right text-teal-300 font-black text-base">15.299</td>
+                            <td class="py-4 px-4 text-right text-amber-300 font-black">9,86%</td>
+                            <td class="py-4 px-4 text-right text-teal-200 font-bold">R$ 2,62</td>
+                            <td class="py-4 px-4 text-right text-amber-400 font-black text-base">R$ 40.087,99</td>
+                            <td class="py-4 px-4 text-right font-bold">74,0%</td>
+                            <td class="py-4 px-4 text-right font-bold">30,9%</td>
+                            <td class="py-4 px-4 text-right font-bold">22,8%</td>
+                            <td class="py-4 px-4 text-right rounded-r-xl">
+                                <span class="bg-emerald-500 text-slate-950 font-black px-2.5 py-1 rounded-lg text-base">887 Conversões</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Observação sobre conversões e ligações -->
+            <div class="bg-teal-50/70 border border-teal-200 rounded-2xl p-4 flex items-start gap-3">
+                <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-sm">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="text-xs text-teal-950">
+                    <p class="font-extrabold text-teal-900 mb-0.5">Observação Importante sobre Conversões:</p>
+                    <p class="text-teal-900/90 font-medium leading-relaxed">
+                        Os dados desta tabela registram estritamente as <strong>conversões diretas do anúncio no Google Ads (887 conversões)</strong>. No entanto, sabemos que houve um volume muito maior de interações práticas do paciente por telefone, comprovado pelos <strong>7.486 cliques e ligações telefônicas</strong> gerados no ano, além do agendamento orgânico gerado pelo impacto da marca.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CONTÊINER ACCORDION EXPANSÍVEL: DETALHAMENTO MÊS A MÊS DIRETO NA PÁGINA -->
+            <div id="monthlyInlineContainer" class="hidden border border-slate-200 rounded-2xl p-4 bg-slate-50/60 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-teal-600"></i>
+                        Amostragem Mês a Mês das Campanhas (Janeiro a Setembro de 2026)
+                    </span>
+                    <span class="text-[11px] text-slate-500 font-medium">Role horizontalmente se necessário</span>
+                </div>
+
+                <div class="overflow-x-auto custom-scrollbar max-h-96 bg-white rounded-xl border border-slate-200/80">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold text-[10px] uppercase sticky top-0 border-b border-slate-200">
+                                <th class="py-2.5 px-3">Mês</th>
+                                <th class="py-2.5 px-3">Campanha</th>
+                                <th class="py-2.5 px-3 text-right">Impressões</th>
+                                <th class="py-2.5 px-3 text-right">Cliques</th>
+                                <th class="py-2.5 px-3 text-right">CTR</th>
+                                <th class="py-2.5 px-3 text-right">CPC Méd.</th>
+                                <th class="py-2.5 px-3 text-right">Custo</th>
+                                <th class="py-2.5 px-3 text-right">% Topo</th>
+                                <th class="py-2.5 px-3 text-right">% 1ª Pos.</th>
+                                <th class="py-2.5 px-3 text-right">Parc. Impr.</th>
+                                <th class="py-2.5 px-3 text-right font-black text-emerald-800">Conv.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="monthlyInlineTbody">
+                            <!-- Preenchido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: GESTÃO FINANCEIRA & CONTROLE DE ORÇAMENTO (ITEM 4 ATUALIZADO: 3 QUADROS E VALORES POR EXTENSO) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Gestão Orçamentária & Auditoria de Mídia</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Controle de Investimento & Execução do Orçamento Anual</h2>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo entre a verba prevista em contrato e o investimento consumido em leilão no Google Ads.</p>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 border border-teal-200 text-xs font-extrabold px-3 py-1.5 rounded-xl">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <span>Execução Orçamentária Rigorosa (100,85%)</span>
+                </div>
+            </div>
+
+            <!-- Grid de 3 Indicadores de Controle Financeiro -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Quadro 1: Valores Contratuais por Extenso -->
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Orçamento Contratual Previsto</span>
+                        <div class="text-2xl font-black text-white mt-1.5">R$ 39.750,00 <span class="text-xs font-normal text-slate-400">(em Google Ads)</span></div>
+                    </div>
+                    <div class="text-xs text-slate-300 mt-3 pt-3 border-t border-slate-800 space-y-2 leading-relaxed">
+                        <p>• <strong>Janeiro e Fevereiro</strong>: R$ 5.500,00 por mês (sendo <strong>R$ 4.125,00</strong> em Google Ads + <strong>R$ 1.375,00</strong> de taxa de gestão).</p>
+                        <p>• <strong>Março a Setembro</strong>: R$ 6.000,00 por mês (sendo <strong>R$ 4.500,00</strong> em Google Ads + <strong>R$ 1.500,00</strong> de taxa de gestão).</p>
+                    </div>
+                </div>
+
+                <!-- Quadro 2: Consumo Real no Google (Reforçado Tráfego Pago Gerado pela Doctoralia) -->
+                <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800">Consumo Real no Google Ads</span>
+                        <div class="text-3xl font-black text-amber-700 mt-1.5">R$ 40.087,99</div>
+                    </div>
+                    <p class="text-xs text-amber-900 font-medium mt-3 leading-relaxed">
+                        Montante exato executado nas campanhas patrocinadas do Google Ads, referente ao <strong>tráfego pago gerado pela parceria e tecnologia da Doctoralia</strong> ao longo dos 9 meses consolidados de 2026.
+                    </p>
+                </div>
+
+                <!-- Quadro 3: Aderência Orçamentária -->
+                <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Aderência ao Orçamento</span>
+                        <div class="text-3xl font-black text-emerald-700 mt-1.5">100,85%</div>
+                    </div>
+                    <p class="text-xs text-emerald-900 font-medium mt-3 leading-relaxed">
+                        Aderência orçamentária com desvio de apenas <strong>+0,85% (+R$ 337,99)</strong> frente à meta orçada de R$ 39.750,00 no Google Ads.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO: Palavras-chave de Maior Conversão (Todas as 32 Palavras-Chave do Consolidado Anual) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Diagnóstica & Estética (Ano Todo)</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">Desempenho de Palavras-Chave Principais no Ano</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Termos configurados com maior volume de impressões e cliques no consolidado de 2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar max-h-[520px]">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold sticky top-0 bg-slate-50">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Pesquisar palavra-chave</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="keywordsTbody">
+                        <!-- Preenchido via JS com os 32 termos -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Histórico de Agendamentos Totais & Pacientes Novos (Sem Tabela Abaixo) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Evolução Mensal de Consultas & Captação (Doctoralia 2026)</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Histórico de Agendamentos Totais e Pacientes Novos</h2>
+                    <p class="text-xs text-slate-500 mt-1">Acompanhamento contínuo da evolução de consultas e primeiras visitas registradas na plataforma.</p>
+                </div>
+                <div class="text-xs text-slate-700 font-bold bg-teal-50 border border-teal-200 px-3.5 py-1.5 rounded-xl self-start md:self-auto flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-check text-teal-600"></i>
+                    <span>Média Superior a 3.200 Consultas/Mês</span>
+                </div>
+            </div>
+
+            <!-- Gráfico Comparativo Mês a Mês -->
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200/80">
+                <div class="h-80 relative">
+                    <canvas id="appointmentsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Reputação Digital & Prova Social na Doctoralia (1055 Novas Opiniões) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">6. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-teal-600">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota 5.0 ★ Excelente</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Acumulado -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões Validadas</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">5.030</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Verificadas</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Acervo monumental de autoridade médica e reconhecimento em Belo Horizonte.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            Crescimento Conquistado no Período
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+1.055 Novas Opiniões</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Novas avaliações nota máxima 5.0★ conquistadas ao longo da estratégia, consolidando a decisão de agendamento de novos pacientes.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Liderança expressiva em validação social médica no estado de Minas Gerais.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: Geolocalização & Raio de Atuação (12km) -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Geolocalização Estratégica Belo Horizonte</span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">7. Mapa de Atuação: Consultório e Raio de Cobertura (12km)</h2>
+                <p class="text-xs text-slate-500 mt-1">Sede no Bairro Funcionários (Rua Cláudio Manoel, 48) com raio otimizado de 12km concentrando o núcleo de pacientes com maior conversão.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-xs space-y-4 print-card">
+                <div id="geoMap"></div>
+
+                <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-base"><i class="fa-solid fa-hospital"></i></div>
+                    <div class="text-xs text-slate-600">
+                        <p class="font-bold text-slate-900 mb-0.5">Endereço da Clínica de Dermatologia Life Laser:</p>
+                        <p class="text-slate-700 font-medium">Rua Cláudio Manoel, 48 - 12º andar, sala 1202, Bairro Funcionários, Belo Horizonte - MG (CEP 30140-100)</p>
+                        <p class="text-slate-500 mt-1">Raio de abrangência otimizado: <strong>12 km</strong> • Belo Horizonte (Savassi, Funcionários, Lourdes, Belvedere, Serra, Sion, Mangabeiras) e Nova Lima (Vila da Serra)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 8: EXPANSÃO ESTRATÉGICA GDN (GOOGLE DISPLAY NETWORK) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Crescimento de Alcance & Branding Visual</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">8. Oportunidade de Escala: Rede de Display do Google (GDN)</h2>
+                    <p class="text-xs text-slate-500 mt-1">
+                        A Rede de Display (GDN) permite exibir anúncios visuais com banners ilustrativos da Life Laser em portais e aplicativos nos bairros nobres de BH, reforçando a autoridade visual da clínica.
+                    </p>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-amber-50 text-amber-900 border border-amber-300 text-xs font-extrabold px-3 py-1.5 rounded-xl">
+                    <i class="fa-solid fa-tag"></i>
+                    <span>Investimento Atual: R$ 6.000,00/mês</span>
+                </div>
+            </div>
+
+            <!-- Contexto Atual -->
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="text-xs text-slate-700">
+                    <p class="font-extrabold text-slate-900 text-sm mb-0.5">Configuração Atual do Contrato:</p>
+                    <p class="text-slate-600">Investimento de <strong>R$ 6.000,00 mensais</strong>, sendo <strong>R$ 4.500,00</strong> em Google Search + <strong>R$ 1.500,00</strong> em taxa de gestão (25%).</p>
+                </div>
+                <span class="bg-slate-200 text-slate-800 text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap">Taxa de Gestão Atual: 25%</span>
+            </div>
+
+            <!-- Grid com as 3 Opções de Investimento -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Opção 1 -->
+                <div class="bg-white border border-slate-200 hover:border-teal-500/50 rounded-2xl p-5 shadow-xs flex flex-col justify-between transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold uppercase text-slate-500">Opção 1</span>
+                            <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Entrada GDN</span>
+                        </div>
+                        <div class="text-2xl font-black text-slate-900 mb-1">R$ 7.000 <span class="text-xs font-semibold text-slate-500">/mês</span></div>
+                        <p class="text-[11px] text-slate-500 mb-4 font-medium">R$ 5.250 em Google / R$ 1.750 em Gestão (25%)</p>
+
+                        <div class="space-y-2 border-t border-slate-100 pt-3 text-xs text-slate-700">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">Google Search:</span>
+                                <span class="font-bold text-slate-900">R$ 4.500,00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">Google Display (GDN):</span>
+                                <span class="font-black text-teal-700">R$ 750,00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
+                                <span>Taxa de Gestão M360:</span>
+                                <span>R$ 1.750,00 (25%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500">
+                        Início da presença visual com banners segmentados em BH.
+                    </div>
+                </div>
+
+                <!-- Opção 2: RECOMENDADA / MAIS ADEQUADA -->
+                <div class="bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-2xl p-5 shadow-md border-2 border-emerald-400 relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-200">Opção 2</span>
+                            <span class="bg-emerald-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-xs">⭐ Mais Adequada</span>
+                        </div>
+                        <div class="text-3xl font-black text-white mb-1">R$ 7.500 <span class="text-xs font-semibold text-emerald-200">/mês</span></div>
+                        <p class="text-[11px] text-emerald-100 mb-4 font-semibold">R$ 6.000 em Google / R$ 1.500 em Gestão (20%)</p>
+
+                        <div class="space-y-2 border-t border-teal-600/60 pt-3 text-xs text-white">
+                            <div class="flex justify-between items-center">
+                                <span class="text-emerald-100">Google Search:</span>
+                                <span class="font-bold text-white">R$ 4.500,00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-emerald-100">Google Display (GDN):</span>
+                                <span class="font-black text-amber-300 text-sm">R$ 1.500,00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px] text-emerald-200 pt-1">
+                                <span>Taxa de Gestão M360:</span>
+                                <span class="font-bold text-white">R$ 1.500,00 (Reduzida para 20%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-teal-600/60 text-[11px] text-emerald-100 font-bold leading-tight">
+                        🔥 <strong>Vantagem Estratégica:</strong> A partir de R$ 7.500 nossa taxa de gestão cai de 25% para 20%. O valor da gestão permanece fixo em R$ 1.500 e <strong>100% dos R$ 1.500 adicionais vão direto para mídia visual no Google</strong>!
+                    </div>
+                </div>
+
+                <!-- Opção 3 -->
+                <div class="bg-white border border-slate-200 hover:border-teal-500/50 rounded-2xl p-5 shadow-xs flex flex-col justify-between transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold uppercase text-slate-500">Opção 3</span>
+                            <span class="bg-sky-100 text-sky-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Máxima Aceleração</span>
+                        </div>
+                        <div class="text-2xl font-black text-slate-900 mb-1">R$ 8.000 <span class="text-xs font-semibold text-slate-500">/mês</span></div>
+                        <p class="text-[11px] text-slate-500 mb-4 font-medium">R$ 6.400 em Google / R$ 1.600 em Gestão (20%)</p>
+
+                        <div class="space-y-2 border-t border-slate-100 pt-3 text-xs text-slate-700">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">Google Search:</span>
+                                <span class="font-bold text-slate-900">R$ 4.500,00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">Google Display (GDN):</span>
+                                <span class="font-black text-teal-700 text-sm">R$ 1.900,00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
+                                <span>Taxa de Gestão M360:</span>
+                                <span>R$ 1.600,00 (Reduzida para 20%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+                        Taxa reduzida a 20% com impacto visual massivo em toda a Região Centro-Sul de BH.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL INTERATIVO: DETALHAMENTO MÊS A MÊS DE CADA CAMPANHA -->
+    <div id="monthlyModalBackdrop" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6 transition-opacity">
+        <div class="bg-white rounded-[2rem] w-full max-w-5xl max-h-[90vh] shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            
+            <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-50/80">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                        <h3 class="text-lg font-black text-slate-900 tracking-tight">Detalhamento Mês a Mês das Campanhas (2026)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">Auditoria linha a linha das 3 campanhas ao longo dos 9 meses (Janeiro a Setembro).</p>
+                </div>
+
+                <div class="flex items-center gap-2 self-end sm:self-auto">
+                    <button onclick="downloadMonthlyCSV()" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition-all shadow-xs">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Exportar CSV</span>
+                    </button>
+                    <button onclick="closeMonthlyModal()" class="w-8 h-8 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabela com Scroll no Modal -->
+            <div class="overflow-y-auto custom-scrollbar flex-1 p-4 bg-slate-50/40">
+                <div class="overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-xs">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold text-[10px] uppercase sticky top-0 border-b border-slate-200">
+                                <th class="py-2.5 px-3">Mês</th>
+                                <th class="py-2.5 px-3">Campanha</th>
+                                <th class="py-2.5 px-3 text-right">Impressões</th>
+                                <th class="py-2.5 px-3 text-right">Cliques</th>
+                                <th class="py-2.5 px-3 text-right">CTR</th>
+                                <th class="py-2.5 px-3 text-right">CPC Méd.</th>
+                                <th class="py-2.5 px-3 text-right">Custo</th>
+                                <th class="py-2.5 px-3 text-right">% Topo</th>
+                                <th class="py-2.5 px-3 text-right">% 1ª Pos.</th>
+                                <th class="py-2.5 px-3 text-right">Parc. Impr.</th>
+                                <th class="py-2.5 px-3 text-right font-black text-emerald-800">Conv.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="monthlyModalTbody">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="p-3.5 border-t border-slate-200 bg-slate-50/80 flex justify-between items-center text-xs text-slate-500 font-medium">
+                <span>Total de 27 registros (9 meses x 3 campanhas)</span>
+                <button onclick="closeMonthlyModal()" class="text-xs font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 px-4 py-1.5 rounded-xl transition-all shadow-xs">Fechar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400 pb-8">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Relatório executivo para Clínica de Dermatologia Life Laser (Belo Horizonte - MG)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados de todas as campanhas mês a mês
+        const monthlyData = [
+            { mes: "Janeiro/26", camp: "Especialidade", impr: 8303, cliq: 870, ctr: "10,48%", cpc: "R$ 3,90", custo: "R$ 3.391,44", top: "85,43%", pos1: "37,79%", share: "28,23%", conv: 47 },
+            { mes: "Janeiro/26", camp: "Serviços", impr: 8344, cliq: 700, ctr: "8,39%", cpc: "R$ 1,15", custo: "R$ 804,05", top: "65,73%", pos1: "15,95%", share: "< 10%", conv: 33 },
+            { mes: "Janeiro/26", camp: "Institucional", impr: 1586, cliq: 377, ctr: "23,77%", cpc: "R$ 0,67", custo: "R$ 253,66", top: "77,30%", pos1: "57,15%", share: "71,31%", conv: 55 },
+            { mes: "Fevereiro/26", camp: "Especialidade", impr: 6392, cliq: 746, ctr: "11,67%", cpc: "R$ 4,52", custo: "R$ 3.372,75", top: "90,32%", pos1: "40,69%", share: "32,94%", conv: 37 },
+            { mes: "Fevereiro/26", camp: "Serviços", impr: 7590, cliq: 628, ctr: "8,27%", cpc: "R$ 1,23", custo: "R$ 771,34", top: "68,67%", pos1: "15,05%", share: "< 10%", conv: 18 },
+            { mes: "Fevereiro/26", camp: "Institucional", impr: 1264, cliq: 266, ctr: "21,04%", cpc: "R$ 0,68", custo: "R$ 181,61", top: "73,54%", pos1: "49,16%", share: "69,66%", conv: 36 },
+            { mes: "Março/26", camp: "Especialidade", impr: 7263, cliq: 796, ctr: "10,96%", cpc: "R$ 4,26", custo: "R$ 3.388,27", top: "89,89%", pos1: "40,41%", share: "32,34%", conv: 40 },
+            { mes: "Março/26", camp: "Serviços", impr: 6888, cliq: 576, ctr: "8,36%", cpc: "R$ 1,03", custo: "R$ 593,01", top: "67,95%", pos1: "11,50%", share: "< 10%", conv: 27 },
+            { mes: "Março/26", camp: "Institucional", impr: 1358, cliq: 262, ctr: "19,29%", cpc: "R$ 0,78", custo: "R$ 204,30", top: "67,07%", pos1: "48,55%", share: "66,73%", conv: 40 },
+            { mes: "Abril/26", camp: "Especialidade", impr: 7225, cliq: 847, ctr: "11,72%", cpc: "R$ 4,29", custo: "R$ 3.633,02", top: "89,11%", pos1: "41,23%", share: "26,44%", conv: 49 },
+            { mes: "Abril/26", camp: "Serviços", impr: 6042, cliq: 490, ctr: "8,11%", cpc: "R$ 1,22", custo: "R$ 596,34", top: "69,95%", pos1: "14,08%", share: "< 10%", conv: 21 },
+            { mes: "Abril/26", camp: "Institucional", impr: 1224, cliq: 209, ctr: "17,08%", cpc: "R$ 0,86", custo: "R$ 178,91", top: "71,20%", pos1: "48,78%", share: "65,56%", conv: 36 },
+            { mes: "Maio/26", camp: "Especialidade", impr: 7284, cliq: 812, ctr: "11,15%", cpc: "R$ 4,24", custo: "R$ 3.444,34", top: "82,89%", pos1: "35,97%", share: "23,92%", conv: 45 },
+            { mes: "Maio/26", camp: "Serviços", impr: 6376, cliq: 442, ctr: "6,93%", cpc: "R$ 1,27", custo: "R$ 561,88", top: "52,86%", pos1: "12,69%", share: "< 10%", conv: 12 },
+            { mes: "Maio/26", camp: "Institucional", impr: 1231, cliq: 238, ctr: "19,33%", cpc: "R$ 0,92", custo: "R$ 218,10", top: "65,10%", pos1: "43,15%", share: "69,88%", conv: 38 },
+            { mes: "Junho/26", camp: "Especialidade", impr: 8143, cliq: 717, ctr: "8,81%", cpc: "R$ 4,70", custo: "R$ 3.372,99", top: "82,02%", pos1: "38,86%", share: "25,38%", conv: 32 },
+            { mes: "Junho/26", camp: "Serviços", impr: 9036, cliq: 737, ctr: "8,16%", cpc: "R$ 1,52", custo: "R$ 1.116,64", top: "60,12%", pos1: "18,38%", share: "13,20%", conv: 21 },
+            { mes: "Junho/26", camp: "Institucional", impr: 1198, cliq: 263, ctr: "21,95%", cpc: "R$ 0,98", custo: "R$ 258,07", top: "69,59%", pos1: "46,34%", share: "74,56%", conv: 38 },
+            { mes: "Julho/26", camp: "Especialidade", impr: 9306, cliq: 934, ctr: "10,04%", cpc: "R$ 4,06", custo: "R$ 3.796,35", top: "81,88%", pos1: "37,85%", share: "24,90%", conv: 36 },
+            { mes: "Julho/26", camp: "Serviços", impr: 7963, cliq: 584, ctr: "7,33%", cpc: "R$ 1,30", custo: "R$ 757,96", top: "61,26%", pos1: "15,70%", share: "11,75%", conv: 12 },
+            { mes: "Julho/26", camp: "Institucional", impr: 1312, cliq: 263, ctr: "20,05%", cpc: "R$ 0,81", custo: "R$ 214,23", top: "70,69%", pos1: "54,08%", share: "69,33%", conv: 39 },
+            { mes: "Agosto/26", camp: "Especialidade", impr: 9056, cliq: 820, ctr: "9,05%", cpc: "R$ 4,38", custo: "R$ 3.592,70", top: "80,34%", pos1: "32,30%", share: "23,18%", conv: 40 },
+            { mes: "Agosto/26", camp: "Serviços", impr: 7578, cliq: 572, ctr: "7,55%", cpc: "R$ 1,27", custo: "R$ 728,30", top: "62,92%", pos1: "13,57%", share: "10,62%", conv: 24 },
+            { mes: "Agosto/26", camp: "Institucional", impr: 1294, cliq: 241, ctr: "18,62%", cpc: "R$ 0,73", custo: "R$ 174,73", top: "68,20%", pos1: "44,46%", share: "65,15%", conv: 27 },
+            { mes: "Setembro/26", camp: "Especialidade", impr: 10950, cliq: 915, ctr: "8,36%", cpc: "R$ 3,70", custo: "R$ 3.381,00", top: "80,17%", pos1: "30,34%", share: "26,54%", conv: 34 },
+            { mes: "Setembro/26", camp: "Serviços", impr: 9687, cliq: 740, ctr: "7,64%", cpc: "R$ 1,22", custo: "R$ 900,67", top: "63,63%", pos1: "17,45%", share: "14,39%", conv: 21 },
+            { mes: "Setembro/26", camp: "Institucional", impr: 1210, cliq: 254, ctr: "20,99%", cpc: "R$ 0,79", custo: "R$ 201,33", top: "70,50%", pos1: "51,93%", share: "67,90%", conv: 29 }
+        ];
+
+        // Palavras-chave consolidado anual (Jan a Set/2026)
+        const annualKeywords = [
+            { termo: "medico de pele", impr: 58039, cliq: 4632, ctr: "7,98%" },
+            { termo: "dermatologista belo horizonte", impr: 11784, cliq: 2046, ctr: "17,36%" },
+            { termo: "dermatologia belo horizonte", impr: 7970, cliq: 1419, ctr: "17,80%" },
+            { termo: "dermatologia belo horizonte", impr: 21298, cliq: 1410, ctr: "6,62%" },
+            { termo: "clinica life laser", impr: 6413, cliq: 1216, ctr: "18,96%" },
+            { termo: "dermatologista", impr: 14195, cliq: 719, ctr: "5,07%" },
+            { termo: "life laser", impr: 2799, cliq: 684, ctr: "24,44%" },
+            { termo: "dermatologista bh", impr: 3463, cliq: 606, ctr: "17,50%" },
+            { termo: "life laser dermatologia", impr: 1168, cliq: 232, ctr: "19,86%" },
+            { termo: "dermatologista bradesco", impr: 833, cliq: 232, ctr: "27,85%" },
+            { termo: "dermatologista perto de mim", impr: 1772, cliq: 220, ctr: "12,42%" },
+            { termo: "tricologista bh", impr: 1441, cliq: 185, ctr: "12,84%" },
+            { termo: "dermatologista pediátrico bh", impr: 1883, cliq: 178, ctr: "9,45%" },
+            { termo: "remover tatuagem bh", impr: 1679, cliq: 127, ctr: "7,56%" },
+            { termo: "clínica de dermatologia life laser", impr: 696, cliq: 119, ctr: "17,10%" },
+            { termo: "lifelaser", impr: 574, cliq: 116, ctr: "20,21%" },
+            { termo: "dermatologista particular", impr: 1191, cliq: 112, ctr: "9,40%" },
+            { termo: "dermatologista sulamérica", impr: 428, cliq: 102, ctr: "23,83%" },
+            { termo: "depilação a laser bh", impr: 1335, cliq: 97, ctr: "7,27%" },
+            { termo: "tricologista bh", impr: 980, cliq: 95, ctr: "9,69%" },
+            { termo: "dermatologistas", impr: 3681, cliq: 91, ctr: "2,47%" },
+            { termo: "dermatologista pediátrico", impr: 1914, cliq: 89, ctr: "4,65%" },
+            { termo: "tricologista belo horizonte", impr: 670, cliq: 61, ctr: "9,10%" },
+            { termo: "dermatologista tratamento acne bh", impr: 402, cliq: 60, ctr: "14,93%" },
+            { termo: "depilação a laser belo horizonte", impr: 787, cliq: 57, ctr: "7,24%" },
+            { termo: "remover tatuagem", impr: 1142, cliq: 44, ctr: "3,85%" },
+            { termo: "clinica depilação a laser bh", impr: 646, cliq: 43, ctr: "6,66%" },
+            { termo: "dermatologista", impr: 1384, cliq: 37, ctr: "2,67%" },
+            { termo: "dermatologista cassi", impr: 135, cliq: 31, ctr: "22,96%" },
+            { termo: "belo horizonte dermatologista", impr: 346, cliq: 28, ctr: "8,09%" },
+            { termo: "depilação a laser", impr: 942, cliq: 26, ctr: "2,76%" },
+            { termo: "dermatologista tratamento acne", impr: 474, cliq: 23, ctr: "4,85%" }
+        ];
+
+        function renderMonthlyTables() {
+            const tableRows = monthlyData.map(r => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 px-3 font-bold text-slate-900">${r.mes}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800">${r.camp}</td>
+                    <td class="py-2.5 px-3 text-right font-medium">${r.impr.toLocaleString('pt-BR')}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-slate-900">${r.cliq.toLocaleString('pt-BR')}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-teal-700">${r.ctr}</td>
+                    <td class="py-2.5 px-3 text-right">${r.cpc}</td>
+                    <td class="py-2.5 px-3 text-right font-bold">${r.custo}</td>
+                    <td class="py-2.5 px-3 text-right">${r.top}</td>
+                    <td class="py-2.5 px-3 text-right">${r.pos1}</td>
+                    <td class="py-2.5 px-3 text-right">${r.share}</td>
+                    <td class="py-2.5 px-3 text-right font-black text-emerald-600 bg-emerald-50/30">${r.conv}</td>
+                </tr>
+            `).join('');
+
+            const inlineTbody = document.getElementById('monthlyInlineTbody');
+            if (inlineTbody) inlineTbody.innerHTML = tableRows;
+
+            const modalTbody = document.getElementById('monthlyModalTbody');
+            if (modalTbody) modalTbody.innerHTML = tableRows;
+        }
+
+        function renderKeywords() {
+            const kwTbody = document.getElementById('keywordsTbody');
+            if (!kwTbody) return;
+            kwTbody.innerHTML = annualKeywords.map((k, idx) => `
+                <tr class="hover:bg-slate-50 transition-colors ${idx < 5 ? 'bg-teal-50/20' : ''}">
+                    <td class="py-3 px-4 font-bold text-slate-900">${k.termo}</td>
+                    <td class="py-3 px-4 text-right font-black">${k.impr.toLocaleString('pt-BR')}</td>
+                    <td class="py-3 px-4 text-right font-bold text-teal-700">${k.cliq.toLocaleString('pt-BR')}</td>
+                    <td class="py-3 px-4 text-right font-black text-teal-800">${k.ctr}</td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleMonthlyAccordion() {
+            const cont = document.getElementById('monthlyInlineContainer');
+            const arrow = document.getElementById('accordionMonthlyArrow');
+            if (cont) {
+                const isHidden = cont.classList.contains('hidden');
+                if (isHidden) {
+                    cont.classList.remove('hidden');
+                    if (arrow) arrow.classList.add('rotate-180');
+                } else {
+                    cont.classList.add('hidden');
+                    if (arrow) arrow.classList.remove('rotate-180');
+                }
+            }
+        }
+
+        function openMonthlyModal() {
+            const modal = document.getElementById('monthlyModalBackdrop');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeMonthlyModal() {
+            const modal = document.getElementById('monthlyModalBackdrop');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function downloadMonthlyCSV() {
+            let csv = "data:text/csv;charset=utf-8,";
+            csv += "Mês,Campanha,Impressões,Cliques,CTR,CPC Médio,Custo,Topo da Página,1a Posição,Parcela Impressões,Conversões\r\n";
+            monthlyData.forEach(r => {
+                csv += `"${r.mes}","${r.camp}",${r.impr},${r.cliq},"${r.ctr}","${r.cpc}","${r.custo}","${r.top}","${r.pos1}","${r.share}",${r.conv}\r\n`;
+            });
+            const encodedUri = encodeURI(csv);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Life_Laser_Desempenho_Mensal_2026.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('monthlyModalBackdrop');
+            if (e.target === modal) closeMonthlyModal();
+        });
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMonthlyModal();
+        });
+
+        // Plugin customizado para rótulos de dados em barras verticais
+        const chartDataLabelsPlugin = {
+            id: 'chartDataLabelsPlugin',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                ctx.save();
+                ctx.font = 'bold 9px "Plus Jakarta Sans"';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    if (!meta || !meta.data || dataset.hidden) return;
+                    
+                    meta.data.forEach((bar, index) => {
+                        const val = dataset.data[index];
+                        if (val > 0 && bar && typeof bar.x === 'number' && typeof bar.y === 'number') {
+                            if (chart.canvas.id === 'visibilityChart') {
+                                if (i === 0) ctx.fillStyle = '#0f766e';      // Verde
+                                else if (i === 1) ctx.fillStyle = '#b45309'; // Laranja
+                                else ctx.fillStyle = '#0369a1';              // Azul
+                            } else {
+                                ctx.fillStyle = (i === 0) ? '#0f766e' : '#b45309';
+                            }
+                            
+                            const formatted = val.toLocaleString('pt-BR');
+                            ctx.fillText(formatted, bar.x, bar.y - 3);
+                        }
+                    });
+                });
+                ctx.restore();
+            }
+        };
+
+        window.onload = function() {
+            renderMonthlyTables();
+            renderKeywords();
+
+            // Leaflet Map Config com RAIO DE 12 KM
+            const bhCoords = [-19.9328, -43.9315];
+            const mapElement = document.getElementById('geoMap');
+
+            if (mapElement && typeof L !== 'undefined') {
+                try {
+                    const map = L.map('geoMap', { center: bhCoords, zoom: 12, zoomControl: true, scrollWheelZoom: false });
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap'
+                    }).addTo(map);
+
+                    // Raio Ajustado de 12km (12.000m)
+                    L.circle(bhCoords, {
+                        color: '#0d9488',
+                        fillColor: '#14b8a6',
+                        fillOpacity: 0.22,
+                        radius: 12000,
+                        weight: 2.5
+                    }).addTo(map).bindPopup("<b>Raio Otimizado de Cobertura (12 km)</b><br>Belo Horizonte e Nova Lima (Vila da Serra)");
+
+                    // Custom Marker Life Laser
+                    const customIcon = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div style="background-color: #0d9488; width: 40px; height: 40px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 15px;"><i class="fa-solid fa-spa"></i></div>`,
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 20]
+                    });
+
+                    L.marker(bhCoords, { icon: customIcon }).addTo(map).bindPopup("<b>Clínica de Dermatologia Life Laser</b><br>Rua Cláudio Manoel, 48 - Bairro Funcionários, BH/MG<br><i>Raio de Atuação: 12 km</i>").openPopup();
+                } catch (e) {
+                    console.error("Erro no Leaflet Map:", e);
+                }
+            }
+
+            // CTR Benchmark Chart
+            const ctxCtr = document.getElementById('ctrBenchmarkChart');
+            if (ctxCtr && typeof Chart !== 'undefined') {
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Média Saúde (3,17%)',
+                            'Consolidado Life Laser (9,86%)'
+                        ],
+                        datasets: [{
+                            data: [3.17, 9.86],
+                            backgroundColor: ['#cbd5e1', '#0d9488'],
+                            borderRadius: 12,
+                            barThickness: 36
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, max: 14, grid: { color: '#f1f5f9' } },
+                            x: { grid: { display: false }, ticks: { font: { size: 11, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico de Evolução de Visibilidade (3 Cores com Rótulos de Dados)
+            const ctxVis = document.getElementById('visibilityChart');
+            if (ctxVis && typeof Chart !== 'undefined') {
+                new Chart(ctxVis, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'],
+                        datasets: [
+                            {
+                                label: 'Impressões no Google Ads (Verde)',
+                                data: [18233, 15246, 15509, 14491, 14891, 18377, 18581, 17928, 21847],
+                                backgroundColor: '#0d9488',
+                                borderRadius: 5,
+                                barPercentage: 0.85,
+                                categoryPercentage: 0.85
+                            },
+                            {
+                                label: 'Acessos Totais no Perfil Doctoralia (Laranja)',
+                                data: [5761, 5688, 7757, 7007, 7483, 6883, 7973, 6873, 4150],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 5,
+                                barPercentage: 0.85,
+                                categoryPercentage: 0.85
+                            },
+                            {
+                                label: 'Cliques vindos do Google Ads (Azul)',
+                                data: [1947, 1640, 1634, 1546, 1492, 1717, 1781, 1633, 1909],
+                                backgroundColor: '#0284c7',
+                                borderRadius: 5,
+                                barPercentage: 0.85,
+                                categoryPercentage: 0.85
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        layout: { padding: { top: 25 } },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    usePointStyle: true,
+                                    font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 11 }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#0f172a',
+                                padding: 12,
+                                cornerRadius: 8,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.raw.toLocaleString('pt-BR');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 26000,
+                                grid: { color: '#f1f5f9' },
+                                ticks: {
+                                    font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' },
+                                    color: '#64748b',
+                                    callback: function(value) {
+                                        return value.toLocaleString('pt-BR');
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#334155' }
+                            }
+                        }
+                    },
+                    plugins: [chartDataLabelsPlugin]
+                });
+            }
+
+            // Doctoralia Appointments Chart
+            const ctxApp = document.getElementById('appointmentsChart');
+            if (ctxApp && typeof Chart !== 'undefined') {
+                new Chart(ctxApp, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out (até 11)'],
+                        datasets: [
+                            {
+                                label: 'Agendamentos Totais',
+                                data: [4469, 2822, 3753, 3269, 2988, 3246, 3817, 3688, 3317, 1113],
+                                backgroundColor: '#0d9488',
+                                borderRadius: 6,
+                                barPercentage: 0.5,
+                                categoryPercentage: 0.7
+                            },
+                            {
+                                label: 'Pacientes Novos (1ª Consulta)',
+                                data: [1248, 836, 1262, 1036, 1058, 913, 1229, 1143, 1082, 388],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 6,
+                                barPercentage: 0.5,
+                                categoryPercentage: 0.7
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        layout: { padding: { top: 25 } },
+                        plugins: {
+                            legend: { position: 'top', align: 'end', labels: { usePointStyle: true, font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
+                            tooltip: { backgroundColor: '#0f172a', padding: 12, cornerRadius: 8 }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 5000, grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, color: '#334155' } }
+                        }
+                    },
+                    plugins: [chartDataLabelsPlugin]
+                });
+            }
+        };
+    </script>
+</body>
+</html>

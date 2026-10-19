@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Executivo de Performance - NeoThorax | Mídias 360</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+                        },
+                        emerald: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f',
+                        },
+                        indigo: {
+                            50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        },
+                        sky: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+            .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+        .gradient-teal { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+        .gradient-accent { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
+        #geoMapRecife { width: 100%; height: 450px; border-radius: 1.5rem; z-index: 10; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Cabeçalho Principal -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs px-4 sm:px-8 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-700 flex items-center justify-center font-black text-xl border border-teal-500/20 shadow-xs">
+                    NT
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">NeoThorax</h1>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 pulse-dot"></span>
+                            Cirurgia Torácica Especializada
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Relatório Executivo de Desempenho • Recife - PE (01/09 a 15/10/2026)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 flex-wrap justify-end">
+                <!-- Distintivo de Fase de Maturação -->
+                <div class="flex items-center gap-2 bg-amber-50 border border-amber-300 px-3.5 py-1.5 rounded-xl shadow-xs">
+                    <i class="fa-solid fa-seedling text-amber-600 text-xs"></i>
+                    <div class="text-left">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-amber-800 block leading-none">Campanha Ativa desde 28/08</span>
+                        <span class="text-xs font-extrabold text-amber-950 leading-none">Fase de Maturação</span>
+                    </div>
+                </div>
+
+                <!-- Google Partner Badge -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="text-left">
+                        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">Google</div>
+                        <div class="text-xs font-bold text-slate-700 leading-none">Partner</div>
+                    </div>
+                </div>
+
+                <!-- Doctoralia Badge with Stars -->
+                <div class="flex items-center gap-2.5 bg-teal-50/80 border border-teal-200/80 px-3 py-1.5 rounded-xl">
+                    <div class="text-teal-700 font-extrabold text-sm tracking-tight">doctoralia</div>
+                    <div class="flex items-center text-teal-600">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <i class="fa-solid fa-star text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-800">5.0 ★</span>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+
+        <!-- Sub-header de Metadados -->
+        <div class="bg-white rounded-[2rem] p-5 sm:p-6 shadow-xs border border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print-card">
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                    <i class="fa-regular fa-calendar-days text-slate-500"></i>
+                    Período Analisado: <span class="text-teal-700">01/09 a 15/10/2026 (45 Dias)</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-teal-50 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-teal-200/60">
+                    <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+                    CTR Consolidado: <span class="text-slate-900 font-black">4,46%</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-900 px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-emerald-200">
+                    🎯 3 Conversões Diretas (Foco Hiperidrose)
+                </div>
+            </div>
+
+            <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-xs active:scale-95 shrink-0">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar Relatório</span>
+            </button>
+        </div>
+
+        <!-- TARJA DE DESTAQUE: FASE DE MATURAÇÃO E APRENDIZAGEM DE MÁQUINA -->
+        <div class="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300 rounded-[2rem] p-5 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 print-card">
+            <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0 font-bold text-lg shadow-sm">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-base font-extrabold text-amber-950">Início Operacional a 28/08: Fase de Maturação Estratégica</h3>
+                    <p class="text-xs sm:text-sm text-amber-900/90 leading-relaxed font-medium">
+                        A campanha conta com pouco mais de 6 semanas de veiculação. Este período inicial é a etapa técnica de <strong>aprendizagem de máquina do algoritmo da Google</strong>, na qual os lances são calibrados, os termos negativos são refinados e o perfil comportamental dos pacientes de cirurgia torácica em Pernambuco é mapeado.
+                    </p>
+                </div>
+            </div>
+            <div class="shrink-0 bg-white border border-amber-300 px-4 py-2 rounded-xl text-center self-stretch md:self-auto">
+                <span class="text-[10px] uppercase font-bold text-slate-400 block">Tempo de Veiculação</span>
+                <span class="text-sm font-black text-amber-700">~45 Dias Ativos</span>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 1: Alcance do Anúncio no Google & Indicadores Globais -->
+        <section class="space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Tração Inicial & Captação Direta no Grande Recife</span>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Visão Geral Google Ads & Canais de Contacto</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Impressões Totais</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">4.216</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Exibições nos leilões do Google Ads</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Qualificados</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-arrow-pointer text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-teal-700 tracking-tight">188</div>
+                    <p class="text-[11px] text-teal-800 font-bold mt-2">Pacientes com intenção cirúrgica direta</p>
+                </div>
+
+                <div class="bg-amber-500 text-white rounded-[2rem] p-5 shadow-md border border-amber-600/20 relative overflow-hidden print-card">
+                    <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-400/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between text-amber-100 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-100">CTR Consolidado</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-600/40 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black tracking-tight">4,46%</div>
+                    <p class="text-[11px] text-amber-100 mt-2 font-medium">▲ Supera a Média de Saúde (3,17%)</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-teal-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Acessos Doctoralia</span>
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
+                            <i class="fa-solid fa-user-doctor text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900 tracking-tight">225</div>
+                    <div class="mt-2 flex items-center gap-1.5">
+                        <span class="bg-teal-100 text-teal-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md">🎯 83,6% gerado pelo tráfego pago</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-5 shadow-xs border border-slate-200/60 hover:border-emerald-500/40 transition-all print-card">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cliques Telefone</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-phone-volume text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600 tracking-tight">49</div>
+                    <p class="text-[11px] text-slate-500 mt-2 font-medium">Chamadas e contactos telefónicos</p>
+                </div>
+
+            </div>
+
+            <!-- TARJA EM DESTAQUE: CONVERSÕES EM HIPERIDROSE -->
+            <div class="bg-[#042f2e] text-white rounded-[2rem] p-5 sm:p-6 shadow-md border border-teal-700/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-card">
+                <div class="space-y-1 max-w-3xl">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-400 text-slate-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">Destaque de Conversão</span>
+                        <span class="text-xs font-bold text-teal-300">Campanha de Serviços</span>
+                    </div>
+                    <h3 class="text-lg font-black text-white">Hiperidrose como Principal Alavanca de Agendamento</h3>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                        Todas as <strong>3 conversões diretas registadas no Google Ads</strong> foram geradas a partir de termos ligados a <strong>Hiperidrose</strong> (suor excessivo e simpatectomia). O segmento apresenta uma elevada prontidão de marcação em consultório no Recife.
+                    </p>
+                </div>
+                <div class="bg-teal-900/80 border border-teal-500/40 rounded-2xl px-5 py-3 text-center shrink-0 self-stretch sm:self-auto">
+                    <span class="text-[10px] uppercase font-bold text-teal-300 block">Total de Conversões</span>
+                    <span class="text-2xl font-black text-emerald-400">3 Diretas</span>
+                    <span class="text-[10px] text-teal-200 block font-semibold">100% em Hiperidrose</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: Benchmark de Eficiência (Apenas Consolidado) & Domínio de Busca -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-[2rem] p-6 shadow-xs border border-slate-200/60 flex flex-col justify-between print-card">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Eficiência de Atração</span>
+                        <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">+40,7% vs Mercado</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900">Benchmark do Setor da Saúde</h3>
+                    <p class="text-xs text-slate-500 mt-1">Comparativo de CTR entre o padrão médico médio (3,17%) e o consolidado das campanhas da NeoThorax (4,46%).</p>
+                </div>
+
+                <div class="my-6 relative h-48 flex items-center justify-center">
+                    <canvas id="ctrBenchmarkChart"></canvas>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                    <span>O CTR consolidado de <strong>4,46%</strong> supera com solidez a média da área de saúde (3,17%), demonstrando alta qualificação de entrega e relevância no Recife.</span>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-slate-900 text-white rounded-[2rem] p-7 shadow-xl border border-slate-800 flex flex-col justify-between relative overflow-hidden print-card">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Share of Voice & Posições de Pesquisa</span>
+                        <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-bold px-3 py-1 rounded-full">Liderança em Recife</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold tracking-tight text-white">Domínio nas Buscas de Cirurgia Torácica, Hiperidrose e Pectus</h3>
+                    <p class="text-xs text-slate-400 mt-1">Presença destacada nos leilões patrocinados do Google Ads na capital pernambucana.</p>
+                </div>
+
+                <div class="my-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                                Top Page Ponderado (% Exibição na Área Superior)
+                            </span>
+                            <span class="text-teal-400 font-extrabold text-base">76,36%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-teal h-full rounded-full" style="width: 76.36%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                1ª Posição Absoluta (% Ponderado em todos os leilões)
+                            </span>
+                            <span class="text-amber-400 font-extrabold text-base">71,44%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="gradient-accent h-full rounded-full" style="width: 71.44%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center text-sm font-semibold mb-2">
+                            <span class="flex items-center gap-2 text-slate-200">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                Parcela de Impressões na Campanha Especialidade
+                            </span>
+                            <span class="text-sky-400 font-extrabold text-base">61,17%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="bg-sky-500 h-full rounded-full" style="width: 61.17%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-teal-400"></i>
+                        Pina (Av. Antônio de Góes) & Ilha do Leite / Boa Vista (Rua das Fronteiras)
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 uppercase">Mídias 360 Analytics</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 3: Desempenho de Leilão por Campanha no Google Ads -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Estrutura de Campanhas no Google Ads</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">3. Performance de Leilão por Campanha</h2>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start md:self-auto font-medium">
+                    Consolidado 01/09 a 15/10/2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Campanha</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CTR</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impr. Chamadas</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">CPC Méd.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">% Topo Pag.</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">1ª Posição</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Parc. Impr.</th>
+                            <th class="py-3.5 px-4 bg-emerald-50 text-emerald-900 text-right rounded-r-xl font-black">Conversões</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-teal-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Serviços (Hiperidrose & Pectus)
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold">2.652</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">93</td>
+                            <td class="py-4 px-4 text-right font-semibold">3,51%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-700">444</td>
+                            <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 14,53</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">70,26%</td>
+                            <td class="py-4 px-4 text-right font-bold text-teal-700">64,44%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">45,14%</td>
+                            <td class="py-4 px-4 text-right font-black text-emerald-700 bg-emerald-50/40 text-base">3</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors bg-sky-50/30">
+                            <td class="py-4 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Especialidade (Cirurgião Torácico)
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold">1.564</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">95</td>
+                            <td class="py-4 px-4 text-right font-black text-sky-700">6,07%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-700">467</td>
+                            <td class="py-4 px-4 text-right font-semibold text-emerald-700">R$ 8,50</td>
+                            <td class="py-4 px-4 text-right font-bold text-sky-700">86,70%</td>
+                            <td class="py-4 px-4 text-right font-bold text-sky-700">83,31%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-900">61,17%</td>
+                            <td class="py-4 px-4 text-right font-bold text-slate-400">0</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-bold text-slate-400 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span> Institucional (Marca NeoThorax)
+                            </td>
+                            <td class="py-4 px-4 text-right text-slate-400">0</td>
+                            <td class="py-4 px-4 text-right text-slate-400">0</td>
+                            <td class="py-4 px-4 text-right text-slate-400">0,00%</td>
+                            <td class="py-4 px-4 text-right text-slate-400">0</td>
+                            <td class="py-4 px-4 text-right text-slate-400">—</td>
+                            <td class="py-4 px-4 text-right text-slate-400">0,00%</td>
+                            <td class="py-4 px-4 text-right text-slate-400">0,00%</td>
+                            <td class="py-4 px-4 text-right text-slate-400">&lt; 10%</td>
+                            <td class="py-4 px-4 text-right text-slate-400">0</td>
+                        </tr>
+
+                        <!-- Linha Total Consolidado -->
+                        <tr class="bg-slate-900 text-white font-bold rounded-xl">
+                            <td class="py-4 px-4 rounded-l-xl">TOTAL CONSOLIDADO</td>
+                            <td class="py-4 px-4 text-right font-black">4.216</td>
+                            <td class="py-4 px-4 text-right text-teal-300 font-black text-base">188</td>
+                            <td class="py-4 px-4 text-right text-amber-300 font-black">4,46%</td>
+                            <td class="py-4 px-4 text-right text-sky-300 font-black">911</td>
+                            <td class="py-4 px-4 text-right text-teal-200 font-bold">R$ 11,48</td>
+                            <td class="py-4 px-4 text-right font-bold">76,36%</td>
+                            <td class="py-4 px-4 text-right font-bold">71,44%</td>
+                            <td class="py-4 px-4 text-right font-bold">51,09%</td>
+                            <td class="py-4 px-4 text-right rounded-r-xl">
+                                <span class="bg-emerald-500 text-slate-950 font-black px-2.5 py-1 rounded-lg text-sm">3 Conversões</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: Palavras-chave de Maior Conversão (Todas as 19 Palavras-Chave do Painel) -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Qualificação de Intenção Cirúrgica & Oncológica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">4. Desempenho de Palavras-Chave Principais</h2>
+                </div>
+                <div class="text-xs text-slate-500 font-medium">
+                    Relação completa das 19 palavras-chave de pesquisa ativadas nas campanhas
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar max-h-[520px]">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px] font-bold sticky top-0 bg-slate-50">
+                            <th class="py-3.5 px-4 bg-slate-50 rounded-l-xl">Palavra-chave de pesquisa</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Impressões</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right">Cliques</th>
+                            <th class="py-3.5 px-4 bg-slate-50 text-right rounded-r-xl">CTR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>cirurgião torácico</span>
+                                <span class="bg-teal-100 text-teal-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Top Volume</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">1.017</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">60</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">5,90%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-emerald-50/40">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>hiperidrose</span>
+                                <span class="bg-emerald-200 text-emerald-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">⭐ Conversão</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">887</td>
+                            <td class="py-3 px-4 text-right font-bold text-emerald-700">40</td>
+                            <td class="py-3 px-4 text-right font-bold text-emerald-800">4,51%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-emerald-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>hiperidrose</span>
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">⭐ Conversão</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">995</td>
+                            <td class="py-3 px-4 text-right font-bold text-emerald-700">22</td>
+                            <td class="py-3 px-4 text-right font-semibold">2,21%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgião torácico recife</td>
+                            <td class="py-3 px-4 text-right font-black">155</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">16</td>
+                            <td class="py-3 px-4 text-right font-black text-teal-700">10,32%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-sky-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>pectus excavatum</span>
+                                <span class="bg-sky-100 text-sky-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Parede Torácica</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">296</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">12</td>
+                            <td class="py-3 px-4 text-right font-semibold">4,05%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-emerald-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>hiperidrose recife</span>
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Local</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">68</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">8</td>
+                            <td class="py-3 px-4 text-right font-black text-emerald-700">11,76%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgião torácico</td>
+                            <td class="py-3 px-4 text-right font-black">188</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">6</td>
+                            <td class="py-3 px-4 text-right font-semibold">3,19%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-emerald-50/30">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>especialista em hiperidrose</span>
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Especialista</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">65</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">6</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">9,23%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgião</td>
+                            <td class="py-3 px-4 text-right font-black">53</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">5</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">9,43%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgião torax</td>
+                            <td class="py-3 px-4 text-right font-black">52</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">4</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">7,69%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">recife cirurgião</td>
+                            <td class="py-3 px-4 text-right font-black">53</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">4</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-800">7,55%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgia torácica</td>
+                            <td class="py-3 px-4 text-right font-black">20</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">3</td>
+                            <td class="py-3 px-4 text-right font-black text-teal-700">15,00%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">médico cirurgião torácico</td>
+                            <td class="py-3 px-4 text-right font-black">15</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">3</td>
+                            <td class="py-3 px-4 text-right font-black text-teal-700">20,00%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-sky-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
+                                <span>pectus excavatum recife</span>
+                                <span class="bg-sky-100 text-sky-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Alta Taxa</span>
+                            </td>
+                            <td class="py-3 px-4 text-right font-black">6</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">3</td>
+                            <td class="py-3 px-4 text-right font-black text-sky-700">50,00%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgia torácica recife</td>
+                            <td class="py-3 px-4 text-right font-black">14</td>
+                            <td class="py-3 px-4 text-right font-medium">1</td>
+                            <td class="py-3 px-4 text-right font-semibold">7,14%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">cirurgião torácico recife</td>
+                            <td class="py-3 px-4 text-right font-black">31</td>
+                            <td class="py-3 px-4 text-right font-medium">1</td>
+                            <td class="py-3 px-4 text-right font-semibold">3,23%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-emerald-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900">especialista em hiperidrose</td>
+                            <td class="py-3 px-4 text-right font-black">12</td>
+                            <td class="py-3 px-4 text-right font-medium">1</td>
+                            <td class="py-3 px-4 text-right font-bold text-teal-700">8,33%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-emerald-50/20">
+                            <td class="py-3 px-4 font-bold text-slate-900">hiperidrose recife</td>
+                            <td class="py-3 px-4 text-right font-black">34</td>
+                            <td class="py-3 px-4 text-right font-medium">1</td>
+                            <td class="py-3 px-4 text-right font-semibold">2,94%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 px-4 font-bold text-slate-900">recife cirurgião torácico</td>
+                            <td class="py-3 px-4 text-right font-black">26</td>
+                            <td class="py-3 px-4 text-right font-medium">1</td>
+                            <td class="py-3 px-4 text-right font-semibold">3,85%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: Reputação Digital & Prova Social na Doctoralia -->
+        <section class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xs border border-slate-200/60 print-card space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Autoridade & Validação Social Médica</span>
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight">5. Reputação Digital & Prova Social na Doctoralia</h2>
+                </div>
+                <div class="flex items-center gap-1 text-teal-600">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 ml-1">Nota 5.0 ★ Excelente</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Card 1: Acumulado -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Patrimônio de Opiniões Validadas</span>
+                    <div class="text-4xl font-black text-amber-400 my-2">8</div>
+                    <p class="text-xs text-teal-300 font-semibold">Avaliações 5.0★ Verificadas</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Base de confiança e reconhecimento técnico de pacientes atendidos em cirurgia torácica.</p>
+                </div>
+
+                <!-- Card 2: Novas Opiniões -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            Crescimento no Período
+                        </div>
+                        <div class="text-3xl font-black text-emerald-950 mt-2">+1 Nova Opinião</div>
+                        <p class="text-xs text-emerald-900/90 mt-2 leading-relaxed">
+                            Nova avaliação nota máxima 5.0★ registada no período analisado, fortalecendo a credibilidade para os novos pacientes captados pelo Google.
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-200 text-[11px] text-emerald-950 font-bold">
+                        🌟 Elemento crucial de validação para procedimentos de média e alta complexidade.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: Geolocalização Estratégica: Raio de 30km e Núcleo de Melhores Entregas de 6km -->
+        <section class="space-y-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Geolocalização Estratégica Recife</span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">6. Mapa de Cobertura das Campanhas & Núcleo de Melhores Entregas</h2>
+                <p class="text-xs text-slate-500 mt-1">Raio amplo de cobertura configurado em 30 km a partir da Unidade Pina, com maior densidade de conversão concentrada no raio de 6 km.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-xs space-y-4 print-card">
+                <div id="geoMapRecife"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Detalhamento dos Raios -->
+                    <div class="bg-teal-50/60 border border-teal-200 p-4 rounded-2xl flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 font-bold text-base">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </div>
+                        <div class="text-xs text-slate-700">
+                            <p class="font-bold text-teal-950 mb-0.5">Análise de Raio & Entrega de Anúncios:</p>
+                            <p class="text-slate-700 leading-relaxed">• <strong>Raio Geral de 30 km (Linha Tracejada):</strong> Cobre todo o Grande Recife, Jaboatão dos Guararapes, Olinda, Camaragibe e Paulista.</p>
+                            <p class="text-teal-900 font-bold mt-1">• <strong>Núcleo de Melhores Entregas de 6 km (Círculo Verde Sólido):</strong> Onde ocorrem os cliques de maior intenção e as conversões para hiperidrose (Pina, Boa Viagem, Ilha do Leite, Graças e Boa Vista).</p>
+                        </div>
+                    </div>
+
+                    <!-- Endereços dos Consultórios -->
+                    <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center shrink-0 font-bold text-base">
+                            <i class="fa-solid fa-hospital"></i>
+                        </div>
+                        <div class="text-xs text-slate-600 space-y-1">
+                            <p class="font-bold text-slate-900">Unidades de Atendimento:</p>
+                            <p>• <strong>Unidade 1 (Pina):</strong> Av. Antônio de Góes, 275 - Pina, Recife - PE (CEP 51110-000)</p>
+                            <p>• <strong>Unidade 2 (Boa Vista):</strong> Rua das Fronteiras, 127 - Boa Vista, Recife - PE (CEP 50070-170)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-400 pb-8">
+        <div class="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-slate-600">
+                <span>Mídias 360</span>
+                <span>•</span>
+                <span>Doctoralia Partner</span>
+            </div>
+            <p>© 2026 Mídias 360 - Relatório exclusivo para NeoThorax (Recife - PE)</p>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            // Leaflet Map Config: Recife (Unidade 1 Pina: -8.0862, -34.8879 | Unidade 2 Boa Vista: -8.0584, -34.8943)
+            const mapElement = document.getElementById('geoMapRecife');
+
+            if (mapElement && typeof L !== 'undefined') {
+                try {
+                    const pinaCoords = [-8.0862, -34.8879];
+                    const boaVistaCoords = [-8.0584, -34.8943];
+                    const mapCenter = [-8.0800, -34.8900];
+
+                    const map = L.map('geoMapRecife', { 
+                        center: mapCenter, 
+                        zoom: 11, 
+                        zoomControl: true, 
+                        scrollWheelZoom: false 
+                    });
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap'
+                    }).addTo(map);
+
+                    // 1) Raio de 30 km (Configuração Geral da Campanha a partir da Unidade Pina)
+                    L.circle(pinaCoords, {
+                        color: '#64748b',
+                        dashArray: '6, 8',
+                        fillColor: '#94a3b8',
+                        fillOpacity: 0.08,
+                        radius: 30000,
+                        weight: 2
+                    }).addTo(map).bindPopup("<b>Raio Global da Campanha (30 km)</b><br>Abrangência no Grande Recife, Jaboatão, Olinda e Litoral");
+
+                    // 2) Raio de 6 km (Núcleo de Melhores Entregas e Conversões)
+                    L.circle(pinaCoords, {
+                        color: '#0d9488',
+                        fillColor: '#14b8a6',
+                        fillOpacity: 0.22,
+                        radius: 6000,
+                        weight: 2.5
+                    }).addTo(map).bindPopup("<b>Núcleo de Melhores Entregas (6 km)</b><br>Pina, Boa Viagem, Ilha do Leite, Graças e Boa Vista");
+
+                    // Marcador Unidade 1 - Pina
+                    const iconPina = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div style="background-color: #0d9488; width: 38px; height: 38px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;"><i class="fa-solid fa-lungs"></i></div>`,
+                        iconSize: [38, 38],
+                        iconAnchor: [19, 19]
+                    });
+                    L.marker(pinaCoords, { icon: iconPina }).addTo(map).bindPopup("<b>NeoThorax • Unidade Pina (Ponto Central)</b><br>Av. Antônio de Góes, 275<br><i>Raio de 30km configurado | Melhores entregas a 6km</i>").openPopup();
+
+                    // Marcador Unidade 2 - Boa Vista / Ilha do Leite
+                    const iconBoaVista = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div style="background-color: #0f766e; width: 38px; height: 38px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;"><i class="fa-solid fa-hospital"></i></div>`,
+                        iconSize: [38, 38],
+                        iconAnchor: [19, 19]
+                    });
+                    L.marker(boaVistaCoords, { icon: iconBoaVista }).addTo(map).bindPopup("<b>NeoThorax • Unidade Boa Vista</b><br>Rua das Fronteiras, 127<br><i>Complexo Médico da Ilha do Leite</i>");
+
+                } catch (e) {
+                    console.error("Erro no Leaflet Map:", e);
+                }
+            }
+
+            // CTR Benchmark Chart (Apenas Média Saúde vs Consolidado)
+            const ctxCtr = document.getElementById('ctrBenchmarkChart');
+            if (ctxCtr && typeof Chart !== 'undefined') {
+                new Chart(ctxCtr, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Média Saúde (3,17%)',
+                            'Consolidado NeoThorax (4,46%)'
+                        ],
+                        datasets: [{
+                            data: [3.17, 4.46],
+                            backgroundColor: ['#cbd5e1', '#0d9488'],
+                            borderRadius: 12,
+                            barThickness: 36
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, max: 7, grid: { color: '#f1f5f9' } },
+                            x: { grid: { display: false }, ticks: { font: { size: 11, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>

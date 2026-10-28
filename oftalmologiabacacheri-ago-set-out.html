@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • Oftalmologia Bacacheri</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+      #map { height: 350px !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              OB
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Oftalmologia Bacacheri</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Oftalmologia • Curitiba</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período: 01/08/2026 - 25/10/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  Início: 30/01/2026 • 9 meses de campanha
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">68.242</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições a respeito da sua especialidade</p>
+        </div>
+
+        <!-- Card 2: Cliques Diretos -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques Diretos</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">3.158</span>
+            </div>
+          </div>
+          <p class="text-xs text-teal-700 font-medium mt-4">Tráfego direcionado para o perfil Doctoralia</p>
+        </div>
+
+        <!-- Card 3: CTR Consolidado -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR Consolidado</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+46,1%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">4,63%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% benchmark</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Elevada atratividade no segmento da saúde</p>
+        </div>
+
+        <!-- Card 4: Acessos Doctoralia -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acessos Doctoralia</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">3.708</span>
+            </div>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-teal-50 border border-teal-200/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="text-[11px] font-bold text-teal-800">85,17% originados do Ads</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Cliques no Telefone -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques no Telefone</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-teal-700">595</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Contatos que chegaram até sua secretária</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: BENCHMARKING DE ATRATIVIDADE & DOMINÂNCIA (50% / 50%) -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      
+      <!-- Coluna Esquerda: Benchmarking de CTR -->
+      <div class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Benchmarking de Atratividade (CTR)</h2>
+            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">Saúde 2026</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Taxa de cliques em anúncios em comparação à média nacional da especialidade médica no Google.</p>
+        </div>
+
+        <div class="my-6">
+          <div class="h-48 relative">
+            <canvas id="ctrBenchmarkChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
+          <div class="p-3 bg-teal-50/70 rounded-xl border border-teal-100">
+            <span class="text-[11px] font-semibold text-teal-900">Oftalmologia Bacacheri</span>
+            <p class="text-lg font-extrabold text-teal-700 mt-0.5">4,63%</p>
+            <p class="text-[10px] text-teal-600">CTR médio consolidado</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-700">Média Google Saúde</span>
+            <p class="text-lg font-extrabold text-slate-800 mt-0.5">3,17%</p>
+            <p class="text-[10px] text-slate-500">Benchmark oficial do setor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Dominância em Leilões e Posições -->
+      <div class="bg-slate-900 text-white rounded-[2rem] p-6 lg:p-8 shadow-xl flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-white tracking-tight">Dominância em Leilões e Posições</h2>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded border border-teal-500/30">Google Search</span>
+          </div>
+          
+          <div class="mt-4 p-4 rounded-2xl bg-teal-950/60 border border-teal-500/30">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+              <span class="text-xs font-bold text-teal-200 uppercase tracking-wider">Volume de Leilão Capturado</span>
+            </div>
+            <p class="text-2xl font-black text-white mt-1">24,36% <span class="text-xs font-normal text-slate-300">do volume de leilão do Google</span></p>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Ganhamos 24,36% da fatia total de buscas ativas na região. Esta parcela reflete o equilíbrio entre o orçamento diário alocado e a forte concorrência em Curitiba.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-4 my-6">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">Exibição no Topo da Página (Top 3)</span>
+              <span class="text-teal-400 font-bold">72,99%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-teal-400 h-2 rounded-full" style="width: 72.99%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">1ª Posição Absoluta (Top 1)</span>
+              <span class="text-amber-400 font-bold">27,72%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-400 h-2 rounded-full" style="width: 27.72%"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-400 border-t border-slate-800 pt-3">
+          Mais de 7 em cada 10 exibições colocam a clínica diretamente no campo de visão primário dos pacientes em busca ativa.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- SEÇÃO 3: ESTRUTURA DE CAMPANHAS & PERFORMANCE -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estrutura de Campanhas & Performance</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Detalhamento de volume, custos médios por clique e taxas de qualificação no Google Ads.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          3 Frentes Ativas
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right">CTR</th>
+              <th class="py-3 px-4 text-right">CPC Médio</th>
+              <th class="py-3 px-4 text-right">Topo Pg. (Top 3)</th>
+              <th class="py-3 px-4 text-right">1ª Pos. Abs.</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Ganho Leilão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Especialidade</td>
+              <td class="py-3.5 px-4 text-right font-medium">66.212</td>
+              <td class="py-3.5 px-4 text-right font-medium">3.025</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-700">4,57%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 2,90</td>
+              <td class="py-3.5 px-4 text-right font-medium">72,73%</td>
+              <td class="py-3.5 px-4 text-right font-medium">27,38%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">24,36%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Serviços</td>
+              <td class="py-3.5 px-4 text-right font-medium">1.637</td>
+              <td class="py-3.5 px-4 text-right font-medium">79</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-700">4,83%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 4,37</td>
+              <td class="py-3.5 px-4 text-right font-medium">79,92%</td>
+              <td class="py-3.5 px-4 text-right font-medium">28,87%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">18,76%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3.5 px-4 text-right font-medium">393</td>
+              <td class="py-3.5 px-4 text-right font-medium">54</td>
+              <td class="py-3.5 px-4 text-right font-bold text-amber-600">13,74%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 2,98</td>
+              <td class="py-3.5 px-4 text-right font-medium">88,21%</td>
+              <td class="py-3.5 px-4 text-right font-medium">79,48%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">81,36%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-100/70 font-extrabold text-slate-900 text-xs border-t-2 border-slate-200">
+              <td class="py-3 px-4 rounded-l-xl">Total / Médias</td>
+              <td class="py-3 px-4 text-right">68.242</td>
+              <td class="py-3 px-4 text-right">3.158</td>
+              <td class="py-3 px-4 text-right text-teal-700">4,63%</td>
+              <td class="py-3 px-4 text-right">R$ 2,94</td>
+              <td class="py-3 px-4 text-right">72,99%</td>
+              <td class="py-3 px-4 text-right">27,72%</td>
+              <td class="py-3 px-4 text-right rounded-r-xl">24,36%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: PRINCIPAIS TERMOS DE PESQUISA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Principais Termos de Pesquisa (Palavras-Chave)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Consultas mais digitadas pelos pacientes que geraram cliques e agendamentos.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Termos Mais Relevantes
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[620px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Palavra-chave de Pesquisa</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CTR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Principal em destaque translúcido -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                oftalmologia curitiba
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">17.529</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">996</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">5,68%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">clínica oftalmológica curitiba</td>
+              <td class="py-3 px-4 text-right font-medium">13.196</td>
+              <td class="py-3 px-4 text-right font-medium">605</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,58%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">oftalmologista</td>
+              <td class="py-3 px-4 text-right font-medium">8.685</td>
+              <td class="py-3 px-4 text-right font-medium">365</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,20%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">oftalmologista curitiba</td>
+              <td class="py-3 px-4 text-right font-medium">1.613</td>
+              <td class="py-3 px-4 text-right font-medium">158</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">9,80%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">clinica de oftalmologia</td>
+              <td class="py-3 px-4 text-right font-medium">2.776</td>
+              <td class="py-3 px-4 text-right font-medium">105</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">3,78%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">clínica oftalmológica</td>
+              <td class="py-3 px-4 text-right font-medium">2.422</td>
+              <td class="py-3 px-4 text-right font-medium">92</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">3,80%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">oftalmologista unimed</td>
+              <td class="py-3 px-4 text-right font-medium">773</td>
+              <td class="py-3 px-4 text-right font-medium">90</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">11,64%</td>
+            </tr>
+            <!-- Termo de Marca -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-900 font-semibold">oftalmologia bacacheri (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">300</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">47</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-600">15,67%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: ESPELHO COMPARATIVO ANTES vs. DEPOIS DA CAMPANHA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Espelho Comparativo: Antes vs. Depois da Campanha</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">M360 Ativo</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Evolução direta dos agendamentos totais e atração de pacientes novos desde o início da campanha em 30/01/2026.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl">
+          <span>Base Histórica: 10 Meses (Janeiro - Outubro)</span>
+        </div>
+      </div>
+
+      <!-- CARDS DE DESTAQUE DO ESPELHO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <!-- Card 1: Pré-M360 (Janeiro) -->
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Cenário Pré-M360 (Janeiro)</span>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-slate-700">139</span>
+            <span class="text-xs text-slate-500 font-medium">agendamentos</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between text-xs pt-3 border-t border-slate-200/80">
+            <span class="text-slate-600">Pacientes Novos: <strong class="text-slate-800">77</strong></span>
+            <span class="text-slate-500 text-[11px]">Ponto de Partida</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Recorde Histórico Geral (Agosto) -->
+        <div class="bg-teal-50/70 rounded-2xl p-5 border border-teal-200">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-teal-900">Pico Histórico (Agosto)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-600 text-white">+95% vs Jan</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-teal-700">271</span>
+            <span class="text-xs text-teal-900 font-semibold">agendamentos</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between text-xs pt-3 border-t border-teal-200/60">
+            <span class="text-teal-900">Pacientes Novos: <strong class="text-teal-950 font-bold">138 (+79%)</strong></span>
+            <span class="text-teal-700 text-[11px] font-semibold">Máxima anual</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Consolidação (Setembro) -->
+        <div class="bg-emerald-50/70 rounded-2xl p-5 border border-emerald-200">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Consolidação (Setembro)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">+62,6% vs Jan</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-emerald-800">226</span>
+            <span class="text-xs text-emerald-900 font-semibold">agendamentos totais</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between text-xs pt-3 border-t border-emerald-200/60">
+            <span class="text-emerald-900">Pacientes Novos: <strong class="text-emerald-950 font-bold">121 (+57,1%)</strong></span>
+            <span class="text-emerald-700 text-[11px] font-semibold">Alto volume constante</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS DIRETOS NAS BARRAS -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: PERFORMANCE GEOGRÁFICA & RAIO DE COBERTURA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Performance Geográfica & Raio de Ação</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Geolocalização da clínica no Bacacheri (Curitiba) com raio de 20km do endereço e alta concentração de pacientes no raio de 8km.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          R. México, 20 - Bacacheri
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Mapa Leaflet Interativo -->
+        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner h-80 sm:h-96 relative">
+          <div id="map" class="w-full h-full"></div>
+        </div>
+
+        <!-- Card Lateral de Abrangência -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-teal-400">Cobertura Estratégica</h3>
+            <p class="text-xs text-slate-300 mt-1">Captação em Curitiba e Região Metropolitana focada em alta conversão de consultas.</p>
+
+            <div class="mt-6 space-y-4">
+              <div class="p-4 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">Raio de 20 km</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">Macro</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                  Abrangência estendida englobando toda Curitiba, Colombo, Pinhais, São José dos Pinhais e Almirante Tamandaré.
+                </p>
+              </div>
+
+              <div class="p-4 bg-teal-950/60 rounded-xl border border-teal-500/40">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-400">Raio de 8 km (Melhor Performance)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded font-semibold">Core</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                  Zona de maior intensidade de cliques e agendamentos: <strong>Bacacheri, Cabral, Juvevê, Jardim Social, Hugo Lange, Alto da XV e Boa Vista</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
+            Centralizado na sede da clínica com entrega prioritária aos bairros vizinhos de maior poder de compra.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 7: AUTORIDADE & PROVA SOCIAL NA DOCTORALIA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Autoridade & Prova Social na Doctoralia</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Validação de reputação e impacto da sinergia entre tráfego qualificado e perfil premium.</p>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold self-start sm:self-auto">
+          <span>Doctoralia Perfil Verificado</span>
+          <span class="text-amber-500 tracking-wider">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Opiniões Totais -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patrimônio de Opiniões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-slate-900">364</span>
+              <span class="text-sm font-bold text-emerald-600">Avaliações Validadas</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-500 text-lg mt-1">
+              ★★★★★
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 mt-4 leading-relaxed">
+            Consolidação de um dos perfis mais bem avaliados do Paraná na especialidade, transmitindo máxima credibilidade para o paciente que clica no anúncio.
+          </p>
+        </div>
+
+        <!-- Card Novas Opiniões -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">Atualizações no Período</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-600 text-white">+98 Novas</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-teal-700">98</span>
+              <span class="text-sm font-semibold text-teal-900">avaliações recentes</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white/80 rounded-xl border border-teal-200/70 text-xs text-teal-950 leading-relaxed font-medium">
+            Mais de 70% dos pacientes que acessam o perfil conferem atentamente os relatos e notas antes de agendar. Manter essa constância de novas opiniões é essencial para sustentar altas taxas de conversão no consultório.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 8: ANÁLISE DE CONCORRÊNCIA & POSICIONAMENTO DE MERCADO -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Análise de Concorrência & Posicionamento de Mercado</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Comparativo do posicionamento da Oftalmologia Bacacheri frente aos concorrentes diretos em Curitiba.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          Benchmarking Regional
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Card 1: Valor de Consulta -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Valor de Consulta</span>
+            <div class="mt-3 flex items-baseline justify-between">
+              <div>
+                <span class="text-xs text-teal-800 font-semibold block">Clínica</span>
+                <span class="text-3xl font-extrabold text-teal-700">R$ 350</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400 font-medium block">Média Concorrência</span>
+                <span class="text-2xl font-bold text-slate-500">R$ 372</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-600 leading-relaxed">
+            Preço altamente atrativo e competitivo para a praça de Curitiba, facilitando a decisão imediata de agendamento pelo paciente.
+          </div>
+        </div>
+
+        <!-- Card 2: Opiniões Acumuladas -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-800">Patrimônio de Opiniões</span>
+            <div class="mt-3 flex items-baseline justify-between">
+              <div>
+                <span class="text-xs text-teal-800 font-semibold block">Clínica</span>
+                <span class="text-3xl font-extrabold text-teal-700">364</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400 font-medium block">Média Concorrência</span>
+                <span class="text-2xl font-bold text-slate-500">244</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-teal-200 text-xs text-teal-900 leading-relaxed font-medium">
+            <strong>+49,2% acima da concorrência</strong>. Este volume expressivo neutraliza concorrentes locais e gera autoridade imediata.
+          </div>
+        </div>
+
+        <!-- Card 3: Densidade de Concorrentes -->
+        <div class="p-6 bg-slate-900 text-white rounded-2xl flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Densidade na Especialidade</span>
+            <div class="mt-3">
+              <span class="text-3xl font-black text-white">152</span>
+              <span class="text-xs text-slate-300 font-medium block mt-1">oftalmologistas com agenda ativa na Doctoralia em Curitiba</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-300 leading-relaxed">
+            Com mais de 150 concorrentes disputando a mesma praça, a liderança no Google Ads somada à reputação de 364 avaliações garante que os pacientes escolham a clínica antes de considerarem outros profissionais.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório gerado em ambiente analítico dedicado para suporte à decisão estratégica.</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Gráfico de Benchmark CTR
+    const ctxBenchmark = document.getElementById('ctrBenchmarkChart').getContext('2d');
+    new Chart(ctxBenchmark, {
+      type: 'bar',
+      data: {
+        labels: ['Oftalmologia Bacacheri', 'Média Google Saúde'],
+        datasets: [{
+          data: [4.63, 3.17],
+          backgroundColor: ['#0d9488', '#94a3b8'],
+          borderRadius: 12,
+          barThickness: 34
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.y}% CTR`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 6,
+            ticks: {
+              callback: (val) => val + '%',
+              font: { family: "'Plus Jakarta Sans'", size: 10 }
+            },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Plugin Nativo para Desenhar Rótulos de Dados sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          // Ignora a linha de tendência para evitar poluição visual sobre as barras
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              // Cor teal para Agendamentos Totais, cinza ardósia para Pacientes Novos
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val, bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Janeiro a Outubro) com Rótulos de Dados
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro (parcial)'],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [139, 178, 225, 123, 168, 236, 240, 271, 226, 244],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [139, 178, 225, 123, 168, 236, 240, 271, 226, 244],
+            backgroundColor: '#0d9488',
+            borderRadius: 8,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [77, 117, 114, 109, 120, 136, 113, 138, 121, 121],
+            backgroundColor: '#64748b',
+            borderRadius: 8,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 310,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Mapa Leaflet (Curitiba - Bacacheri)
+    const lat = -25.3985;
+    const lng = -49.2392;
+
+    const map = leaflet.map('map', {
+      center: [lat, lng],
+      zoom: 11,
+      scrollWheelZoom: false
+    });
+
+    leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Marcador da clínica
+    const clinicIcon = leaflet.divIcon({
+      className: 'custom-icon',
+      html: `<div style="background-color: #0d9488; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3);"></div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    leaflet.marker([lat, lng], { icon: clinicIcon })
+      .addTo(map)
+      .bindPopup('<b>Oftalmologia Bacacheri</b><br>R. México, 20 - 2º Andar, Curitiba/PR')
+      .openPopup();
+
+    // Raio de 20 km (Secundário/Macro)
+    leaflet.circle([lat, lng], {
+      color: '#64748b',
+      fillColor: '#94a3b8',
+      fillOpacity: 0.12,
+      weight: 1.5,
+      dashArray: '4, 4',
+      radius: 20000
+    }).addTo(map);
+
+    // Raio de 8 km (Principal/Alta intensidade)
+    leaflet.circle([lat, lng], {
+      color: '#0d9488',
+      fillColor: '#0d9488',
+      fillOpacity: 0.22,
+      weight: 2.5,
+      radius: 8000
+    }).addTo(map);
+  </script>
+</body>
+</html>

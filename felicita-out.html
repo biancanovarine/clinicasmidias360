@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • Espaço Felicitá</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+      #map { height: 350px !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              EF
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Espaço Felicitá</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Geriatria • Teresina</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período: 01/10/2026 - 31/10/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  2 Unidades Integradas (Cabral &amp; Santa Isabel)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">4.417</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições a respeito da sua especialidade</p>
+        </div>
+
+        <!-- Card 2: Cliques Diretos -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques Diretos</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">519</span>
+            </div>
+          </div>
+          <p class="text-xs text-teal-700 font-medium mt-4">Tráfego direcionado para o perfil Doctoralia</p>
+        </div>
+
+        <!-- Card 3: CTR Consolidado -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR Consolidado</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+270%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">11,75%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% benchmark</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Taxa excepcional de qualificação e interesse</p>
+        </div>
+
+        <!-- Card 4: Acessos Doctoralia -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acessos Doctoralia</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">620</span>
+            </div>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-teal-50 border border-teal-200/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="text-[11px] font-bold text-teal-800">83,71% originados do Ads no Perfil Doctoralia</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Cliques no Telefone -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques no Telefone</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-teal-700">295</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Contatos que chegaram até sua secretária</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: BENCHMARKING DE ATRATIVIDADE & DOMINÂNCIA (50% / 50%) -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      
+      <!-- Coluna Esquerda: Benchmarking de CTR -->
+      <div class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Benchmarking de Atratividade (CTR)</h2>
+            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">Saúde 2026</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Taxa de cliques em anúncios em comparação à média nacional do segmento de saúde no Google.</p>
+        </div>
+
+        <div class="my-6">
+          <div class="h-48 relative">
+            <canvas id="ctrBenchmarkChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
+          <div class="p-3 bg-teal-50/70 rounded-xl border border-teal-100">
+            <span class="text-[11px] font-semibold text-teal-900">Espaço Felicitá</span>
+            <p class="text-lg font-extrabold text-teal-700 mt-0.5">11,75%</p>
+            <p class="text-[10px] text-teal-600">CTR médio consolidado</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-700">Média Google Saúde</span>
+            <p class="text-lg font-extrabold text-slate-800 mt-0.5">3,17%</p>
+            <p class="text-[10px] text-slate-500">Benchmark oficial do setor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Dominância em Leilões e Posições -->
+      <div class="bg-slate-900 text-white rounded-[2rem] p-6 lg:p-8 shadow-xl flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-white tracking-tight">Dominância em Leilões e Posições</h2>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded border border-teal-500/30">Google Search</span>
+          </div>
+          
+          <div class="mt-4 p-4 rounded-2xl bg-teal-950/60 border border-teal-500/30">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+              <span class="text-xs font-bold text-teal-200 uppercase tracking-wider">Volume de Leilão Capturado</span>
+            </div>
+            <p class="text-2xl font-black text-white mt-1">70,21% <span class="text-xs font-normal text-slate-300">do volume de leilão do Google</span></p>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Ganhamos 70,21% do leilão na campanha de especialidade em Teresina. Essa liderança expressiva reflete alta dominância sobre a concorrência na praça.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-4 my-6">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">Exibição no Topo da Página (Top 3)</span>
+              <span class="text-teal-400 font-bold">80,90%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-teal-400 h-2 rounded-full" style="width: 80.90%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">1ª Posição Absoluta (Top 1)</span>
+              <span class="text-amber-400 font-bold">60,73%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-400 h-2 rounded-full" style="width: 60.73%"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-400 border-t border-slate-800 pt-3">
+          Mais de 6 em cada 10 vezes em que um paciente pesquisa por geriatria em Teresina, o Espaço Felicitá aparece no primeiríssimo lugar absoluto da tela.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- SEÇÃO 3: ESTRUTURA DE CAMPANHAS & PERFORMANCE -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estrutura de Campanhas &amp; Performance</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Detalhamento dos anúncios de Geriatria Geral e Institucional da clínica.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          2 Frentes Ativas
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right">CTR</th>
+              <th class="py-3 px-4 text-right">CPC Médio</th>
+              <th class="py-3 px-4 text-right">Topo Pg. (Top 3)</th>
+              <th class="py-3 px-4 text-right">1ª Pos. Abs.</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Ganho Leilão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Especialidade</td>
+              <td class="py-3.5 px-4 text-right font-medium">4.200</td>
+              <td class="py-3.5 px-4 text-right font-medium">505</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-700">12,02%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 3,38</td>
+              <td class="py-3.5 px-4 text-right font-medium">81,99%</td>
+              <td class="py-3.5 px-4 text-right font-medium">60,92%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">70,21%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3.5 px-4 text-right font-medium">217</td>
+              <td class="py-3.5 px-4 text-right font-medium">14</td>
+              <td class="py-3.5 px-4 text-right font-bold text-amber-600">6,45%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 2,27</td>
+              <td class="py-3.5 px-4 text-right font-medium">59,88%</td>
+              <td class="py-3.5 px-4 text-right font-medium">57,14%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">28,54%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-100/70 font-extrabold text-slate-900 text-xs border-t-2 border-slate-200">
+              <td class="py-3 px-4 rounded-l-xl">Total / Médias</td>
+              <td class="py-3 px-4 text-right">4.417</td>
+              <td class="py-3 px-4 text-right">519</td>
+              <td class="py-3 px-4 text-right text-teal-700">11,75%</td>
+              <td class="py-3 px-4 text-right">R$ 3,35</td>
+              <td class="py-3 px-4 text-right">80,90%</td>
+              <td class="py-3 px-4 text-right">60,73%</td>
+              <td class="py-3 px-4 text-right rounded-r-xl">70,21%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: PRINCIPAIS TERMOS DE PESQUISA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Principais Termos de Pesquisa (Palavras-Chave)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Termos digitados pelos pacientes em Teresina com alto índice de clique e interesse.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Termos Mais Relevantes
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[620px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Palavra-chave de Pesquisa</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CTR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Principal em destaque translúcido -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                geriatria teresina
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">744</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">90</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">12,10%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatria</td>
+              <td class="py-3 px-4 text-right font-medium">703</td>
+              <td class="py-3 px-4 text-right font-medium">81</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,52%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatra em teresina</td>
+              <td class="py-3 px-4 text-right font-medium">589</td>
+              <td class="py-3 px-4 text-right font-medium">68</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,54%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatra teresina</td>
+              <td class="py-3 px-4 text-right font-medium">485</td>
+              <td class="py-3 px-4 text-right font-medium">67</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">13,81%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatras teresina</td>
+              <td class="py-3 px-4 text-right font-medium">272</td>
+              <td class="py-3 px-4 text-right font-medium">45</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">16,54%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">clínica geriátrica teresina</td>
+              <td class="py-3 px-4 text-right font-medium">287</td>
+              <td class="py-3 px-4 text-right font-medium">32</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,15%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">clínica geriátrica teresina</td>
+              <td class="py-3 px-4 text-right font-medium">218</td>
+              <td class="py-3 px-4 text-right font-medium">26</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,93%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatra</td>
+              <td class="py-3 px-4 text-right font-medium">245</td>
+              <td class="py-3 px-4 text-right font-medium">19</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">7,76%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatras teresina</td>
+              <td class="py-3 px-4 text-right font-medium">88</td>
+              <td class="py-3 px-4 text-right font-medium">18</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">20,45%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">geriatra em teresina</td>
+              <td class="py-3 px-4 text-right font-medium">72</td>
+              <td class="py-3 px-4 text-right font-medium">16</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">22,22%</td>
+            </tr>
+            <!-- Termo de Marca -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-900 font-semibold">espaço felicità (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">217</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">14</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-600">6,45%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">clínica geriátrica</td>
+              <td class="py-3 px-4 text-right font-medium">105</td>
+              <td class="py-3 px-4 text-right font-medium">12</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,43%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: HISTÓRICO DE AGENDAMENTOS & PACIENTES NOVOS (COM RÓTULOS NATIVOS) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Histórico de Agendamentos &amp; Pacientes Novos</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+              Consistência de Alta Demanda
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Acompanhamento contínuo dos agendamentos totais e do fluxo de novos pacientes de Junho a Outubro.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl">
+          <span>Série Histórica: Junho a Outubro</span>
+        </div>
+      </div>
+
+      <!-- CARDS DE DESTAQUE DO HISTÓRICO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <!-- Card 1: Média Mensal de Agendamentos -->
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Média de Consultas</span>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-slate-700">~237</span>
+            <span class="text-xs text-slate-500 font-medium">agendamentos/mês</span>
+          </div>
+          <p class="mt-3 text-xs text-slate-500 leading-relaxed pt-3 border-t border-slate-200/80">
+            Volume extremamente estável mantendo o consultório operando em alta ocupação nos últimos 4 meses.
+          </p>
+        </div>
+
+        <!-- Card 2: Novos Pacientes em Outubro -->
+        <div class="bg-teal-50/70 rounded-2xl p-5 border border-teal-200">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-teal-900">Novos Pacientes (Outubro)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-600 text-white">63 Novos</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-teal-700">63</span>
+            <span class="text-xs text-teal-900 font-semibold">novos pacientes</span>
+          </div>
+          <p class="mt-3 text-xs text-teal-800 leading-relaxed pt-3 border-t border-teal-200/60">
+            Total de <strong>63 pacientes de primeira consulta</strong> integrados à base da clínica somente no mês de Outubro.
+          </p>
+        </div>
+
+        <!-- Card 3: Volume Telefônico Direto -->
+        <div class="bg-emerald-50/70 rounded-2xl p-5 border border-emerald-200">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Contatos Telefônicos</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">Alta Demanda</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-emerald-800">295</span>
+            <span class="text-xs text-emerald-900 font-semibold">cliques no telefone</span>
+          </div>
+          <p class="mt-3 text-xs text-emerald-900 leading-relaxed pt-3 border-t border-emerald-200/60">
+            Forte direcionamento para a recepção das duas unidades, gerando oportunidades diárias de agendamento assistido.
+          </p>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS NAS BARRAS -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: PERFORMANCE GEOGRÁFICA & DUAS UNIDADES EM TERESINA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Performance Geográfica &amp; Cobertura em Teresina</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Cobertura simultânea de 10km a partir da Unidade Cabral (Líder) e da Unidade Santa Isabel.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          2 Unidades Estratégicas
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Mapa Leaflet Interativo -->
+        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner h-80 sm:h-96 relative">
+          <div id="map" class="w-full h-full"></div>
+        </div>
+
+        <!-- Card Lateral de Abrangência -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-teal-400">Cobertura Regional Dupla</h3>
+            <p class="text-xs text-slate-300 mt-1">Presença estratégica em duas zonas médicas nobres de Teresina.</p>
+
+            <div class="mt-5 space-y-4">
+              <div class="p-3.5 bg-teal-950/60 rounded-xl border border-teal-500/40">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">Unidade 2 - Cabral / Centro (Líder)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded font-semibold">Polo Central</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  R. Gov. Tibério Nunes, 614. O raio de 10km cobre todo o Centro, Cabral, Ilhotas, Vermelha e a divisa com Timon (MA).
+                </p>
+              </div>
+
+              <div class="p-3.5 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-400">Unidade 1 - Santa Isabel</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">Zona Leste</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  R. Des. João de Deus Lima, 1055. O raio de 10km atinge bairros de alto padrão da Zona Leste (Jóquei, Fátima, Ininga, São Cristóvão e Horto).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+            A convergência dos dois raios de 10km assegura 100% de dominância territorial sobre toda a mancha urbana de Teresina.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 7: AUTORIDADE & PROVA SOCIAL NA DOCTORALIA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Autoridade &amp; Prova Social na Doctoralia</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Validação de reputação e impacto da sinergia entre tráfego qualificado e perfil premium.</p>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold self-start sm:self-auto">
+          <span>Doctoralia Perfil Verificado</span>
+          <span class="text-amber-500 tracking-wider">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Opiniões Totais -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patrimônio de Opiniões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-slate-900">421</span>
+              <span class="text-sm font-bold text-emerald-600">Avaliações Validadas</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-500 text-lg mt-1">
+              ★★★★★
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 mt-4 leading-relaxed">
+            Com mais de 420 avaliações de nota máxima, a clínica possui um dos perfis mais respeitados de Geriatria no Piauí, convertendo com facilidade o paciente que clica nos anúncios.
+          </p>
+        </div>
+
+        <!-- Card Novas Opiniões -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">Atualizações no Período</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-600 text-white">+18 Novas</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-teal-700">18</span>
+              <span class="text-sm font-semibold text-teal-900">avaliações recentes</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white/80 rounded-xl border border-teal-200/70 text-xs text-teal-950 leading-relaxed font-medium">
+            Sabemos que mais de 70% dos pacientes que entram no perfil do médico olham esta seção antes de tomar a decisão de consulta, então é fundamental manter a constância no recebimento de novas opiniões para garantir a máxima taxa de agendamento.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório executivo mensal de performance e inteligência de mídia.</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Gráfico de Benchmark CTR
+    const ctxBenchmark = document.getElementById('ctrBenchmarkChart').getContext('2d');
+    new Chart(ctxBenchmark, {
+      type: 'bar',
+      data: {
+        labels: ['Espaço Felicitá', 'Média Google Saúde'],
+        datasets: [{
+          data: [11.75, 3.17],
+          backgroundColor: ['#0d9488', '#94a3b8'],
+          borderRadius: 12,
+          barThickness: 34
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.y}% CTR`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 14,
+            ticks: {
+              callback: (val) => val + '%',
+              font: { family: "'Plus Jakarta Sans'", size: 10 }
+            },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Plugin Nativo para Desenhar Rótulos de Dados sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val, bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Junho a Outubro)
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [167, 241, 232, 241, 233],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [167, 241, 232, 241, 233],
+            backgroundColor: '#0d9488',
+            borderRadius: 8,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [56, 76, 59, 72, 63],
+            backgroundColor: '#64748b',
+            borderRadius: 8,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 280,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Mapa Leaflet - 2 Unidades em Teresina (PI)
+    // Unidade 2 - Cabral / Centro (Líder): R. Gov. Tibério Nunes, 614
+    const cabralCoords = [-5.0825, -42.8125];
+    // Unidade 1 - Santa Isabel: R. Des. João de Deus Lima, 1055
+    const santaIsabelCoords = [-5.0875, -42.7750];
+
+    const map = leaflet.map('map', {
+      center: [-5.085, -42.794],
+      zoom: 12,
+      scrollWheelZoom: false
+    });
+
+    leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Ícone da Unidade Líder (Cabral)
+    const iconCabral = leaflet.divIcon({
+      className: 'custom-icon-cabral',
+      html: `<div style="background-color: #0d9488; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    // Ícone da Unidade Santa Isabel
+    const iconSantaIsabel = leaflet.divIcon({
+      className: 'custom-icon-santa',
+      html: `<div style="background-color: #f59e0b; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    // Marcador Unidade Cabral
+    leaflet.marker(cabralCoords, { icon: iconCabral })
+      .addTo(map)
+      .bindPopup('<b>Espaço Felicitá • Unidade Cabral / Centro (Líder)</b><br>R. Governador Tibério Nunes, 614 - Teresina/PI')
+      .openPopup();
+
+    // Raio de 10 km a partir da Unidade Cabral
+    leaflet.circle(cabralCoords, {
+      color: '#0d9488',
+      fillColor: '#0d9488',
+      fillOpacity: 0.18,
+      weight: 2,
+      radius: 10000
+    }).addTo(map);
+
+    // Marcador Unidade Santa Isabel
+    leaflet.marker(santaIsabelCoords, { icon: iconSantaIsabel })
+      .addTo(map)
+      .bindPopup('<b>Espaço Felicitá • Unidade Santa Isabel</b><br>R. Des. João de Deus Lima, 1055 - Teresina/PI');
+
+    // Raio de 10 km a partir da Unidade Santa Isabel
+    leaflet.circle(santaIsabelCoords, {
+      color: '#f59e0b',
+      fillColor: '#f59e0b',
+      fillOpacity: 0.18,
+      weight: 2,
+      radius: 10000
+    }).addTo(map);
+  </script>
+</body>
+</html>

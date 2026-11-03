@@ -805,14 +805,14 @@
                   <td class="py-2.5 px-3">Especialidade</td>
                   <td class="py-2.5 px-3 text-slate-400">--</td>
                   <td class="py-2.5 px-3 text-center font-mono text-slate-400">0s</td>
-                  <td class="py-2.5 px-3 text-right"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Perdida</span></td>
+                  <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Perdida</span></td>
                 </tr>
                 <tr class="hover:bg-slate-50/60">
                   <td class="py-2.5 px-3 font-medium text-slate-900">15/09/2026 16:00:00</td>
                   <td class="py-2.5 px-3">Especialidade</td>
                   <td class="py-2.5 px-3 text-slate-400">--</td>
                   <td class="py-2.5 px-3 text-center font-mono text-slate-400">0s</td>
-                  <td class="py-2.5 px-3 text-right"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Perdida</span></td>
+                  <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Perdida</span></td>
                 </tr>
                 <tr class="hover:bg-teal-50/30">
                   <td class="py-2.5 px-3 font-medium text-slate-900">15/09/2026 16:00:00</td>
@@ -1216,24 +1216,24 @@
       }
     });
 
-    // Mapa Leaflet - 2 Unidades em Teresina (PI)
+    // Mapa Leaflet - 2 Unidades em Teresina (PI) com OpenStreetMap (sem chave de API)
     const cabralCoords = [-5.0825, -42.8125];
     const santaIsabelCoords = [-5.0875, -42.7750];
 
-    const map = leaflet.map('map', {
+    const map = L.map('map', {
       center: [-5.085, -42.794],
       zoom: 12,
       scrollWheelZoom: false
     });
 
-    leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      subdomains: 'abcd',
+    // Camada pública e livre do OpenStreetMap
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
     }).addTo(map);
 
     // Ícone da Unidade Líder (Cabral)
-    const iconCabral = leaflet.divIcon({
+    const iconCabral = L.divIcon({
       className: 'custom-icon-cabral',
       html: `<div style="background-color: #0d9488; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>`,
       iconSize: [18, 18],
@@ -1241,7 +1241,7 @@
     });
 
     // Ícone da Unidade Santa Isabel
-    const iconSantaIsabel = leaflet.divIcon({
+    const iconSantaIsabel = L.divIcon({
       className: 'custom-icon-santa',
       html: `<div style="background-color: #f59e0b; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>`,
       iconSize: [18, 18],
@@ -1249,13 +1249,13 @@
     });
 
     // Marcador Unidade Cabral
-    leaflet.marker(cabralCoords, { icon: iconCabral })
+    L.marker(cabralCoords, { icon: iconCabral })
       .addTo(map)
       .bindPopup('<b>Espaço Felicitá • Unidade Cabral / Centro (Líder)</b><br>R. Governador Tibério Nunes, 614 - Teresina/PI')
       .openPopup();
 
     // Raio de 10 km a partir da Unidade Cabral
-    leaflet.circle(cabralCoords, {
+    L.circle(cabralCoords, {
       color: '#0d9488',
       fillColor: '#0d9488',
       fillOpacity: 0.18,
@@ -1264,12 +1264,12 @@
     }).addTo(map);
 
     // Marcador Unidade Santa Isabel
-    leaflet.marker(santaIsabelCoords, { icon: iconSantaIsabel })
+    L.marker(santaIsabelCoords, { icon: iconSantaIsabel })
       .addTo(map)
       .bindPopup('<b>Espaço Felicitá • Unidade Santa Isabel</b><br>R. Des. João de Deus Lima, 1055 - Teresina/PI');
 
     // Raio de 10 km a partir da Unidade Santa Isabel
-    leaflet.circle(santaIsabelCoords, {
+    L.circle(santaIsabelCoords, {
       color: '#f59e0b',
       fillColor: '#f59e0b',
       fillOpacity: 0.18,

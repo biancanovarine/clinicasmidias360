@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • Clínica Soft &amp; Dra. Laís Fraga</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+      #map { height: 350px !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              SF
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Clínica Soft &amp; Dra. Laís Fraga</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Endocrinologia • Psiquiatria • São Paulo</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período: 01/10/2026 - 10/11/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  Operação Dual Integrada (CNPJ Clínica Soft + CPF Dra. Laís)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões Consolidadas</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">55.055</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições a respeito da sua especialidade</p>
+        </div>
+
+        <!-- Card 2: Cliques Diretos com Divisão Obrigatória Soft vs Lais -->
+        <div class="bg-white rounded-[2rem] p-6 border border-teal-500/50 shadow-lg shadow-teal-500/10 flex flex-col justify-between hover:border-teal-600 transition duration-300">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-900 uppercase tracking-wider">Cliques Diretos</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-100 text-teal-800">Total Unificado</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">2.545</span>
+              <span class="text-xs text-slate-500 font-medium">cliques</span>
+            </div>
+          </div>
+          
+          <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-600 font-medium flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                Campanha Soft (CNPJ):
+              </span>
+              <strong class="text-slate-900 font-bold">2.070 (81,3%)</strong>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-600 font-medium flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                Campanha Laís (CPF):
+              </span>
+              <strong class="text-slate-900 font-bold">475 (18,7%)</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: CTR Consolidado -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR Consolidado</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+45,7%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">4,62%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% benchmark</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Elevada atratividade no segmento da saúde</p>
+        </div>
+
+        <!-- Card 4: Acessos Doctoralia -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acessos Doctoralia</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">2.834</span>
+            </div>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-teal-50 border border-teal-200/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="text-[11px] font-bold text-teal-800">89,80% originados do Ads no Perfil</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Cliques no Telefone -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques no Telefone</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-teal-700">264</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Contatos que chegaram até sua secretária</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: ESTRUTURA DE CAMPANHAS & PERFORMANCE (SOFT + LAÍS) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estrutura de Campanhas &amp; Performance por Conta</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Desempenho detalhado das 6 frentes ativas divididas entre as contas Clínica Soft (CNPJ) e Dra. Laís Fraga (CPF).</p>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <span class="text-xs font-semibold px-2.5 py-1 bg-teal-50 text-teal-800 border border-teal-200 rounded-lg">
+            Conta Soft (CNPJ)
+          </span>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg">
+            Conta Laís (CPF)
+          </span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[760px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right">CTR</th>
+              <th class="py-3 px-4 text-right">CPC Médio</th>
+              <th class="py-3 px-4 text-right">Topo Pg. (Top 3)</th>
+              <th class="py-3 px-4 text-right">1ª Pos. Abs.</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Ganho Leilão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- CONTA SOFT (CNPJ) -->
+            <tr class="bg-teal-50/20 font-semibold text-teal-950">
+              <td colspan="8" class="py-2 px-4 uppercase text-[10px] tracking-wider text-teal-800 bg-teal-50/60 font-extrabold">
+                • Matrícula 1: Clínica Soft (Conta CNPJ)
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Soft - Endocrinologia</td>
+              <td class="py-3 px-4 text-right font-medium">27.989</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">1.328</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,74%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,81</td>
+              <td class="py-3 px-4 text-right font-medium">62,65%</td>
+              <td class="py-3 px-4 text-right font-medium">20,97%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">11,66%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Soft - Psiquiatria</td>
+              <td class="py-3 px-4 text-right font-medium">15.138</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">738</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,88%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,83</td>
+              <td class="py-3 px-4 text-right font-medium">62,96%</td>
+              <td class="py-3 px-4 text-right font-medium">22,45%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">&lt; 10%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Soft - Institucional</td>
+              <td class="py-3 px-4 text-right font-medium">21</td>
+              <td class="py-3 px-4 text-right font-medium">4</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-600">19,05%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,69</td>
+              <td class="py-3 px-4 text-right font-medium">56,25%</td>
+              <td class="py-3 px-4 text-right font-medium">50,00%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">38,10%</td>
+            </tr>
+            <tr class="bg-teal-50/50 font-bold text-teal-950 border-b-2 border-teal-100">
+              <td class="py-2.5 px-4">Subtotal Conta Soft (CNPJ)</td>
+              <td class="py-2.5 px-4 text-right">43.148</td>
+              <td class="py-2.5 px-4 text-right text-teal-800">2.070 (81,3%)</td>
+              <td class="py-2.5 px-4 text-right text-teal-800">4,80%</td>
+              <td class="py-2.5 px-4 text-right">R$ 1,82</td>
+              <td class="py-2.5 px-4 text-right">62,75%</td>
+              <td class="py-2.5 px-4 text-right">21,50%</td>
+              <td class="py-2.5 px-4 text-right">~11,2%</td>
+            </tr>
+
+            <!-- CONTA LAÍS (CPF) -->
+            <tr class="bg-amber-50/20 font-semibold text-amber-950">
+              <td colspan="8" class="py-2 px-4 uppercase text-[10px] tracking-wider text-amber-900 bg-amber-50/60 font-extrabold">
+                • Matrícula 2: Dra. Laís Fraga (Conta CPF)
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Lais - Endocrinologia</td>
+              <td class="py-3 px-4 text-right font-medium">10.751</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">311</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">2,89%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 4,39</td>
+              <td class="py-3 px-4 text-right font-medium">67,08%</td>
+              <td class="py-3 px-4 text-right font-medium">12,33%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">20,86%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Lais - Online</td>
+              <td class="py-3 px-4 text-right font-medium">1.022</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">147</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">14,38%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 5,32</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">90,07%</td>
+              <td class="py-3 px-4 text-right font-medium">16,94%</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-600">36,35%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Lais - Institucional</td>
+              <td class="py-3 px-4 text-right font-medium">134</td>
+              <td class="py-3 px-4 text-right font-medium">17</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-600">12,69%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,00</td>
+              <td class="py-3 px-4 text-right font-medium">63,27%</td>
+              <td class="py-3 px-4 text-right font-medium">43,88%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">47,15%</td>
+            </tr>
+            <tr class="bg-amber-50/50 font-bold text-amber-950 border-b-2 border-amber-200">
+              <td class="py-2.5 px-4">Subtotal Conta Laís (CPF)</td>
+              <td class="py-2.5 px-4 text-right">11.907</td>
+              <td class="py-2.5 px-4 text-right text-amber-800">475 (18,7%)</td>
+              <td class="py-2.5 px-4 text-right text-amber-800">3,99%</td>
+              <td class="py-2.5 px-4 text-right">R$ 4,56</td>
+              <td class="py-2.5 px-4 text-right">69,04%</td>
+              <td class="py-2.5 px-4 text-right">13,10%</td>
+              <td class="py-2.5 px-4 text-right">~22,5%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-900 text-white font-extrabold text-xs">
+              <td class="py-3.5 px-4 rounded-l-xl">Total Geral Consolidado (2 Contas)</td>
+              <td class="py-3.5 px-4 text-right text-teal-300">55.055</td>
+              <td class="py-3.5 px-4 text-right text-teal-300">2.545</td>
+              <td class="py-3.5 px-4 text-right text-amber-300">4,62%</td>
+              <td class="py-3.5 px-4 text-right">R$ 2,33</td>
+              <td class="py-3.5 px-4 text-right">64,11%</td>
+              <td class="py-3.5 px-4 text-right">19,68%</td>
+              <td class="py-3.5 px-4 text-right rounded-r-xl">~14,8%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: PRINCIPAIS TERMOS DE PESQUISA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Principais Termos de Pesquisa (Palavras-Chave)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Termos mais buscados pelos pacientes que geraram cliques e agendamentos nas duas especialidades.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Alta Relevância Clínica
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[620px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Palavra-chave de Pesquisa</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CTR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Principal em destaque translúcido -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                endocrinologista são paulo
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">24.078</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">1.141</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">4,74%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras sp</td>
+              <td class="py-3 px-4 text-right font-medium">4.443</td>
+              <td class="py-3 px-4 text-right font-medium">234</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">5,27%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatra sp</td>
+              <td class="py-3 px-4 text-right font-medium">5.128</td>
+              <td class="py-3 px-4 text-right font-medium">230</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,49%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">endocrinologista</td>
+              <td class="py-3 px-4 text-right font-medium">8.680</td>
+              <td class="py-3 px-4 text-right font-medium">143</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">1,65%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">endocrinologistas</td>
+              <td class="py-3 px-4 text-right font-medium">2.062</td>
+              <td class="py-3 px-4 text-right font-medium">89</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,32%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras são paulo</td>
+              <td class="py-3 px-4 text-right font-medium">1.731</td>
+              <td class="py-3 px-4 text-right font-medium">82</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,74%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras</td>
+              <td class="py-3 px-4 text-right font-medium">1.284</td>
+              <td class="py-3 px-4 text-right font-medium">66</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">5,14%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">endocrinologistas sp</td>
+              <td class="py-3 px-4 text-right font-medium">976</td>
+              <td class="py-3 px-4 text-right font-medium">65</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">6,66%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">endocrinologista são paulo (exato)</td>
+              <td class="py-3 px-4 text-right font-medium">611</td>
+              <td class="py-3 px-4 text-right font-medium">55</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">9,00%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">endocrinologista sp</td>
+              <td class="py-3 px-4 text-right font-medium">430</td>
+              <td class="py-3 px-4 text-right font-medium">48</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">11,16%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra</td>
+              <td class="py-3 px-4 text-right font-medium">910</td>
+              <td class="py-3 px-4 text-right font-medium">45</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,95%</td>
+            </tr>
+            <!-- Termos Online de Alta Conversão -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-900 font-semibold">endocrinologista online</td>
+              <td class="py-3 px-4 text-right font-medium">251</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">44</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-600">17,53%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatra</td>
+              <td class="py-3 px-4 text-right font-medium">648</td>
+              <td class="py-3 px-4 text-right font-medium">35</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">5,40%</td>
+            </tr>
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-900 font-semibold">consulta endocrinologista online</td>
+              <td class="py-3 px-4 text-right font-medium">175</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">32</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-amber-600">18,29%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: HISTÓRICO GERAL DE AGENDAMENTOS & PACIENTES NOVOS (MAIO A OUTUBRO) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Histórico de Agendamentos &amp; Pacientes Novos</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+              Maio a Outubro
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Evolução mensal do volume consolidado de consultas e entrada contínua de novos pacientes na clínica.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl">
+          <span>Série Histórica Fechada</span>
+        </div>
+      </div>
+
+      <!-- CARDS DE DESTAQUE DO HISTÓRICO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <!-- Card 1: Média Mensal de Agendamentos -->
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Média Mensal Estável</span>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-slate-700">~360</span>
+            <span class="text-xs text-slate-500 font-medium">agendamentos/mês</span>
+          </div>
+          <p class="mt-3 text-xs text-slate-500 leading-relaxed pt-3 border-t border-slate-200/80">
+            A clínica mantém patamar consistente acima de 320 consultas mensais, atingindo pico de 394 agendamentos em Julho.
+          </p>
+        </div>
+
+        <!-- Card 2: Novos Pacientes em Outubro -->
+        <div class="bg-teal-50/70 rounded-2xl p-5 border border-teal-200">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-teal-900">Novos Pacientes (Outubro)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-600 text-white">37 Novos</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-teal-700">37</span>
+            <span class="text-xs text-teal-900 font-semibold">novos pacientes</span>
+          </div>
+          <p class="mt-3 text-xs text-teal-800 leading-relaxed pt-3 border-t border-teal-200/60">
+            Atração sustentada de novas primeiras consultas (acumulando 267 novos pacientes entre Maio e Outubro).
+          </p>
+        </div>
+
+        <!-- Card 3: Volume Telefônico Direto -->
+        <div class="bg-emerald-50/70 rounded-2xl p-5 border border-emerald-200">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Impacto na Recepção</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">Alta Demanda</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-3xl font-black text-emerald-800">264</span>
+            <span class="text-xs text-emerald-900 font-semibold">cliques no telefone</span>
+          </div>
+          <p class="mt-3 text-xs text-emerald-900 leading-relaxed pt-3 border-t border-emerald-200/60">
+            Mais de 260 pacientes buscaram contato telefônico imediato para agendamentos e informações na recepção.
+          </p>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS NAS BARRAS (SEM NOVEMBRO) -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: ANÁLISE DETALHADA POR CADA PROFISSIONAL -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Análise Detalhada de Agendamentos por Especialista</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Distribuição individual de consultas realizadas mês a mês por cada médico e terapeuta do corpo clínico.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          10 Especialistas Ativos
+        </span>
+      </div>
+
+      <!-- CARDS EXECUTIVOS DE ANÁLISE POR PROFISSIONAL -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        
+        <!-- Destaque 1: Dra. Laís Fraga -->
+        <div class="p-5 bg-teal-50/70 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-900 uppercase tracking-wider">Liderança Absoluta</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-600 text-white">55,8% do Total</span>
+            </div>
+            <h3 class="text-lg font-extrabold text-teal-950 mt-1">Dra. Laís Fraga</h3>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">1.197</span>
+              <span class="text-xs text-teal-900 font-semibold">consultas no semestre</span>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 border-t border-teal-200/60 text-xs text-teal-900 leading-relaxed">
+            Médica líder da clínica, mantendo média de <strong>~200 consultas/mês</strong> (fechando Outubro com 184 agendamentos).
+          </div>
+        </div>
+
+        <!-- Destaque 2: Dra. Raphaella Gomes -->
+        <div class="p-5 bg-slate-900 text-white rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-400 uppercase tracking-wider">2ª Força Clínica</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-500/30 text-teal-300">26,9% do Total</span>
+            </div>
+            <h3 class="text-lg font-extrabold text-white mt-1">Dra. Raphaella Gomes</h3>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-white">577</span>
+              <span class="text-xs text-slate-300 font-medium">consultas no semestre</span>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-300 leading-relaxed">
+            Forte recuperação em Outubro com <strong>111 consultas</strong> (+126% vs setembro). Juntas, Dra. Laís e Dra. Raphaella somam <strong class="text-teal-400">82,7% de toda a clínica</strong>.
+          </div>
+        </div>
+
+        <!-- Destaque 3: Alysson, Barbara e Equipe -->
+        <div class="p-5 bg-amber-50/70 rounded-2xl border border-amber-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">Crescimento da Equipe</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500 text-white">Recorde Outubro</span>
+            </div>
+            <h3 class="text-lg font-extrabold text-amber-950 mt-1">Dr. Alysson &amp; Dra. Barbara</h3>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-amber-700">34</span>
+              <span class="text-xs text-amber-900 font-semibold">consultas Dr. Alysson em Out</span>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 border-t border-amber-200/60 text-xs text-amber-900 leading-relaxed">
+            Dr. Alysson atingiu seu <strong>recorde histórico (34 consultas)</strong> em Outubro (+88% vs setembro), enquanto Dra. Barbara Leão manteve estabilidade com 18 atendimentos.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TABELA COMPLETA POR ESPECIALISTA -->
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50">
+              <th class="py-3 px-4 rounded-l-xl">Especialista</th>
+              <th class="py-3 px-3 text-center">Maio</th>
+              <th class="py-3 px-3 text-center">Junho</th>
+              <th class="py-3 px-3 text-center">Julho</th>
+              <th class="py-3 px-3 text-center">Agosto</th>
+              <th class="py-3 px-3 text-center">Setembro</th>
+              <th class="py-3 px-3 text-center">Outubro</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Total Semestre</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Laís Fraga -->
+            <tr class="bg-teal-50/40 hover:bg-teal-50 transition font-semibold text-teal-950">
+              <td class="py-3 px-4 font-extrabold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                Laís Fraga
+              </td>
+              <td class="py-3 px-3 text-center">200</td>
+              <td class="py-3 px-3 text-center">183</td>
+              <td class="py-3 px-3 text-center">225</td>
+              <td class="py-3 px-3 text-center">184</td>
+              <td class="py-3 px-3 text-center">221</td>
+              <td class="py-3 px-3 text-center font-black text-teal-800">184</td>
+              <td class="py-3 px-4 text-right font-black text-teal-800">1.197 (55,8%)</td>
+            </tr>
+            <!-- Raphaella Gomes -->
+            <tr class="hover:bg-slate-50 transition font-semibold text-slate-900">
+              <td class="py-2.5 px-4 font-bold">Raphaella Gomes</td>
+              <td class="py-2.5 px-3 text-center">75</td>
+              <td class="py-2.5 px-3 text-center">141</td>
+              <td class="py-2.5 px-3 text-center">97</td>
+              <td class="py-2.5 px-3 text-center">104</td>
+              <td class="py-2.5 px-3 text-center">49</td>
+              <td class="py-2.5 px-3 text-center font-black text-slate-900">111</td>
+              <td class="py-2.5 px-4 text-right font-black text-slate-900">577 (26,9%)</td>
+            </tr>
+            <!-- Alysson Vieira -->
+            <tr class="bg-amber-50/30 hover:bg-amber-50 transition">
+              <td class="py-2 px-4 font-bold text-amber-950">Alysson Emannuel Vieira</td>
+              <td class="py-2 px-3 text-center">11</td>
+              <td class="py-2 px-3 text-center">21</td>
+              <td class="py-2 px-3 text-center">23</td>
+              <td class="py-2 px-3 text-center">20</td>
+              <td class="py-2 px-3 text-center">18</td>
+              <td class="py-2 px-3 text-center font-bold text-amber-700">34</td>
+              <td class="py-2 px-4 text-right font-bold text-amber-800">127 (5,9%)</td>
+            </tr>
+            <!-- Barbara Leão -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 font-medium text-slate-800">Barbara Leão</td>
+              <td class="py-2 px-3 text-center">25</td>
+              <td class="py-2 px-3 text-center">17</td>
+              <td class="py-2 px-3 text-center">25</td>
+              <td class="py-2 px-3 text-center">19</td>
+              <td class="py-2 px-3 text-center">20</td>
+              <td class="py-2 px-3 text-center">18</td>
+              <td class="py-2 px-4 text-right font-semibold text-slate-800">124 (5,8%)</td>
+            </tr>
+            <!-- Mariana Baratojo -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 font-medium text-slate-800">Mariana de Mattos Baratojo</td>
+              <td class="py-2 px-3 text-center">7</td>
+              <td class="py-2 px-3 text-center">8</td>
+              <td class="py-2 px-3 text-center">6</td>
+              <td class="py-2 px-3 text-center">10</td>
+              <td class="py-2 px-3 text-center">11</td>
+              <td class="py-2 px-3 text-center">11</td>
+              <td class="py-2 px-4 text-right font-semibold text-slate-800">53 (2,5%)</td>
+            </tr>
+            <!-- Gabriella Galdino -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 text-slate-600">Gabriella Galdino Vilela Dourado</td>
+              <td class="py-2 px-3 text-center">9</td>
+              <td class="py-2 px-3 text-center">11</td>
+              <td class="py-2 px-3 text-center">5</td>
+              <td class="py-2 px-3 text-center">1</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-4 text-right font-medium text-slate-600">26</td>
+            </tr>
+            <!-- Fernanda Amorim -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 text-slate-600">Fernanda Amorim</td>
+              <td class="py-2 px-3 text-center">3</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-3 text-center">7</td>
+              <td class="py-2 px-3 text-center">4</td>
+              <td class="py-2 px-3 text-center">4</td>
+              <td class="py-2 px-3 text-center">1</td>
+              <td class="py-2 px-4 text-right font-medium text-slate-600">21</td>
+            </tr>
+            <!-- Lorenna Menezes -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 text-slate-600">Lorenna Oliveira Menezes</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-3 text-center">3</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-3 text-center">1</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-4 text-right font-medium text-slate-600">12</td>
+            </tr>
+            <!-- Carolina Silveira -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 text-slate-600">Carolina Silveira</td>
+              <td class="py-2 px-3 text-center">1</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-3 text-center">3</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-3 text-center">2</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-4 text-right font-medium text-slate-600">8</td>
+            </tr>
+            <!-- José Humberto -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2 px-4 text-slate-600">José Humberto Guimarães</td>
+              <td class="py-2 px-3 text-center">1</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-3 text-center text-slate-400">—</td>
+              <td class="py-2 px-4 text-right font-medium text-slate-600">1</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-100 font-extrabold text-slate-900 text-xs border-t-2 border-slate-200">
+              <td class="py-3 px-4 rounded-l-xl">Total por Mês</td>
+              <td class="py-3 px-3 text-center">334</td>
+              <td class="py-3 px-3 text-center">385</td>
+              <td class="py-3 px-3 text-center">394</td>
+              <td class="py-3 px-3 text-center">346</td>
+              <td class="py-3 px-3 text-center">326</td>
+              <td class="py-3 px-3 text-center text-teal-800">361</td>
+              <td class="py-3 px-4 text-right rounded-r-xl">2.146</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: PERFORMANCE GEOGRÁFICA & RAIO DE COBERTURA (SÃO PAULO - PARAÍSO) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Performance Geográfica &amp; Raio de Cobertura</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Sede no bairro Paraíso com raio estratégico de 12km cobrindo os bairros de maior potencial de São Paulo.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          R. Teixeira da Silva, 34 - Paraíso
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Mapa Leaflet Interativo -->
+        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner h-80 sm:h-96 relative">
+          <div id="map" class="w-full h-full"></div>
+        </div>
+
+        <!-- Card Lateral de Abrangência -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-teal-400">Cobertura da Capital (SP)</h3>
+            <p class="text-xs text-slate-300 mt-1">Captação presencial de alto padrão combinada à modalidade de telemedicina.</p>
+
+            <div class="mt-5 space-y-3.5">
+              <div class="p-3.5 bg-teal-950/60 rounded-xl border border-teal-500/40">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">Raio de 12 km (Sede Paraíso)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded font-semibold">Core SP</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  Engloba <strong>Paraíso, Jardins, Bela Vista, Vila Mariana, Moema, Itaim Bibi, Pinheiros, Perdizes, Higienópolis e Saúde</strong>.
+                </p>
+              </div>
+
+              <div class="p-3.5 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-400">Alcance Digital (Telemedicina)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">Brasil</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  Campanhas online especializadas em Endocrinologia capturando pacientes de todo o estado com CTR de até 14,38%.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+            Localização privilegiada na região da Av. Paulista com fácil acesso pelas linhas Azul e Verde do Metrô.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 7: AUTORIDADE & PROVA SOCIAL NA DOCTORALIA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Autoridade &amp; Prova Social na Doctoralia</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Validação de reputação e impacto da sinergia entre tráfego pago qualificado e perfis médicos consolidados.</p>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold self-start sm:self-auto">
+          <span>Doctoralia Perfil Verificado</span>
+          <span class="text-amber-500 tracking-wider">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Opiniões Totais -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patrimônio de Opiniões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-slate-900">220</span>
+              <span class="text-sm font-bold text-emerald-600">Avaliações Validadas</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-500 text-lg mt-1">
+              ★★★★★
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 mt-4 leading-relaxed">
+            Com 220 avaliações de nota máxima, a clínica e a Dra. Laís Fraga consolidam autoridade indiscutível em São Paulo, eliminando barreiras de confiança no momento da decisão do paciente.
+          </p>
+        </div>
+
+        <!-- Card Novas Opiniões -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">Atualizações no Período</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-600 text-white">+10 Novas</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-teal-700">10</span>
+              <span class="text-sm font-semibold text-teal-900">avaliações recentes</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white/80 rounded-xl border border-teal-200/70 text-xs text-teal-950 leading-relaxed font-medium">
+            Sabemos que mais de 70% dos pacientes que entram no perfil médico olham esta seção antes de agendar consulta. Manter essa constância contínua de novas opiniões é fator determinante para manter altas taxas de conversão no consultório e teleconsultas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório executivo unificado • Gestão estratégica de campanhas médicas em São Paulo.</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Plugin Nativo para Desenhar Rótulos de Dados sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val, bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Maio a Outubro - Sem Novembro)
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [280, 385, 394, 346, 326, 361],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [280, 385, 394, 346, 326, 361],
+            backgroundColor: '#0d9488',
+            borderRadius: 8,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [42, 54, 51, 40, 43, 37],
+            backgroundColor: '#64748b',
+            borderRadius: 8,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 440,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Mapa Leaflet - São Paulo (Paraíso) com OpenStreetMap (sem chave de API)
+    const spCoords = [-23.5710, -46.6475];
+
+    const map = L.map('map', {
+      center: spCoords,
+      zoom: 12,
+      scrollWheelZoom: false
+    });
+
+    // Camada pública do OpenStreetMap
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Ícone da Clínica
+    const iconClinic = L.divIcon({
+      className: 'custom-icon-clinic',
+      html: `<div style="background-color: #0d9488; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    // Marcador Sede
+    L.marker(spCoords, { icon: iconClinic })
+      .addTo(map)
+      .bindPopup('<b>Clínica Soft &amp; Dra. Laís Fraga</b><br>R. Teixeira da Silva, 34 - Cj. 63 - Paraíso / São Paulo - SP')
+      .openPopup();
+
+    // Raio de 12 km em São Paulo
+    L.circle(spCoords, {
+      color: '#0d9488',
+      fillColor: '#0d9488',
+      fillOpacity: 0.16,
+      weight: 2.5,
+      radius: 12000
+    }).addTo(map);
+  </script>
+</body>
+</html>

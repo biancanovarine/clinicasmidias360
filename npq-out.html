@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • NPQ - Saúde Mental</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+      #map { height: 380px !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              NPQ
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">NPQ - Saúde Mental</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Psiquiatria • Telemedicina</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período Analisado: 01/10/2026 - 10/11/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  Segmentação de Alta Renda Nacional (4 Capitais)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">4.965</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições segmentadas em polos de alta renda</p>
+        </div>
+
+        <!-- Card 2: Cliques Diretos -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques Diretos</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">618</span>
+            </div>
+          </div>
+          <p class="text-xs text-teal-700 font-medium mt-4">Tráfego qualificado para teleconsulta Doctoralia</p>
+        </div>
+
+        <!-- Card 3: CTR Consolidado -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR Consolidado</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+292,7%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">12,45%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% benchmark</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Taxa excepcional de interesse em telepsiquiatria</p>
+        </div>
+
+        <!-- Card 4: Acessos Doctoralia -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acessos Doctoralia</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">678</span>
+            </div>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-teal-50 border border-teal-200/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="text-[11px] font-bold text-teal-800">91,15% originados do Ads no Perfil</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Cliques no Telefone -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques no Telefone</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-teal-700">50</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Contatos diretos com a equipe de atendimento</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: ESTRUTURA DE CAMPANHAS & PERFORMANCE -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estrutura de Campanhas &amp; Performance</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Detalhamento das frentes de Telemedicina (Online) e Proteção de Marca (Institucional) no Google Ads.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          2 Frentes Ativas
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[760px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-4">Grupo de Anúncios</th>
+              <th class="py-3 px-3 text-right">Impressões</th>
+              <th class="py-3 px-3 text-right">Cliques</th>
+              <th class="py-3 px-3 text-right">CTR</th>
+              <th class="py-3 px-3 text-right">CPC Médio</th>
+              <th class="py-3 px-3 text-right">Topo Pg. (Top 3)</th>
+              <th class="py-3 px-3 text-right">1ª Pos. Abs.</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Ganho Leilão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Online</td>
+              <td class="py-3.5 px-4 font-mono text-slate-600">psiquiatra {78}</td>
+              <td class="py-3.5 px-3 text-right font-medium">4.958</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">618</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">12,46%</td>
+              <td class="py-3.5 px-3 text-right font-medium">R$ 7,26</td>
+              <td class="py-3.5 px-3 text-right font-medium">89,08%</td>
+              <td class="py-3.5 px-3 text-right font-medium">32,90%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">20,73%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3.5 px-4 font-mono text-slate-600">npq-saude-mental</td>
+              <td class="py-3.5 px-3 text-right font-medium">7</td>
+              <td class="py-3.5 px-3 text-right font-medium">0</td>
+              <td class="py-3.5 px-3 text-right font-medium text-slate-400">0,00%</td>
+              <td class="py-3.5 px-3 text-right font-medium text-slate-400">--</td>
+              <td class="py-3.5 px-3 text-right font-medium">100,00%</td>
+              <td class="py-3.5 px-3 text-right font-medium">100,00%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">&lt; 10%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-900 text-white font-extrabold text-xs">
+              <td class="py-3.5 px-4 rounded-l-xl" colspan="2">Total / Médias Consolidadas</td>
+              <td class="py-3.5 px-3 text-right text-teal-300">4.965</td>
+              <td class="py-3.5 px-3 text-right text-teal-300">618</td>
+              <td class="py-3.5 px-3 text-right text-amber-300">12,45%</td>
+              <td class="py-3.5 px-3 text-right">R$ 7,26</td>
+              <td class="py-3.5 px-3 text-right">89,10%</td>
+              <td class="py-3.5 px-3 text-right">32,99%</td>
+              <td class="py-3.5 px-4 text-right rounded-r-xl">20,73%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: PRINCIPAIS TERMOS DE PESQUISA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Principais Termos de Pesquisa (Palavras-Chave)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Consultas de alta intenção focadas em atendimento psiquiátrico online e telemedicina.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Alta Intenção Digital
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[620px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Palavra-chave de Pesquisa</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CTR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Principal em destaque translúcido -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                psiquiatra online
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">1.828</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">287</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">15,70%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatra online</td>
+              <td class="py-3 px-4 text-right font-medium">754</td>
+              <td class="py-3 px-4 text-right font-medium">108</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">14,32%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras online</td>
+              <td class="py-3 px-4 text-right font-medium">897</td>
+              <td class="py-3 px-4 text-right font-medium">57</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">6,35%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatria online</td>
+              <td class="py-3 px-4 text-right font-medium">488</td>
+              <td class="py-3 px-4 text-right font-medium">57</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,68%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra online (correspondência exata)</td>
+              <td class="py-3 px-4 text-right font-medium">412</td>
+              <td class="py-3 px-4 text-right font-medium">55</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">13,35%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra telemedicina</td>
+              <td class="py-3 px-4 text-right font-medium">121</td>
+              <td class="py-3 px-4 text-right font-medium">16</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">13,22%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatria telemedicina</td>
+              <td class="py-3 px-4 text-right font-medium">116</td>
+              <td class="py-3 px-4 text-right font-medium">12</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">10,34%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras online (exata)</td>
+              <td class="py-3 px-4 text-right font-medium">50</td>
+              <td class="py-3 px-4 text-right font-medium">9</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">18,00%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra telemedicina (frase)</td>
+              <td class="py-3 px-4 text-right font-medium">136</td>
+              <td class="py-3 px-4 text-right font-medium">6</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,41%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatria online (frase)</td>
+              <td class="py-3 px-4 text-right font-medium">123</td>
+              <td class="py-3 px-4 text-right font-medium">6</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,88%</td>
+            </tr>
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-semibold">psiquiatria infantil telemedicina</td>
+              <td class="py-3 px-4 text-right font-medium">2</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">2</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-600">100,00%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatra telemedicina</td>
+              <td class="py-3 px-4 text-right font-medium">4</td>
+              <td class="py-3 px-4 text-right font-medium">1</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">25,00%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatria online</td>
+              <td class="py-3 px-4 text-right font-medium">6</td>
+              <td class="py-3 px-4 text-right font-medium">1</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">16,67%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatria telemedicina</td>
+              <td class="py-3 px-4 text-right font-medium">6</td>
+              <td class="py-3 px-4 text-right font-medium">1</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">16,67%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: HISTÓRICO DE AGENDAMENTOS & PACIENTES NOVOS (COM CONTEXTO DE FÉRIAS) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Histórico de Agendamentos &amp; Pacientes Novos</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+              Março a Novembro (Parcial)
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Acompanhamento mensal de consultas e entrada de pacientes novos, considerando o período de recesso entre 17/09 e 21/10.</p>
+        </div>
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl">
+          <span>Recesso / Férias: 17/09 a 21/10</span>
+        </div>
+      </div>
+
+      <!-- CARDS DE DESTAQUE DO HISTÓRICO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <!-- Card 1: Desempenho Pré-Férias -->
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Ritmo Regular (Mar–Ago)</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-slate-800">142</span>
+              <span class="text-xs text-slate-500 font-medium">agendamentos/mês</span>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-slate-600 leading-relaxed pt-3 border-t border-slate-200/80">
+            Crescimento contínuo antes das férias, atingindo pico de <strong>212 consultas em Julho</strong> e recorde de <strong>54 novos pacientes em Agosto</strong>.
+          </p>
+        </div>
+
+        <!-- Card 2: Impacto do Período de Férias -->
+        <div class="bg-amber-50/70 rounded-2xl p-5 border border-amber-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-950">Período de Férias</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500 text-white">17/09 – 21/10</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-amber-700">89 / 95</span>
+              <span class="text-xs text-amber-950 font-semibold">Setembro / Outubro</span>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-amber-950 leading-relaxed pt-3 border-t border-amber-200/80">
+            Mesmo com a agenda reduzida pelas férias entre <strong>17/09 e 21/10</strong>, a clínica manteve fluxo ativo com <strong>46 novos pacientes</strong> captados no bimestre.
+          </p>
+        </div>
+
+        <!-- Card 3: Retomada Acelerada em Novembro -->
+        <div class="bg-teal-50/80 rounded-2xl p-5 border-2 border-teal-500/40 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-teal-950">Retomada Pós-Férias</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-600 text-white">Até Dia 12/11</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">86</span>
+              <span class="text-xs text-teal-900 font-semibold">agendamentos em 12 dias</span>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-teal-900 leading-relaxed pt-3 border-t border-teal-200">
+            Em apenas 12 dias de Novembro, o volume já praticamente igualou o mês inteiro de Setembro (89), projetando fechamento acima de <strong>215 consultas</strong> no mês.
+          </p>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS NAS BARRAS -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: PERFORMANCE GEOGRÁFICA & SEGMENTAÇÃO DE ALTA RENDA NACIONAL -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Performance Geográfica &amp; Segmentação de Alta Renda Nacional</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Estratégia nacional de telemedicina direcionada aos bairros de maior poder aquisitivo em 4 grandes capitais brasileiras.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          4 Capitais • 5 Polos Estratégicos
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Mapa Leaflet Interativo Nacional -->
+        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner h-80 sm:h-[26rem] relative">
+          <div id="map" class="w-full h-full"></div>
+        </div>
+
+        <!-- Card Lateral com os 4 Polos de Alta Renda -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-teal-400">Polos de Alta Renda Ativos</h3>
+            <p class="text-xs text-slate-300 mt-1">Captação hipersegmentada para atendimento psiquiátrico particular via telemedicina.</p>
+
+            <div class="mt-4 space-y-2.5">
+              <!-- SP -->
+              <div class="p-3 bg-teal-950/60 rounded-xl border border-teal-500/40">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">São Paulo (SP)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded font-semibold">Raio 6 km</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1">Concentrado no <strong>Itaim Bibi e Jardins</strong>.</p>
+              </div>
+
+              <!-- BH -->
+              <div class="p-3 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-400">Belo Horizonte (MG)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">Raio 6 km</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1">A partir da <strong>Praça da Liberdade / Lourdes</strong>.</p>
+              </div>
+
+              <!-- Curitiba -->
+              <div class="p-3 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">Curitiba (PR)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">Raio 5 km</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1">Centrado no bairro <strong>Batel</strong>.</p>
+              </div>
+
+              <!-- Rio de Janeiro -->
+              <div class="p-3 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-400">Rio de Janeiro (RJ)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">Raios 2 km</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1"><strong>Península e Jardim Oceânico</strong> (Barra da Tijuca).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+            Clique nos marcadores do mapa para visualizar os raios exatos de segmentação em cada capital.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: AUTORIDADE & PROVA SOCIAL NA DOCTORALIA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Autoridade &amp; Prova Social na Doctoralia</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Validação de reputação para pacientes particulares que buscam atendimento psiquiátrico online de excelência.</p>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold self-start sm:self-auto">
+          <span>Doctoralia Perfil Verificado</span>
+          <span class="text-amber-500 tracking-wider">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Opiniões Totais -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patrimônio de Opiniões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-slate-900">120</span>
+              <span class="text-sm font-bold text-emerald-600">Avaliações Validadas</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-500 text-lg mt-1">
+              ★★★★★
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 mt-4 leading-relaxed">
+            Na telemedicina, a confiança digital é o fator decisivo de escolha. Com 120 avaliações de nota máxima, a NPQ - Saúde Mental transmite segurança imediata para o paciente agendar sua teleconsulta.
+          </p>
+        </div>
+
+        <!-- Card Novas Opiniões -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">Atualizações no Período</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-600 text-white">+14 Novas</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-teal-700">14</span>
+              <span class="text-sm font-semibold text-teal-900">avaliações recentes</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white/80 rounded-xl border border-teal-200/70 text-xs text-teal-950 leading-relaxed font-medium">
+            Sabemos que mais de 70% dos pacientes que entram no perfil médico olham esta seção antes de agendar. O ganho contínuo de +14 novas opiniões sustenta a alta taxa de conversão do tráfego pago em teleconsultas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório executivo de performance • Telemedicina e Segmentação de Alta Renda Nacional.</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Plugin Nativo para Desenhar Rótulos de Dados Nítidos sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val, bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Março a Novembro Parcial)
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
+          'Setembro (férias)', 'Outubro (férias)', 'Novembro (até 12)'
+        ],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [87, 125, 107, 148, 212, 173, 89, 95, 86],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [87, 125, 107, 148, 212, 173, 89, 95, 86],
+            backgroundColor: [
+              '#0d9488', '#0d9488', '#0d9488', '#0d9488', '#0d9488', '#0d9488',
+              '#f59e0b', '#f59e0b', '#14b8a6'
+            ],
+            borderRadius: 8,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [24, 43, 39, 45, 41, 54, 24, 22, 20],
+            backgroundColor: '#64748b',
+            borderRadius: 8,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 245,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Mapa Leaflet - Segmentação de Alta Renda Nacional (SP, BH, Curitiba, RJ)
+    const poles = [
+      {
+        name: 'São Paulo (SP) • Itaim Bibi & Jardins',
+        desc: 'Raio de 6km concentrado no Itaim Bibi e Jardins',
+        coords: [-23.5815, -46.6745],
+        radius: 6000,
+        color: '#0d9488'
+      },
+      {
+        name: 'Belo Horizonte (MG) • Praça da Liberdade / Lourdes',
+        desc: 'Raio de 6km a partir da Praça da Liberdade / Lourdes',
+        coords: [-19.9320, -43.9380],
+        radius: 6000,
+        color: '#f59e0b'
+      },
+      {
+        name: 'Curitiba (PR) • Batel',
+        desc: 'Raio de 5km centrado no bairro Batel',
+        coords: [-25.4420, -49.2865],
+        radius: 5000,
+        color: '#0d9488'
+      },
+      {
+        name: 'Rio de Janeiro (RJ) • Península (Barra da Tijuca)',
+        desc: 'Raio de 2km na Península (Barra da Tijuca)',
+        coords: [-22.9885, -43.3545],
+        radius: 2000,
+        color: '#f59e0b'
+      },
+      {
+        name: 'Rio de Janeiro (RJ) • Jardim Oceânico (Barra da Tijuca)',
+        desc: 'Raio de 2km no Jardim Oceânico (Barra da Tijuca)',
+        coords: [-23.0115, -43.3065],
+        radius: 2000,
+        color: '#f59e0b'
+      }
+    ];
+
+    const map = L.map('map', {
+      center: [-22.8, -46.2],
+      zoom: 6,
+      scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    const bounds = [];
+
+    poles.forEach((p, idx) => {
+      const icon = L.divIcon({
+        className: 'custom-pole-icon',
+        html: `<div style="background-color: ${p.color}; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.4);"></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+      });
+
+      const marker = L.marker(p.coords, { icon })
+        .addTo(map)
+        .bindPopup(`<b>${p.name}</b><br>${p.desc}`);
+
+      if (idx === 0) marker.openPopup();
+
+      L.circle(p.coords, {
+        color: p.color,
+        fillColor: p.color,
+        fillOpacity: 0.22,
+        weight: 2,
+        radius: p.radius
+      }).addTo(map);
+
+      bounds.push(p.coords);
+    });
+
+    map.fitBounds(bounds, { padding: [45, 45] });
+  </script>
+</body>
+</html>

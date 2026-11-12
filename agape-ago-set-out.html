@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • Clínica Agape</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+      #map { height: 350px !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              CA
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Clínica Agape</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Nutrologia • Belo Horizonte</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período Analisado: 01/08/2026 - 31/10/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  Trimestre Consolidado (Ago • Set • Out)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">12.658</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições a respeito da sua especialidade</p>
+        </div>
+
+        <!-- Card 2: Cliques Diretos -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques Diretos</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">2.202</span>
+            </div>
+          </div>
+          <p class="text-xs text-teal-700 font-medium mt-4">Tráfego direcionado para o perfil Doctoralia</p>
+        </div>
+
+        <!-- Card 3: CTR Consolidado -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR Consolidado</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+448,9%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">17,40%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% benchmark</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Atratividade extraordinária em Belo Horizonte</p>
+        </div>
+
+        <!-- Card 4: Acessos Doctoralia -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acessos Doctoralia</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">4.073</span>
+            </div>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-teal-50 border border-teal-200/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="text-[11px] font-bold text-teal-800">54,06% originados do Ads no Perfil</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Cliques no Telefone -->
+        <div class="bg-white rounded-[2rem] p-6 border border-teal-500/40 shadow-lg shadow-teal-500/10 flex flex-col justify-between hover:border-teal-600 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-teal-900 uppercase tracking-wider">Cliques no Telefone</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">614</span>
+            </div>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-100">
+            <p class="text-xs text-slate-700 font-bold">Telefone: (31) 3291-075</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Contatos que chegaram até sua secretária</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: ESTRUTURA DE CAMPANHAS POR MÊS & TOTAL CONSOLIDADO -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estrutura de Campanhas por Mês &amp; Consolidado</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Evolução mensal detalhada entre Agosto, Setembro e Outubro de 2026 com fechamento consolidado do trimestre.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          Agosto • Setembro • Outubro
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[780px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-3">Mês</th>
+              <th class="py-3 px-3 text-right">Impressões</th>
+              <th class="py-3 px-3 text-right">Cliques</th>
+              <th class="py-3 px-3 text-right">CTR</th>
+              <th class="py-3 px-3 text-right">CPC Médio</th>
+              <th class="py-3 px-3 text-right">Topo Pg. (Top 3)</th>
+              <th class="py-3 px-3 text-right">1ª Pos. Abs.</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Ganho Leilão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- AGOSTO DE 2026 -->
+            <tr class="bg-slate-50/70">
+              <td colspan="9" class="py-2 px-4 uppercase text-[10px] tracking-wider text-slate-600 font-extrabold">
+                • Agosto de 2026 (729 cliques | CTR 15,40%)
+              </td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Especialidade - Nutrologia</td>
+              <td class="py-3 px-3 text-slate-500">Agosto/2026</td>
+              <td class="py-3 px-3 text-right font-medium">3.807</td>
+              <td class="py-3 px-3 text-right font-bold text-teal-700">512</td>
+              <td class="py-3 px-3 text-right font-semibold">13,45%</td>
+              <td class="py-3 px-3 text-right font-medium">R$ 3,96</td>
+              <td class="py-3 px-3 text-right font-medium">83,67%</td>
+              <td class="py-3 px-3 text-right font-medium">56,70%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">42,25%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3 px-3 text-slate-500">Agosto/2026</td>
+              <td class="py-3 px-3 text-right font-medium">928</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-700">217</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-600">23,38%</td>
+              <td class="py-3 px-3 text-right font-medium">R$ 2,33</td>
+              <td class="py-3 px-3 text-right font-medium">94,90%</td>
+              <td class="py-3 px-3 text-right font-medium">92,86%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">78,64%</td>
+            </tr>
+
+            <!-- SETEMBRO DE 2026 -->
+            <tr class="bg-slate-50/70">
+              <td colspan="9" class="py-2 px-4 uppercase text-[10px] tracking-wider text-slate-600 font-extrabold">
+                • Setembro de 2026 (718 cliques | CTR 18,42%)
+              </td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Especialidade - Nutrologia</td>
+              <td class="py-3 px-3 text-slate-500">Setembro/2026</td>
+              <td class="py-3 px-3 text-right font-medium">2.944</td>
+              <td class="py-3 px-3 text-right font-bold text-teal-700">523</td>
+              <td class="py-3 px-3 text-right font-semibold">17,76%</td>
+              <td class="py-3 px-3 text-right font-medium">R$ 3,87</td>
+              <td class="py-3 px-3 text-right font-medium">86,28%</td>
+              <td class="py-3 px-3 text-right font-medium">59,92%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">30,62%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3 px-3 text-slate-500">Setembro/2026</td>
+              <td class="py-3 px-3 text-right font-medium">954</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-700">195</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-600">20,44%</td>
+              <td class="py-3 px-3 text-right font-medium">R$ 2,27</td>
+              <td class="py-3 px-3 text-right font-medium">95,03%</td>
+              <td class="py-3 px-3 text-right font-medium">93,00%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">86,62%</td>
+            </tr>
+
+            <!-- OUTUBRO DE 2026 -->
+            <tr class="bg-slate-50/70">
+              <td colspan="9" class="py-2 px-4 uppercase text-[10px] tracking-wider text-slate-600 font-extrabold">
+                • Outubro de 2026 (755 cliques | CTR 18,76%)
+              </td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Especialidade - Nutrologia</td>
+              <td class="py-3 px-3 text-slate-500">Outubro/2026</td>
+              <td class="py-3 px-3 text-right font-medium">3.098</td>
+              <td class="py-3 px-3 text-right font-bold text-teal-700">529</td>
+              <td class="py-3 px-3 text-right font-semibold">17,08%</td>
+              <td class="py-3 px-3 text-right font-medium">R$ 3,83</td>
+              <td class="py-3 px-3 text-right font-medium">86,43%</td>
+              <td class="py-3 px-3 text-right font-medium">60,08%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">37,10%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3 px-3 text-slate-500">Outubro/2026</td>
+              <td class="py-3 px-3 text-right font-medium">927</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-700">226</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-600">24,38%</td>
+              <td class="py-3 px-3 text-right font-medium">R$ 2,20</td>
+              <td class="py-3 px-3 text-right font-medium">93,01%</td>
+              <td class="py-3 px-3 text-right font-medium">86,21%</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">90,37%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-900 text-white font-extrabold text-xs">
+              <td class="py-3.5 px-4 rounded-l-xl" colspan="2">Total / Médias Consolidadas</td>
+              <td class="py-3.5 px-3 text-right text-teal-300">12.658</td>
+              <td class="py-3.5 px-3 text-right text-teal-300">2.202</td>
+              <td class="py-3.5 px-3 text-right text-amber-300">17,40%</td>
+              <td class="py-3.5 px-3 text-right">R$ 3,42</td>
+              <td class="py-3.5 px-3 text-right">87,32%</td>
+              <td class="py-3.5 px-3 text-right">65,82%</td>
+              <td class="py-3.5 px-4 text-right rounded-r-xl">47,82%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: PRINCIPAIS TERMOS DE PESQUISA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Principais Termos de Pesquisa (Palavras-Chave)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Consultas mais digitadas pelos pacientes em Belo Horizonte com altíssima taxa de conversão em cliques.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Termos Mais Relevantes
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[620px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Palavra-chave de Pesquisa</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CTR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Principal em destaque translúcido -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                nutrologo belo horizonte
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">4.076</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">717</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">17,59%</td>
+            </tr>
+            <!-- Termo de Marca -->
+            <tr class="bg-amber-50/60 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-bold">clínica agape (marca)</td>
+              <td class="py-3 px-4 text-right font-semibold">2.809</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-800">638</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-700">22,71%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">nutrologo consulta</td>
+              <td class="py-3 px-4 text-right font-medium">3.698</td>
+              <td class="py-3 px-4 text-right font-medium">601</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">16,25%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">nutrologo em</td>
+              <td class="py-3 px-4 text-right font-medium">1.225</td>
+              <td class="py-3 px-4 text-right font-medium">129</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">10,53%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">nutrologo bh</td>
+              <td class="py-3 px-4 text-right font-medium">144</td>
+              <td class="py-3 px-4 text-right font-medium">40</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">27,78%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">nutrologo perto de mim</td>
+              <td class="py-3 px-4 text-right font-medium">250</td>
+              <td class="py-3 px-4 text-right font-medium">33</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">13,20%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">nutrólogo</td>
+              <td class="py-3 px-4 text-right font-medium">352</td>
+              <td class="py-3 px-4 text-right font-medium">27</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">7,67%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta com nutrólogo</td>
+              <td class="py-3 px-4 text-right font-medium">37</td>
+              <td class="py-3 px-4 text-right font-medium">9</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">24,32%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">nutrólogo em bh</td>
+              <td class="py-3 px-4 text-right font-medium">64</td>
+              <td class="py-3 px-4 text-right font-medium">8</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">12,50%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: HISTÓRICO DE AGENDAMENTOS & AUTOAGENDAMENTO ONLINE -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Histórico de Agendamentos &amp; Autoagendamento Online</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+              Janeiro a Outubro
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Evolução mensal do volume consolidado de agendamentos, captação de pacientes novos e salto no autoagendamento digital.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl">
+          <span>Série Histórica: 10 Meses</span>
+        </div>
+      </div>
+
+      <!-- CARDS DE DESTAQUE DO HISTÓRICO & AUTOAGENDAMENTO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Card 1: Salto no Autoagendamento Online -->
+        <div class="bg-teal-50/80 rounded-2xl p-5 border-2 border-teal-500/40 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-teal-950">Autoagendamento Online</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-600 text-white">+48,0% Salto</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">219</span>
+              <span class="text-xs text-teal-900 font-semibold">agendamentos online/mês</span>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-teal-900 leading-relaxed pt-3 border-t border-teal-200">
+            Antes das campanhas no Google, a clínica registrava uma média de <strong>148 agendamentos online</strong> por mês, saltando para <strong>219 no último mês</strong>.
+          </p>
+        </div>
+
+        <!-- Card 2: Agendamentos via Secretária (Telefone / WhatsApp) -->
+        <div class="bg-amber-50/70 rounded-2xl p-5 border border-amber-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-950">Fluxo via Secretária</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500 text-white">614 Ligações</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-2xl font-extrabold text-amber-800">Canal Híbrido</span>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-amber-950 leading-relaxed pt-3 border-t border-amber-200/80">
+            Os <strong>219 agendamentos</strong> contabilizam exclusivamente o <strong>autoagendamento online</strong>. Além disso, um grande volume de pacientes agenda diretamente <strong>através da secretária</strong> pelo telefone <strong>(31) 3291-075</strong>.
+          </p>
+        </div>
+
+        <!-- Card 3: Volume Global Consolidado (10 Meses) -->
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Volume Consolidado (10 Meses)</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-slate-800">16.359</span>
+              <span class="text-xs text-slate-500 font-medium">agendamentos totais</span>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 border-t border-slate-200/80 text-xs text-slate-600 flex justify-between">
+            <span>Média: <strong>1.636/mês</strong></span>
+            <span>Novos: <strong class="text-teal-700">3.707 (371/mês)</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS NAS BARRAS -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: PERFORMANCE GEOGRÁFICA & RAIO DE COBERTURA (BELO HORIZONTE) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Performance Geográfica &amp; Raio de Cobertura</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Sede na R. Paracatu, 1154 (Sala 507) em Belo Horizonte com raio estratégico de 10km.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          R. Paracatu, 1154 • Belo Horizonte - MG
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Mapa Leaflet Interativo -->
+        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner h-80 sm:h-96 relative">
+          <div id="map" class="w-full h-full"></div>
+        </div>
+
+        <!-- Card Lateral de Abrangência -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-teal-400">Cobertura Estratégica BH</h3>
+            <p class="text-xs text-slate-300 mt-1">Captação focada nas regiões de maior demanda por Nutrologia na capital mineira.</p>
+
+            <div class="mt-5 space-y-3.5">
+              <div class="p-3.5 bg-teal-950/60 rounded-xl border border-teal-500/40">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">Raio de 10 km (Sede Barro Preto)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded font-semibold">Core BH</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  Abrange <strong>Santo Agostinho, Lourdes, Savassi, Funcionários, Gutierrez, Prado, Belvedere, Buritis, Sion, Cidade Jardim e Pampulha</strong>.
+                </p>
+              </div>
+
+              <div class="p-3.5 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-400">Alta Qualificação Local</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-slate-700 text-slate-300 rounded font-semibold">CTR 17,40%</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  A concentração do orçamento dentro do raio de 10km garante que praticamente 9 em cada 10 buscas exibam a Clínica Agape no topo da página.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+            Localização central privilegiada na região hospitalar e médica da Zona Centro-Sul de Belo Horizonte.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: AUTORIDADE & PROVA SOCIAL NA DOCTORALIA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Autoridade &amp; Prova Social na Doctoralia</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Validação de reputação e impacto da sinergia entre tráfego pago qualificado e perfil líder em avaliações.</p>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold self-start sm:self-auto">
+          <span>Doctoralia Perfil Verificado</span>
+          <span class="text-amber-500 tracking-wider">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Opiniões Totais -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patrimônio de Opiniões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-slate-900">2.433</span>
+              <span class="text-sm font-bold text-emerald-600">Avaliações Validadas</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-500 text-lg mt-1">
+              ★★★★★
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 mt-4 leading-relaxed">
+            Com mais de 2.430 avaliações de nota máxima, a Clínica Agape detém uma das maiores provas sociais do Brasil em Nutrologia, convertendo instantaneamente o paciente que clica no anúncio.
+          </p>
+        </div>
+
+        <!-- Card Novas Opiniões -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">Atualizações no Período</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-600 text-white">+160 Novas</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-teal-700">160</span>
+              <span class="text-sm font-semibold text-teal-900">avaliações recentes</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white/80 rounded-xl border border-teal-200/70 text-xs text-teal-950 leading-relaxed font-medium">
+            Sabemos que mais de 70% dos pacientes que entram no perfil da clínica olham esta seção antes de agendar. O ritmo acelerado de +160 novas opiniões sustenta a liderança absoluta em autoagendamentos e ligações.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório executivo trimestral de performance e inteligência de mídia.</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Plugin Nativo para Desenhar Rótulos de Dados sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 10px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val.toLocaleString('pt-BR'), bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Janeiro a Outubro)
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [2811, 1343, 1813, 1599, 1503, 1496, 1605, 1475, 1449, 1265],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [2811, 1343, 1813, 1599, 1503, 1496, 1605, 1475, 1449, 1265],
+            backgroundColor: '#0d9488',
+            borderRadius: 8,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [522, 277, 455, 382, 375, 364, 360, 365, 349, 258],
+            backgroundColor: '#64748b',
+            borderRadius: 8,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('pt-BR')}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 3150,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Mapa Leaflet - Belo Horizonte (R. Paracatu, 1154) com OpenStreetMap
+    const bhCoords = [-19.9238, -43.9515];
+
+    const map = L.map('map', {
+      center: bhCoords,
+      zoom: 12,
+      scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    const iconClinic = L.divIcon({
+      className: 'custom-icon-clinic',
+      html: `<div style="background-color: #0d9488; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    L.marker(bhCoords, { icon: iconClinic })
+      .addTo(map)
+      .bindPopup('<b>Clínica Agape</b><br>R. Paracatu, 1154 (Sala 507) - Belo Horizonte/MG')
+      .openPopup();
+
+    // Raio de 10 km em Belo Horizonte
+    L.circle(bhCoords, {
+      color: '#0d9488',
+      fillColor: '#0d9488',
+      fillOpacity: 0.16,
+      weight: 2.5,
+      radius: 10000
+    }).addTo(map);
+  </script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Performance - Neothorax</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js DataLabels Plugin CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; height: 280px; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen">
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 bg-teal-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/20">
+                    NT
+                </div>
+                <div>
+                    <span class="font-black text-slate-900 text-lg sm:text-xl block leading-tight">Neothorax</span>
+                    <span class="text-xs text-slate-500 font-medium">ID Unidade: 142731 • Recife / PE &amp; Nordeste</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Distintivo Google Partner -->
+                <div class="hidden sm:flex items-center gap-2 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                    </svg>
+                    <span class="text-xs font-bold text-slate-700">Google Partner</span>
+                </div>
+                <!-- Distintivo Doctoralia VIP -->
+                <div class="flex items-center gap-1.5 bg-teal-50 px-3.5 py-2 rounded-xl border border-teal-100">
+                    <span class="text-amber-500 text-sm font-black">★★★★★</span>
+                    <span class="text-[10px] font-black text-teal-900 uppercase tracking-wider">Doctoralia VIP</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+        <!-- SUB-CABEÇALHO DE METADADOS -->
+        <section class="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            <div class="space-y-2">
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                        Doctor ID: 142731 • Recife / PE
+                    </span>
+                    <span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        Período Analisado: 01/11/2026 - 12/11/2026
+                    </span>
+                </div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight mt-1">Relatório de Performance do Google Ads</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Análise consolidada de alcance, dominância de leilão, grupos de campanha e perfil demográfico do público</p>
+            </div>
+
+            <div class="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-end">
+                <!-- Destaque CPC Médio Consolidado -->
+                <div class="bg-gradient-to-br from-teal-900 to-slate-900 text-white px-5 py-3 rounded-2xl text-left border border-teal-800 shadow-md">
+                    <p class="text-[9px] font-bold text-teal-300 uppercase tracking-widest">CPC Médio Consolidado</p>
+                    <p class="text-xl font-black text-amber-400">R$ 14,59</p>
+                </div>
+
+                <button onclick="window.print()" class="no-print bg-slate-900 text-white px-5 py-3.5 rounded-2xl text-xs font-bold shadow-xl shadow-slate-900/10 hover:bg-slate-800 transition-all flex items-center gap-2">
+                    <span>Exportar Relatório</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 1: ALCANCE DO ANÚNCIO NO GOOGLE & INVESTIMENTO -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">1. Alcance do Anúncio no Google &amp; Investimento</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Apresenta a visibilidade e o tráfego gerados pelas campanhas direcionadas às pessoas que pesquisam pelos serviços e especialidades da Neothorax no Google, bem como o consumo de mídia no período.
+                </div>
+            </div>
+
+            <!-- Grid de 5 Cartões Destaque -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-2">
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Impressões</p>
+                    <h3 class="text-2xl font-black text-slate-900">7.598</h3>
+                    <p class="text-[10px] font-bold text-teal-600">Exibições no Google</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cliques Diretos</p>
+                    <h3 class="text-2xl font-black text-slate-900">402</h3>
+                    <p class="text-[10px] font-bold text-teal-700">Tráfego Qualificado</p>
+                </div>
+
+                <div class="bg-amber-50 p-5 rounded-[2rem] border border-amber-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-amber-800 uppercase tracking-widest">CTR Performance</p>
+                    <h3 class="text-2xl font-black text-amber-600">5,29%</h3>
+                    <p class="text-[10px] font-bold text-amber-700">▲ Média Google: 3,17%</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-1.5">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Imp. de Chamadas</p>
+                    <h3 class="text-2xl font-black text-slate-900">1.458</h3>
+                    <p class="text-[10px] font-bold text-teal-800">Opção de Ligação Exibida</p>
+                </div>
+
+                <div class="bg-teal-600 p-5 rounded-[2rem] shadow-lg shadow-teal-600/20 text-white space-y-1.5">
+                    <p class="text-[10px] font-black text-teal-200 uppercase tracking-widest">Consumo Google</p>
+                    <h3 class="text-2xl font-black">R$ 5.866,97</h3>
+                    <p class="text-[10px] font-bold text-teal-100">Investimento no Período</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: BENCHMARK DE EFICIÊNCIA & DOMÍNIO DE LEILÃO -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">2. Benchmark de Eficiência &amp; Domínio de Leilão nas Buscas</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Mostra a taxa de interesse (CTR) frente à média do setor médico e a competitividade dos anúncios da Neothorax nos resultados do Google, indicando a frequência com que aparecem no topo e na 1ª posição absoluta.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                <!-- Coluna Esquerda 1/3: Gráfico CTR vs Benchmark -->
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
+                    <div>
+                        <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Alta Atratividade</span>
+                        <h3 class="text-lg font-black text-slate-900 mt-2">CTR Google Ads vs Mercado</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Média padrão do setor de saúde é 3,17%.</p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="ctrBenchmarkChart"></canvas>
+                    </div>
+
+                    <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 text-[11px] text-teal-900">
+                        <strong>Performance:</strong> Os anúncios atingiram <strong>5,29% de CTR</strong> (67% acima da média de mercado do Google).
+                    </div>
+                </div>
+
+                <!-- Coluna Direita 2/3: Share of Voice -->
+                <div class="lg:col-span-2 bg-slate-900 rounded-[2rem] p-8 text-white flex flex-col justify-between space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="bg-teal-500/20 text-teal-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-teal-500/30">Share of Voice</span>
+                            <span class="text-xs font-bold text-slate-400">Dominância nas Buscas</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white mt-3">Exibição nas Posições Principais do Google</h3>
+                        <p class="text-xs text-slate-400 mt-1">Frequência de exibição nos blocos superiores de pesquisa entre 01/11 e 12/11/2026.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Top 3 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-slate-300">Três Primeiras Posições (Top 3)</span>
+                                <span class="text-teal-400 text-sm font-black">74,62%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 p-0.5 border border-slate-700">
+                                <div class="bg-gradient-to-r from-teal-500 to-teal-400 h-2 rounded-full" style="width: 74.62%"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-400">Presença no bloco nobre da página em aproximadamente 3 de cada 4 pesquisas realizadas.</p>
+                        </div>
+
+                        <!-- Top 1 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-slate-300">Topo de Página (1ª Posição Absoluta)</span>
+                                <span class="text-amber-400 text-sm font-black">68,75%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 p-0.5 border border-slate-700">
+                                <div class="bg-gradient-to-r from-amber-500 to-amber-400 h-2 rounded-full" style="width: 68.75%"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-400">Primeira opção isolada exibida ao paciente em quase 70% de todas as aparições.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700/80 text-xs text-slate-300">
+                        <strong>Parcela de Buscas no Google:</strong> A conta conquistou <strong>48,35% do mercado de buscas</strong> elegível, restando uma margem de <strong>51,65% de leilões disponíveis</strong> para expansão de alcance.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: DESEMPENHO POR GRUPO DE CAMPANHA -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">3. Desempenho por Grupo de Campanha</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Compara impressões, cliques, taxa de atração (CTR), custo médio por clique e posicionamento gerados por cada estratégia de campanha da Neothorax.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-200/80 shadow-sm overflow-hidden overflow-x-auto mt-2">
+                <div class="p-4 bg-slate-50 border-b border-slate-200/80">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Consolidado por Estrutura de Campanha (01/11 a 12/11/2026)</h3>
+                </div>
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100/50 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-widest">
+                            <th class="px-6 py-3.5">Campanha</th>
+                            <th class="px-6 py-3.5 text-right">Impressões</th>
+                            <th class="px-6 py-3.5 text-right">Cliques</th>
+                            <th class="px-6 py-3.5 text-right">CTR (%)</th>
+                            <th class="px-6 py-3.5 text-right">CPC Médio</th>
+                            <th class="px-6 py-3.5 text-right">Topo de Página</th>
+                            <th class="px-6 py-3.5 text-right">1ª Posição</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium">
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-600 shrink-0"></span>
+                                    <span>SN-Services-Facilities-recife (142731) - Serviços/Procedimentos</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">5.170</td>
+                            <td class="px-6 py-4 text-right font-black text-teal-700">218</td>
+                            <td class="px-6 py-4 text-right font-bold text-teal-600">4,22%</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-800">R$ 15,40</td>
+                            <td class="px-6 py-4 text-right">77,08%</td>
+                            <td class="px-6 py-4 text-right font-bold text-amber-600">76,27%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors bg-teal-50/20">
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+                                    <span>SN-Facilities-recife (142731) - Especialidade</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">2.265</td>
+                            <td class="px-6 py-4 text-right font-black text-teal-700">183</td>
+                            <td class="px-6 py-4 text-right font-bold text-amber-600">8,08%</td>
+                            <td class="px-6 py-4 text-right font-bold text-teal-700">R$ 13,61</td>
+                            <td class="px-6 py-4 text-right font-bold text-teal-800">89,11%</td>
+                            <td class="px-6 py-4 text-right font-bold text-amber-600">87,73%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0"></span>
+                                    <span>SN-Name-Facilities (142731) - Institucional</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">163</td>
+                            <td class="px-6 py-4 text-right font-black text-teal-700">1</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-500">0,61%</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-800">R$ 19,97</td>
+                            <td class="px-6 py-4 text-right">50,39%</td>
+                            <td class="px-6 py-4 text-right">50,39%</td>
+                        </tr>
+                        <tr class="bg-slate-900 text-white font-bold">
+                            <td class="px-6 py-4 rounded-l-xl">Total Consolidado Google Ads</td>
+                            <td class="px-6 py-4 text-right">7.598</td>
+                            <td class="px-6 py-4 text-right text-teal-300 font-black">402</td>
+                            <td class="px-6 py-4 text-right text-amber-400 font-black">5,29%</td>
+                            <td class="px-6 py-4 text-right text-teal-300">R$ 14,59</td>
+                            <td class="px-6 py-4 text-right">74,62%</td>
+                            <td class="px-6 py-4 text-right text-amber-400 rounded-r-xl">68,75%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: PERFIL DO PÚBLICO, DEMOGRAFIA & ALCANCE REGIONAL -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">4. Perfil do Público, Demografia &amp; Alcance Regional</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Mapeia o perfil demográfico (gênero e faixa etária) e a distribuição geográfica dos <strong>402 cliques</strong> recebidos ao longo de <strong>61 cidades</strong>, com forte concentração em Recife e capitais do Nordeste.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                <!-- Coluna 1: Gênero -->
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900">Distribuição por Gênero</h3>
+                        <p class="text-[11px] text-slate-500 mt-0.5 mb-4">Proporção de interesse declarado (402 cliques).</p>
+                    </div>
+                    <div class="space-y-3.5">
+                        <div>
+                            <div class="flex justify-between items-center text-xs font-bold mb-1">
+                                <span class="text-slate-700">Feminino</span>
+                                <span class="text-teal-700">242 cliques (60,20%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-teal-600 h-2.5 rounded-full" style="width: 60.20%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center text-xs font-bold mb-1">
+                                <span class="text-slate-700">Masculino</span>
+                                <span class="text-teal-700">93 cliques (23,13%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-teal-500 h-2.5 rounded-full" style="width: 23.13%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center text-xs font-bold mb-1">
+                                <span class="text-slate-400">Indeterminado</span>
+                                <span class="text-slate-500">67 cliques (16,67%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-slate-300 h-2.5 rounded-full" style="width: 16.67%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-4">Predomínio expressivo do público feminino (60,20%).</p>
+                </div>
+
+                <!-- Coluna 2: Faixa Etária -->
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900">Faixa Etária</h3>
+                        <p class="text-[11px] text-slate-500 mt-0.5 mb-3">Volume de cliques por idade.</p>
+                    </div>
+                    <div class="w-full h-48 relative">
+                        <canvas id="idadeChart"></canvas>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-2">Pico de interesse entre 25 e 44 anos (161 cliques).</p>
+                </div>
+
+                <!-- Coluna 3: Principais Cidades -->
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-base font-black text-slate-900">Principais Cidades</h3>
+                            <span class="bg-teal-100 text-teal-800 text-[10px] font-black px-2.5 py-0.5 rounded-full">61 Cidades</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-0.5 mb-3">Origem geográfica com maior volume de cliques.</p>
+                    </div>
+                    <div class="space-y-1.5 text-xs">
+                        <div class="flex justify-between py-1 border-b border-slate-100 font-bold">
+                            <span class="text-slate-800">1. Recife / PE</span>
+                            <span class="text-teal-700">83 cliques</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-600">2. Campina Grande / PB</span>
+                            <span class="font-bold text-slate-700">34 cliques</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-600">3. Aracaju / SE</span>
+                            <span class="font-bold text-slate-700">32 cliques</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-600">4. Natal / RN</span>
+                            <span class="font-bold text-slate-700">24 cliques</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-600">5. João Pessoa / PB</span>
+                            <span class="font-bold text-slate-700">24 cliques</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-600">6. Maceió / AL</span>
+                            <span class="font-bold text-slate-700">13 cliques</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleCitiesList()" class="no-print mt-3 w-full bg-slate-100 hover:bg-teal-50 text-teal-800 font-bold text-[11px] py-2 rounded-xl border border-slate-200/80 transition-all flex items-center justify-center gap-1.5">
+                        <span id="citiesBtnIcon">📍</span>
+                        <span id="citiesBtnText">Ver Detalhamento por Cidades (37 principais)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAINEL EXPANSÍVEL DE CIDADES -->
+            <div id="citiesDetailSection" class="hidden bg-white rounded-[2rem] border border-teal-200 shadow-sm p-6 mt-4 transition-all">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900">Distribuição Geográfica Detalhada (Principais Cidades Atingidas)</h3>
+                        <p class="text-[11px] text-slate-500">As 37 cidades listadas abaixo concentram 329 cliques (81,84% do tráfego), enquanto outras 24 localidades somam 73 cliques adicionais.</p>
+                    </div>
+                    <span class="text-[10px] font-bold bg-teal-50 text-teal-800 px-3 py-1 rounded-full border border-teal-100">Total: 61 Cidades</span>
+                </div>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="bg-teal-600 text-white px-3 py-1.5 rounded-xl font-bold">Recife (83)</span>
+                    <span class="bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl font-bold border border-teal-200">Campina Grande (34)</span>
+                    <span class="bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl font-bold border border-teal-200">Aracaju (32)</span>
+                    <span class="bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl font-bold border border-teal-200">Natal (24)</span>
+                    <span class="bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl font-bold border border-teal-200">João Pessoa (24)</span>
+                    <span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl font-semibold border border-slate-200">Maceió (13)</span>
+                    <span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl font-semibold border border-slate-200">Petrolina (12)</span>
+                    <span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl font-semibold border border-slate-200">Caruaru (12)</span>
+                    <span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl font-semibold border border-slate-200">Jaboatão dos Guararapes (8)</span>
+                    <span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl font-semibold border border-slate-200">Cabo de Santo Agostinho (7)</span>
+                    <span class="bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl font-semibold border border-slate-200">Olinda (7)</span>
+                    <span class="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl font-medium border border-slate-200">Itambé (5)</span>
+                    <span class="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl font-medium border border-slate-200">Mossoró (5)</span>
+                    <span class="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl font-medium border border-slate-200">Cajazeiras (4)</span>
+                    <span class="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl font-medium border border-slate-200">Itabaiana (4)</span>
+                    <span class="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl font-medium border border-slate-200">Palmeira dos Índios (4)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Simão Dias (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Arcoverde (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Caicó (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Garanhuns (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Apodi (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Marechal Deodoro (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Moreno (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Rio Largo (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Patos (3)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Lagarto (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Parnamirim (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Paulista (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Santa Rita (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Serra Talhada (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Nossa Senhora do Socorro (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Gravatá (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Igarassu (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">União dos Palmares (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Arapiraca (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Camaragibe (2)</span>
+                    <span class="bg-slate-50 text-slate-600 px-2.5 py-1 rounded-xl border border-slate-200">Penedo (2)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: INSIGHTS ESTRATÉGICOS & OPORTUNIDADES DE ESCALA -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">5. Insights Estratégicos &amp; Oportunidades de Expansão</h2>
+                <div class="mt-2.5 p-3.5 bg-teal-50 border border-teal-100 rounded-2xl text-xs text-teal-950 font-medium leading-relaxed">
+                    💡 <strong>O que é este item:</strong> Aponta oportunidades práticas para potencializar a captação de pacientes em Recife e nas praças regionais de maior resposta.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <!-- Card 1: Expansão de Parcela de Buscas -->
+                <div class="bg-white p-7 rounded-[2rem] border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase">Rede de Pesquisa</span>
+                            <span class="text-xs font-bold text-teal-600">51,65% de Margem Livre</span>
+                        </div>
+                        <h3 class="text-lg font-black text-slate-900">Escala em Especialidade &amp; Procedimentos</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            O grupo <strong>SN-Facilities-recife (142731) - Especialidade</strong> apresentou excelente eficiência, com <strong>8,08% de CTR</strong>, <strong>87,73% de presença na 1ª posição</strong> e o menor CPC da conta (<strong>R$ 13,61</strong>). Como a conta captura atualmente <strong>48,35% da parcela de buscas</strong>, existe uma margem de <strong>51,65% de leilões disponíveis</strong> para expandir a captação de pacientes qualificados.
+                        </p>
+                    </div>
+                    <div class="p-3 bg-teal-50 rounded-xl border border-teal-100 text-[11px] text-teal-900 font-semibold">
+                        📈 Direcionar reforço orçamentário para Especialidade e Serviços amplia o volume de cliques mantendo o topo de página.
+                    </div>
+                </div>
+
+                <!-- Card 2: Atração Regional e Remarketing -->
+                <div class="bg-slate-900 text-white p-7 rounded-[2rem] border border-slate-800 shadow-xl flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-teal-500/20 text-teal-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-teal-500/30">Alcance Regional</span>
+                            <span class="text-xs font-bold text-amber-400">61 Cidades Impactadas</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white">Consolidação de Marca no Nordeste</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Além da liderança em <strong>Recife (83 cliques)</strong> e Região Metropolitana, as campanhas atraíram pacientes de capitais e polos vizinhos como <strong>Campina Grande (34)</strong>, <strong>Aracaju (32)</strong>, <strong>Natal (24)</strong> e <strong>João Pessoa (24)</strong>. Ativar campanhas de Remarketing e Display permite reimpactar esse público regional e fortalecer as buscas diretas pela marca <strong>Neothorax</strong>.
+                        </p>
+                    </div>
+                    <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-[11px] text-amber-300 font-semibold">
+                        🎯 Remarketing Regional: reforça a autoridade da Neothorax para pacientes que avaliam deslocamento até Recife.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ DE PÁGINA -->
+    <footer class="bg-white border-t border-slate-200/80 py-8 text-center">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Mídias 360 - Doctoralia</p>
+        <p class="text-[10px] text-slate-400 italic">Consultoria &amp; Gestão Estratégica de Performance Médica</p>
+    </footer>
+
+    <!-- SCRIPTS DE CHART.JS & INTERATIVIDADE -->
+    <script>
+        function toggleCitiesList() {
+            const section = document.getElementById('citiesDetailSection');
+            const btnText = document.getElementById('citiesBtnText');
+            const btnIcon = document.getElementById('citiesBtnIcon');
+
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                btnText.innerText = 'Ocultar Detalhamento por Cidades';
+                btnIcon.innerText = '✕';
+            } else {
+                section.classList.add('hidden');
+                btnText.innerText = 'Ver Detalhamento por Cidades (37 principais)';
+                btnIcon.innerText = '📍';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gráfico CTR vs Benchmark
+            const ctxCtr = document.getElementById('ctrBenchmarkChart').getContext('2d');
+            new Chart(ctxCtr, {
+                type: 'bar',
+                data: {
+                    labels: ['Neothorax', 'Benchmark Mercado'],
+                    datasets: [{
+                        label: 'CTR (%)',
+                        data: [5.29, 3.17],
+                        backgroundColor: [
+                            'rgba(13, 148, 136, 0.9)',
+                            'rgba(217, 119, 6, 0.4)'
+                        ],
+                        borderColor: [
+                            '#0d9488',
+                            '#d97706'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toFixed(2) + '% CTR';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 8,
+                            ticks: { callback: v => v + '%' },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Gráfico Faixa Etária
+            const ctxIdade = document.getElementById('idadeChart').getContext('2d');
+            new Chart(ctxIdade, {
+                type: 'bar',
+                data: {
+                    labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+', 'N/A'],
+                    datasets: [{
+                        label: 'Cliques',
+                        data: [27, 88, 73, 53, 45, 49, 67],
+                        backgroundColor: 'rgba(20, 184, 166, 0.85)',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: '#f1f5f9' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • Clínica MedTotal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              MT
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Clínica MedTotal</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Campanha para Reumatologia • Santo André &amp; Grande ABC</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período: 01/10/2026 - 15/11/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  ID da Conta: 86603
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS (ALCANCE DO ANÚNCIO NO GOOGLE - SEM LIGAÇÕES) -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">41.225</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições do anúncio no Google</p>
+        </div>
+
+        <!-- Card 2: Cliques Diretos -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">2.817</span>
+            </div>
+          </div>
+          <p class="text-xs text-teal-700 font-medium mt-4">Cliques qualificados no anúncio</p>
+        </div>
+
+        <!-- Card 3: CTR Consolidado -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+115,5%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">6,83%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% média</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Mais que o dobro da média Google Saúde</p>
+        </div>
+
+        <!-- Card 4: Impressões de Chamadas -->
+        <div class="bg-white rounded-[2rem] p-6 border border-teal-500/40 shadow-lg shadow-teal-500/10 flex flex-col justify-between hover:border-teal-600 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-teal-900 uppercase tracking-wider">Imp. Chamadas</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">9.687</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 font-medium mt-4">Exibições do telefone no anúncio</p>
+        </div>
+
+        <!-- Card 5: CPC Médio -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">CPC Médio</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">R$ 1,98</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Custo médio pago por clique</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: BENCHMARKING DE ATRATIVIDADE & DOMÍNIO DE LEILÃO NAS BUSCAS -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      
+      <!-- Coluna Esquerda: Benchmarking de CTR -->
+      <div class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Benchmarking de Atratividade (CTR)</h2>
+            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">Saúde 2026</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Percentual de impressões que resultaram em cliques comparado à média oficial do Google.</p>
+        </div>
+
+        <div class="my-6">
+          <div class="h-48 relative">
+            <canvas id="ctrBenchmarkChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
+          <div class="p-3 bg-teal-50/70 rounded-xl border border-teal-100">
+            <span class="text-[11px] font-semibold text-teal-900">Clínica MedTotal</span>
+            <p class="text-lg font-extrabold text-teal-700 mt-0.5">6,83%</p>
+            <p class="text-[10px] text-teal-600">CTR médio em Reumatologia</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-700">Média Google Saúde</span>
+            <p class="text-lg font-extrabold text-slate-800 mt-0.5">3,17%</p>
+            <p class="text-[10px] text-slate-500">Benchmark de referência</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Domínio de Leilão nas Buscas -->
+      <div class="bg-slate-900 text-white rounded-[2rem] p-6 lg:p-8 shadow-xl flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-white tracking-tight">Domínio de Leilão nas Buscas</h2>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded border border-teal-500/30">Google Search</span>
+          </div>
+          
+          <div class="mt-4 p-4 rounded-2xl bg-teal-950/60 border border-teal-500/30">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+              <span class="text-xs font-bold text-teal-200 uppercase tracking-wider">Parcela de Buscas no Google</span>
+            </div>
+            <p class="text-2xl font-black text-white mt-1">40,07% <span class="text-xs font-normal text-slate-300">de participação nas buscas elegíveis</span></p>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Amplo alcance regional no Grande ABC (São Caetano, Mauá, São Bernardo, Santo André) e Zona Leste/Sul de São Paulo com CPC altamente competitivo de R$ 1,98.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-4 my-6">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">Três Primeiras Posições (Top 3)</span>
+              <span class="text-teal-400 font-bold">79,40%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-teal-400 h-2 rounded-full" style="width: 79.40%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">Topo de Página (1ª Posição Absoluta)</span>
+              <span class="text-amber-400 font-bold">61,72%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-400 h-2 rounded-full" style="width: 61.72%"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-400 border-t border-slate-800 pt-3">
+          Mais de 6 em cada 10 exibições colocam a Clínica MedTotal no primeiro lugar absoluto do Google para pacientes buscando Reumatologia.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- SEÇÃO 3: DESEMPENHO POR GRUPO DE CAMPANHA (CAMPANHAS RENOMEADAS) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Desempenho por Grupo de Campanha</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Comparativo de impressões, cliques, posicionamento e conversões entre Especialidade e Institucional.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          2 Grupos Ativos
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[740px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right">CTR</th>
+              <th class="py-3 px-4 text-right">CPC Médio</th>
+              <th class="py-3 px-4 text-right">Topo de Página</th>
+              <th class="py-3 px-4 text-right">1ª Posição</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Conversões</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <tr class="bg-teal-50/30 hover:bg-teal-50/60 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Especialidade</td>
+              <td class="py-3.5 px-4 text-right font-medium">41.088</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-700">2.790</td>
+              <td class="py-3.5 px-4 text-right font-semibold">6,79%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 1,98</td>
+              <td class="py-3.5 px-4 text-right font-medium">69,75%</td>
+              <td class="py-3.5 px-4 text-right font-medium">31,07%</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-800">15</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Institucional</td>
+              <td class="py-3.5 px-4 text-right font-medium">137</td>
+              <td class="py-3.5 px-4 text-right font-bold text-amber-700">27</td>
+              <td class="py-3.5 px-4 text-right font-bold text-amber-600">19,71%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 2,76</td>
+              <td class="py-3.5 px-4 text-right font-medium">90,12%</td>
+              <td class="py-3.5 px-4 text-right font-medium">82,72%</td>
+              <td class="py-3.5 px-4 text-right font-medium text-slate-400">0</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-900 text-white font-extrabold text-xs">
+              <td class="py-3.5 px-4 rounded-l-xl">Total / Médias Consolidadas</td>
+              <td class="py-3.5 px-4 text-right text-teal-300">41.225</td>
+              <td class="py-3.5 px-4 text-right text-teal-300">2.817</td>
+              <td class="py-3.5 px-4 text-right text-amber-300">6,83%</td>
+              <td class="py-3.5 px-4 text-right">R$ 1,98</td>
+              <td class="py-3.5 px-4 text-right">79,40%</td>
+              <td class="py-3.5 px-4 text-right">61,72%</td>
+              <td class="py-3.5 px-4 text-right text-emerald-300 rounded-r-xl">15</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: PALAVRAS-CHAVE COM MAIOR DESEMPENHO -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Palavras-Chave com Maior Desempenho</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Termos de busca na especialidade de Reumatologia e marca institucional que geraram maior volume de cliques.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Alta Relevância &amp; Volume
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[650px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Pesquisar Palavra-Chave</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right">CTR</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CPC Médio</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Líder -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                reumatologia
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">21.254</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">1.384</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">6,51%</td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 1,75</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologistas</td>
+              <td class="py-3 px-4 text-right font-medium">12.041</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">837</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">6,95%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,77</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologia santo andré</td>
+              <td class="py-3 px-4 text-right font-medium">1.637</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">169</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">10,32%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 2,54</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologista</td>
+              <td class="py-3 px-4 text-right font-medium">3.941</td>
+              <td class="py-3 px-4 text-right font-medium">168</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,26%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 2,74</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologista santo andré</td>
+              <td class="py-3 px-4 text-right font-medium">1.044</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">130</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">12,45%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 3,67</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologista perto de mim</td>
+              <td class="py-3 px-4 text-right font-medium">213</td>
+              <td class="py-3 px-4 text-right font-medium">33</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-600">15,49%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 2,50</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">especialista em reumatologia</td>
+              <td class="py-3 px-4 text-right font-medium">372</td>
+              <td class="py-3 px-4 text-right font-medium">24</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">6,45%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,78</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologista infantil</td>
+              <td class="py-3 px-4 text-right font-medium">282</td>
+              <td class="py-3 px-4 text-right font-medium">20</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">7,09%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 2,47</td>
+            </tr>
+            <!-- Termo de Marca -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-semibold">clínica médica med total (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">78</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">17</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-600">21,79%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 2,81</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologia pediátrica</td>
+              <td class="py-3 px-4 text-right font-medium">139</td>
+              <td class="py-3 px-4 text-right font-medium">16</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">11,51%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 2,93</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">reumatologista particular</td>
+              <td class="py-3 px-4 text-right font-medium">103</td>
+              <td class="py-3 px-4 text-right font-medium">4</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-600">3,88%</td>
+              <td class="py-3 px-4 text-right font-medium">R$ 1,93</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: HISTÓRICO DE AGENDAMENTOS & PACIENTES NOVOS (LIMPO, SEM OS 3 CARDS RISCADOS) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Histórico de Agendamentos &amp; Pacientes Novos</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+              Junho a Novembro (Parcial)
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Evolução mensal do volume total de consultas e aceleração expressiva de novos pacientes a partir de Setembro.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl">
+          <span>Série Histórica 2026</span>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS NAS BARRAS -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: PERFIL DO PÚBLICO (COM TARJA DE DESTAQUE SUZANO E SÃO VICENTE) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Perfil do Público &amp; Distribuição Regional</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Localização por cidade, distribuição por gênero e faixa etária dos 2.817 pacientes que clicaram nos anúncios.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Grande ABC &amp; São Paulo
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Coluna 1: Principais Cidades + Tarja Estratégica Suzano & São Vicente (4 Colunas) -->
+        <div class="lg:col-span-4 bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Principais Cidades</h3>
+              <span class="text-[11px] font-bold text-teal-700">11 Municípios</span>
+            </div>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between p-2.5 bg-teal-600 text-white rounded-xl font-bold shadow-sm">
+                <span>1. São Caetano do Sul</span>
+                <span>739 cliques (26,2%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">2. Mauá</span>
+                <span class="font-bold text-teal-700">559 (19,8%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">3. São Bernardo do Campo</span>
+                <span class="font-bold text-teal-700">521 (18,5%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">4. São Paulo</span>
+                <span class="font-bold text-slate-900">423 (15,0%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">5. Santo André</span>
+                <span class="font-bold text-slate-900">163 (5,8%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">6. Ribeirão Pires</span>
+                <span class="font-bold text-slate-900">144 (5,1%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">7. Diadema</span>
+                <span class="font-bold text-slate-900">63 (2,2%)</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-xl">
+                <span class="font-semibold text-slate-800">8. Guarulhos</span>
+                <span class="font-bold text-slate-900">2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJA DE DESTAQUE ESTRATÉGICO (SUZANO E SÃO VICENTE) -->
+          <div class="mt-4 p-3.5 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl shadow-sm">
+            <div class="flex items-center gap-1.5 text-amber-900 font-extrabold text-[11px] uppercase tracking-wider">
+              <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>Alinhamento Estratégico</span>
+            </div>
+            <p class="text-[11px] text-amber-950 font-medium mt-1 leading-relaxed">
+              Identificamos buscas e cliques originados de <strong>Suzano</strong> e <strong>São Vicente</strong> nos termos de pesquisa. Faz sentido estratégico para a clínica atender pacientes dessas regiões ou devemos negativá-las para concentrar verba no ABC?
+            </p>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Distribuição por Gênero (4 Colunas) -->
+        <div class="lg:col-span-4 bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Distribuição por Gênero</h3>
+              <span class="text-[11px] font-bold text-teal-700">62,0% Feminino</span>
+            </div>
+
+            <div class="space-y-4">
+              <div class="p-3.5 bg-white rounded-xl border border-teal-200">
+                <div class="flex justify-between text-xs font-bold mb-1.5">
+                  <span class="text-teal-950">Feminino</span>
+                  <span class="text-teal-700">1.747 (62,0%)</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                  <div class="bg-teal-600 h-2.5 rounded-full" style="width: 62.0%"></div>
+                </div>
+              </div>
+
+              <div class="p-3.5 bg-white rounded-xl border border-slate-200">
+                <div class="flex justify-between text-xs font-bold mb-1.5">
+                  <span class="text-slate-700">Indeterminado</span>
+                  <span class="text-slate-600">598 (21,2%)</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                  <div class="bg-slate-400 h-2.5 rounded-full" style="width: 21.2%"></div>
+                </div>
+              </div>
+
+              <div class="p-3.5 bg-white rounded-xl border border-amber-200">
+                <div class="flex justify-between text-xs font-bold mb-1.5">
+                  <span class="text-amber-950">Masculino</span>
+                  <span class="text-amber-700">472 (16,8%)</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                  <div class="bg-amber-500 h-2.5 rounded-full" style="width: 16.8%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-teal-50/70 rounded-xl border border-teal-100 text-[11px] text-teal-950 leading-relaxed">
+            Forte predominância feminina (62,0%) na procura por diagnóstico e acompanhamento reumatológico no ABC Paulista.
+          </div>
+        </div>
+
+        <!-- Coluna 3: Faixa Etária (4 Colunas) -->
+        <div class="lg:col-span-4 bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Faixa Etária</h3>
+              <span class="text-[11px] font-bold text-teal-700">45+ anos: 58,0%</span>
+            </div>
+            <div class="h-64 relative">
+              <canvas id="ageChart"></canvas>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
+            Maior volume concentrado nas faixas de <strong>65+ anos (571)</strong>, <strong>55–64 anos (555)</strong> e <strong>45–54 anos (506)</strong>.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 7: CONTROLE DE INVESTIMENTOS & CICLOS DE CAMPANHA (SEMELHANTE À IMAGEM + CICLO 5) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Controle de Investimentos &amp; Ciclos de Campanha</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Acompanhamento financeiro acumulado dos 5 ciclos de veiculação Google Ads (aporte mensal base de R$ 3.750,00).</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          5 Ciclos Consolidados
+        </span>
+      </div>
+
+      <!-- 4 CARDS SUPERIORES DE RESUMO FINANCEIRO -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        
+        <!-- Card 1: Total Previsto / Orçado -->
+        <div class="bg-slate-900 text-white rounded-2xl p-5 flex flex-col justify-between shadow-md">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-teal-400">Total Previsto / Orçado</span>
+            <p class="text-2xl sm:text-3xl font-black text-white mt-2">R$ 17.375,00</p>
+          </div>
+          <p class="text-[11px] text-slate-300 mt-4">Soma orçada dos 5 ciclos de investimento</p>
+        </div>
+
+        <!-- Card 2: Total Executado / Utilizado -->
+        <div class="bg-amber-50/70 rounded-2xl p-5 border border-amber-300/80 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-900">Total Executado / Utilizado</span>
+            <p class="text-2xl sm:text-3xl font-black text-amber-700 mt-2">R$ 15.947,10</p>
+          </div>
+          <p class="text-[11px] text-amber-900/80 font-medium mt-4">628,73 + 4.732,49 + 4.588,67 + 1.942,99 + 4.054,22</p>
+        </div>
+
+        <!-- Card 3: Saldo Restante Ciclo 5 -->
+        <div class="bg-emerald-50/70 rounded-2xl p-5 border border-emerald-200 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Saldo Restante Ciclo 5</span>
+            <p class="text-2xl sm:text-3xl font-black text-emerald-700 mt-2">R$ 1.427,90</p>
+          </div>
+          <p class="text-[11px] text-emerald-900/80 font-medium mt-4">Saldo acumulado após fechamento até 12/11</p>
+        </div>
+
+        <!-- Card 4: % Saldo Disponível -->
+        <div class="bg-teal-600 text-white rounded-2xl p-5 flex flex-col justify-between shadow-md">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-teal-100">% Saldo Disponível</span>
+            <p class="text-2xl sm:text-3xl font-black text-white mt-2">8,22%</p>
+          </div>
+          <p class="text-[11px] text-teal-50 mt-4">Percentual de saldo orçado ainda disponível</p>
+        </div>
+
+      </div>
+
+      <!-- TABELA DETALHADA DOS 5 CICLOS -->
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[740px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Ciclo de Veiculação</th>
+              <th class="py-3 px-4 text-center">Status</th>
+              <th class="py-3 px-4 text-right">Orçamento Base</th>
+              <th class="py-3 px-4 text-right">Valor Utilizado / Gasto</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Saldo Acumulado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Ciclo 1 -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Ciclo 1: 24/06 a 12/07 (Proporcional)</td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">Finalizado</span>
+              </td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 2.375,00</td>
+              <td class="py-3.5 px-4 text-right font-semibold text-slate-900">R$ 628,73</td>
+              <td class="py-3.5 px-4 text-right font-bold text-emerald-700">+R$ 1.746,27</td>
+            </tr>
+            <!-- Ciclo 2 -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Ciclo 2: 13/07 a 12/08</td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">Finalizado</span>
+              </td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 3.750,00 <span class="text-slate-400">(+ R$ 1.746,27)</span></td>
+              <td class="py-3.5 px-4 text-right font-semibold text-slate-900">R$ 4.732,49</td>
+              <td class="py-3.5 px-4 text-right font-bold text-emerald-700">+R$ 763,78</td>
+            </tr>
+            <!-- Ciclo 3 -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Ciclo 3: 13/08 a 12/09</td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">Fechado</span>
+              </td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 3.750,00 <span class="text-slate-400">(+ R$ 763,78)</span></td>
+              <td class="py-3.5 px-4 text-right font-semibold text-slate-900">R$ 4.588,67</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-700">-R$ 74,89</td>
+            </tr>
+            <!-- Ciclo 4 -->
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Ciclo 4: 13/09 a 12/10</td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">Fechado</span>
+              </td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 3.750,00 <span class="text-slate-400">(- R$ 74,89)</span></td>
+              <td class="py-3.5 px-4 text-right font-semibold text-slate-900">R$ 1.942,99</td>
+              <td class="py-3.5 px-4 text-right font-bold text-emerald-700">+R$ 1.732,12</td>
+            </tr>
+            <!-- Ciclo 5 (Recente) -->
+            <tr class="bg-amber-50/60 hover:bg-amber-50 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
+                <span>Ciclo 5: 13/10 a 12/11</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-200 text-amber-950">Recente</span>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">Fechado (12/11)</span>
+              </td>
+              <td class="py-3.5 px-4 text-right font-medium">R$ 3.750,00 <span class="text-slate-500">(+ R$ 1.732,12)</span></td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-amber-800">R$ 4.054,22</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-emerald-700">+R$ 1.427,90</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-900 text-white font-extrabold text-xs">
+              <td class="py-3.5 px-4 rounded-l-xl">TOTAL CONSOLIDADO ACUMULADO</td>
+              <td class="py-3.5 px-4 text-center text-slate-400">—</td>
+              <td class="py-3.5 px-4 text-right">R$ 17.375,00</td>
+              <td class="py-3.5 px-4 text-right text-amber-300">R$ 15.947,10</td>
+              <td class="py-3.5 px-4 text-right text-teal-300 rounded-r-xl">R$ 1.427,90 (8,22%)</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório executivo de performance • Clínica MedTotal — Reumatologia (ID: 86603).</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Gráfico de Benchmark CTR
+    const ctxBenchmark = document.getElementById('ctrBenchmarkChart').getContext('2d');
+    new Chart(ctxBenchmark, {
+      type: 'bar',
+      data: {
+        labels: ['Clínica MedTotal', 'Média Google Saúde'],
+        datasets: [{
+          data: [6.83, 3.17],
+          backgroundColor: ['#0d9488', '#94a3b8'],
+          borderRadius: 12,
+          barThickness: 36
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.y}% CTR`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 8.5,
+            ticks: {
+              callback: (val) => val + '%',
+              font: { family: "'Plus Jakarta Sans'", size: 10 }
+            },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Plugin Nativo para Desenhar Rótulos de Dados Nítidos sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val, bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Junho a Novembro Parcial)
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro (até 15)'],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [46, 31, 40, 126, 83, 44],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [46, 31, 40, 126, 83, 44],
+            backgroundColor: ['#0d9488', '#0d9488', '#0d9488', '#0f766e', '#0d9488', '#14b8a6'],
+            borderRadius: 10,
+            barThickness: 38,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [4, 7, 7, 37, 24, 8],
+            backgroundColor: '#64748b',
+            borderRadius: 10,
+            barThickness: 38,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 145,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Gráfico Horizontal de Faixa Etária
+    const ctxAge = document.getElementById('ageChart').getContext('2d');
+    new Chart(ctxAge, {
+      type: 'bar',
+      data: {
+        labels: ['18–24', '25–34', '35–44', '45–54', '55–64', '65+', 'Indet.'],
+        datasets: [{
+          data: [52, 184, 359, 506, 555, 571, 590],
+          backgroundColor: ['#ccfbf1', '#99f6e4', '#5eead4', '#14b8a6', '#0d9488', '#0f766e', '#94a3b8'],
+          borderRadius: 6,
+          barThickness: 16
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.x} cliques`
+            }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 680,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 9 } },
+            grid: { color: '#e2e8f0' }
+          },
+          y: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

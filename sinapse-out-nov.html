@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Executivo • Dr. Jhonas Geraldo & Sinapse</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js 4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body { background-color: #ffffff !important; }
+      .no-print { display: none !important; }
+      .shadow-xl, .shadow-sm, .shadow-lg { box-shadow: none !important; }
+      .page-break { page-break-before: always; }
+      .rounded-\[2rem\] { border-radius: 1rem !important; }
+      #map { height: 380px !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HEADER PRINCIPAL -->
+    <header class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 transition-all">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-600/30">
+              JS
+            </div>
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Dr. Jhonas Geraldo &amp; Sinapse</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span class="text-teal-700 font-semibold text-sm">Psiquiatria • Presencial &amp; Telemedicina</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 text-xs sm:text-sm font-medium">Período Analisado: 01/10/2026 - 15/11/2026</span>
+                <span class="text-slate-300">•</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+                  Florianópolis • SP • BH • Curitiba • Fortaleza
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges em linha única compacta -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <!-- Selo M360 -->
+          <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            M360
+          </div>
+
+          <!-- Selo Doctoralia com 5 Estrelas Amarelas -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-900">
+            <span>Doctoralia • 497 Opiniões</span>
+            <span class="text-amber-500 tracking-wider">★★★★★</span>
+          </div>
+
+          <!-- Botão Exportar PDF -->
+          <button onclick="window.print()" class="no-print inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-xl font-semibold text-xs transition shadow-sm active:scale-95">
+            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1: 5 KPI CARDS (REDE DE PESQUISA) -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1: Impressões Pesquisa -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Impressões (Pesquisa)</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">16.210</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-medium mt-4">Exibições na Rede de Pesquisa Google</p>
+        </div>
+
+        <!-- Card 2: Cliques Pesquisa -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cliques (Pesquisa)</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">1.460</span>
+            </div>
+          </div>
+          <p class="text-xs text-teal-700 font-medium mt-4">Tráfego qualificado de busca ativa</p>
+        </div>
+
+        <!-- Card 3: CTR Rede de Pesquisa -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-[2rem] p-6 border-2 border-amber-400/60 shadow-lg shadow-amber-500/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">CTR Pesquisa</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">+184,2%</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-amber-700">9,01%</span>
+              <span class="text-xs text-slate-500 font-medium">vs 3,17% média</span>
+            </div>
+          </div>
+          <p class="text-xs text-amber-800 font-semibold mt-4">Quase o triplo do benchmark de saúde</p>
+        </div>
+
+        <!-- Card 4: Acessos Doctoralia -->
+        <div class="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-lg shadow-slate-200/30 flex flex-col justify-between hover:border-teal-500/50 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acessos Doctoralia</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold text-slate-900">2.771</span>
+            </div>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-teal-50 border border-teal-200/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="text-[11px] font-bold text-teal-800">52,69% originados da Pesquisa Ads</span>
+          </div>
+        </div>
+
+        <!-- Card 5: CPC Médio Pesquisa -->
+        <div class="bg-white rounded-[2rem] p-6 border border-teal-500/40 shadow-lg shadow-teal-500/10 flex flex-col justify-between hover:border-teal-600 transition duration-300">
+          <div>
+            <span class="text-xs font-bold text-teal-900 uppercase tracking-wider">CPC Médio Pesquisa</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-teal-700">R$ 5,86</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 font-medium mt-4">Custo médio por clique na Rede de Pesquisa</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: ESTRUTURA DE CAMPANHAS & PERFORMANCE (REDE DE PESQUISA) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estrutura de Campanhas &amp; Performance (Rede de Pesquisa)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Comparativo entre as campanhas de pesquisa da Sinapse Núcleo Integrado de Saúde Mental e Dr. Jhonas Geraldo.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          5 Frentes de Pesquisa Ativas
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[780px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Campanha</th>
+              <th class="py-3 px-3 text-right">Impressões</th>
+              <th class="py-3 px-3 text-right">Cliques</th>
+              <th class="py-3 px-3 text-right">CTR</th>
+              <th class="py-3 px-3 text-right">CPC Médio</th>
+              <th class="py-3 px-3 text-right">Topo Pg. (Top 3)</th>
+              <th class="py-3 px-3 text-right">1ª Pos. Abs.</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">Ganho Leilão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Subgrupo Sinapse Pesquisa -->
+            <tr class="bg-slate-50/70">
+              <td colspan="8" class="py-2 px-4 uppercase text-[10px] tracking-wider text-slate-600 font-extrabold">
+                • Sinapse Núcleo Integrado de Saúde Mental
+              </td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Presencial - Sinapse</td>
+              <td class="py-3.5 px-3 text-right font-medium">7.426</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">350</td>
+              <td class="py-3.5 px-3 text-right font-semibold">4,71%</td>
+              <td class="py-3.5 px-3 text-right font-medium">R$ 4,89</td>
+              <td class="py-3.5 px-3 text-right font-medium">77,58%</td>
+              <td class="py-3.5 px-3 text-right font-medium">28,76%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">34,94%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Institucional - Sinapse</td>
+              <td class="py-3.5 px-3 text-right font-medium">1.181</td>
+              <td class="py-3.5 px-3 text-right font-bold text-amber-700">71</td>
+              <td class="py-3.5 px-3 text-right font-semibold">6,01%</td>
+              <td class="py-3.5 px-3 text-right font-medium">R$ 7,50</td>
+              <td class="py-3.5 px-3 text-right font-medium">77,87%</td>
+              <td class="py-3.5 px-3 text-right font-medium">74,69%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">13,86%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Online - Sinapse</td>
+              <td class="py-3.5 px-3 text-right font-medium">646</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">92</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">14,24%</td>
+              <td class="py-3.5 px-3 text-right font-medium">R$ 7,78</td>
+              <td class="py-3.5 px-3 text-right font-medium">90,33%</td>
+              <td class="py-3.5 px-3 text-right font-medium">32,48%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">36,91%</td>
+            </tr>
+
+            <!-- Subgrupo Dr. Jhonas Pesquisa -->
+            <tr class="bg-slate-50/70">
+              <td colspan="8" class="py-2 px-4 uppercase text-[10px] tracking-wider text-slate-600 font-extrabold">
+                • Dr. Jhonas Geraldo
+              </td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Online - Jhonas</td>
+              <td class="py-3.5 px-3 text-right font-medium">6.247</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">819</td>
+              <td class="py-3.5 px-3 text-right font-bold text-teal-700">13,11%</td>
+              <td class="py-3.5 px-3 text-right font-medium">R$ 6,72</td>
+              <td class="py-3.5 px-3 text-right font-medium">90,27%</td>
+              <td class="py-3.5 px-3 text-right font-medium">31,34%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">39,23%</td>
+            </tr>
+            <tr class="hover:bg-teal-50/30 transition">
+              <td class="py-3.5 px-4 font-bold text-slate-900">Institucional - Jhonas</td>
+              <td class="py-3.5 px-3 text-right font-medium">710</td>
+              <td class="py-3.5 px-3 text-right font-bold text-amber-700">128</td>
+              <td class="py-3.5 px-3 text-right font-bold text-amber-600">18,03%</td>
+              <td class="py-3.5 px-3 text-right font-medium">R$ 0,78</td>
+              <td class="py-3.5 px-3 text-right font-medium">73,29%</td>
+              <td class="py-3.5 px-3 text-right font-medium">46,38%</td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900">67,32%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-900 text-white font-extrabold text-xs">
+              <td class="py-3.5 px-4 rounded-l-xl">Total / Médias Consolidadas (Pesquisa)</td>
+              <td class="py-3.5 px-3 text-right text-teal-300">16.210</td>
+              <td class="py-3.5 px-3 text-right text-teal-300">1.460</td>
+              <td class="py-3.5 px-3 text-right text-amber-300">9,01%</td>
+              <td class="py-3.5 px-3 text-right">R$ 5,86</td>
+              <td class="py-3.5 px-3 text-right">82,81%</td>
+              <td class="py-3.5 px-3 text-right">34,02%</td>
+              <td class="py-3.5 px-4 text-right rounded-r-xl">36,55%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: PRINCIPAIS TERMOS DE PESQUISA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Principais Termos de Pesquisa (Palavras-Chave)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Consultas realizadas pelos pacientes em Telemedicina, Presencial em Florianópolis e buscas diretas por Dr. Jhonas e Sinapse.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Termos Mais Relevantes
+        </span>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[620px]">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+              <th class="py-3 px-4 rounded-l-xl">Palavra-chave de Pesquisa</th>
+              <th class="py-3 px-4 text-right">Impressões</th>
+              <th class="py-3 px-4 text-right">Cliques</th>
+              <th class="py-3 px-4 text-right rounded-r-xl">CTR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+            <!-- Termo Principal em destaque translúcido -->
+            <tr class="bg-teal-50/70 border-l-4 border-teal-600 font-semibold text-teal-950">
+              <td class="py-3.5 px-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                psiquiatra online
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">2.801</td>
+              <td class="py-3.5 px-4 text-right font-bold text-teal-900">319</td>
+              <td class="py-3.5 px-4 text-right font-extrabold text-teal-700">11,39%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatria online</td>
+              <td class="py-3 px-4 text-right font-medium">1.594</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">239</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">14,99%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra online (exata)</td>
+              <td class="py-3 px-4 text-right font-medium">948</td>
+              <td class="py-3 px-4 text-right font-bold text-slate-900">152</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-600">16,03%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatra</td>
+              <td class="py-3 px-4 text-right font-medium">2.908</td>
+              <td class="py-3 px-4 text-right font-medium">123</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,23%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatria florianópolis</td>
+              <td class="py-3 px-4 text-right font-medium">2.600</td>
+              <td class="py-3 px-4 text-right font-medium">110</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,23%</td>
+            </tr>
+            <!-- Marca Jhonas -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-semibold">peixoto flauzino jhonas geraldo (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">418</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">89</td>
+              <td class="py-3 px-4 text-right font-extrabold text-amber-600">21,29%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra online (frase)</td>
+              <td class="py-3 px-4 text-right font-medium">507</td>
+              <td class="py-3 px-4 text-right font-medium">77</td>
+              <td class="py-3 px-4 text-right font-bold text-teal-700">15,19%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatra florianópolis</td>
+              <td class="py-3 px-4 text-right font-medium">576</td>
+              <td class="py-3 px-4 text-right font-medium">63</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">10,94%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">consulta psiquiatra online</td>
+              <td class="py-3 px-4 text-right font-medium">332</td>
+              <td class="py-3 px-4 text-right font-medium">59</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-600">17,77%</td>
+            </tr>
+            <!-- Marca Sinapse -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-semibold">sinapse (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">948</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">53</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">5,59%</td>
+            </tr>
+            <!-- Marca Jhonas 2 -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-semibold">jhonas geraldo peixoto flauzino (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">292</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">39</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">13,36%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras online</td>
+              <td class="py-3 px-4 text-right font-medium">307</td>
+              <td class="py-3 px-4 text-right font-medium">23</td>
+              <td class="py-3 px-4 text-right font-semibold text-teal-700">7,49%</td>
+            </tr>
+            <!-- Marca Sinapse 2 -->
+            <tr class="bg-amber-50/50 hover:bg-amber-50 transition font-medium">
+              <td class="py-3 px-4 text-amber-950 font-semibold">sinapse núcleo integrado de saúde mental (marca)</td>
+              <td class="py-3 px-4 text-right font-medium">230</td>
+              <td class="py-3 px-4 text-right font-bold text-amber-700">18</td>
+              <td class="py-3 px-4 text-right font-semibold text-amber-600">7,83%</td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 font-medium">psiquiatras</td>
+              <td class="py-3 px-4 text-right font-medium">322</td>
+              <td class="py-3 px-4 text-right font-medium">14</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">4,35%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: HISTÓRICO DE AGENDAMENTOS & PACIENTES NOVOS -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Histórico de Agendamentos &amp; Pacientes Novos</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+              Janeiro a Novembro (Parcial)
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Evolução mensal do volume total de consultas e captação de novos pacientes (2.849 agendamentos e 1.095 novos no período).</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl">
+          <span>Série Histórica 2026</span>
+        </div>
+      </div>
+
+      <!-- GRÁFICO HISTÓRICO COM RÓTULOS NATIVOS NÍTIDOS NAS BARRAS -->
+      <div class="h-80 sm:h-96 relative">
+        <canvas id="appointmentsHistoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: ESTRATÉGIA GEOGRÁFICA — PRESENCIAL (SINAPSE) & TELEMEDICINA (SINAPSE + DR. JHONAS) -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Estratégia Geográfica • Presencial &amp; Telemedicina</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Operação híbrida combinando captação presencial em Florianópolis (SC) e telemedicina segmentada em 4 grandes capitais.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl self-start sm:self-auto">
+          5 Capitais Estratégicas
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Mapa Leaflet Interativo -->
+        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner h-80 sm:h-[26rem] relative">
+          <div id="map" class="w-full h-full"></div>
+        </div>
+
+        <!-- Card Lateral de Abrangência -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-teal-400">Frentes de Atuação Ativas</h3>
+            <p class="text-xs text-slate-300 mt-1">Divisão geográfica por unidade e modalidade de atendimento.</p>
+
+            <div class="mt-4 space-y-3">
+              <!-- Presencial Sinapse -->
+              <div class="p-3.5 bg-amber-950/50 rounded-xl border border-amber-500/50">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-300">Florianópolis (SC)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-amber-500 text-amber-950 rounded font-extrabold">Presencial</span>
+                </div>
+                <p class="text-[11px] text-slate-200 mt-1 leading-relaxed">
+                  <strong>Campanha Sinapse Presencial</strong> — Atendimento clínico local na capital catarinense (350 cliques na frente presencial).
+                </p>
+              </div>
+
+              <!-- Telemedicina Sinapse -->
+              <div class="p-3.5 bg-teal-950/60 rounded-xl border border-teal-500/40">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-teal-300">Fortaleza (CE) &amp; Curitiba (PR)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-teal-500/20 text-teal-300 rounded font-semibold">Telemedicina</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  <strong>Frente Online — Sinapse</strong> — Expansão de teleconsultas psiquiátricas para os polos de Fortaleza e Curitiba.
+                </p>
+              </div>
+
+              <!-- Telemedicina Jhonas -->
+              <div class="p-3.5 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-indigo-300">São Paulo (SP) &amp; Belo Horizonte (MG)</span>
+                  <span class="text-[10px] px-2 py-0.5 bg-indigo-500/20 text-indigo-300 rounded font-semibold">Telemedicina</span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                  <strong>Frente Online — Dr. Jhonas</strong> — Captação de alta demanda em São Paulo e Belo Horizonte (819 cliques diretos).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+            Clique nos pinos do mapa para identificar a frente ativa em cada cidade.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: PLANOS FIRST CLASS CONTRATADOS (SINAPSE & DR. JHONAS) - SOLICITADO PELO USUÁRIO -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Posicionamento First Class Contratado</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Mapa de destaques prioritários ativos dentro da Doctoralia organizados em ordem alfabética por conta contratante.</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1.5 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl self-start sm:self-auto">
+          Sinapse (24 Praças) • Dr. Jhonas (8 Praças)
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Bloco 1: Contratado pela Sinapse (7 Colunas) -->
+        <div class="lg:col-span-7 bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-200">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-teal-600 text-white">Conta Clínica</span>
+                <h3 class="text-base font-extrabold text-slate-900 mt-1.5">First Class — Sinapse</h3>
+              </div>
+              <span class="text-xs font-bold text-teal-800 bg-teal-100/80 px-3 py-1 rounded-xl">
+                23 Localidades + Nutricionista SP
+              </span>
+            </div>
+
+            <!-- Lista em Ordem Alfabética bem legível para reunião -->
+            <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Balneário Camboriú</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Barueri</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Belo Horizonte</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Blumenau</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Brasília</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Campinas</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Campo Grande</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Curitiba</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Florianópolis</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Guarulhos</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">João Pessoa</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Joinville</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Londrina</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Maceió</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Natal</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Niterói</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Patos de Minas</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Porto Alegre</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Rio de Janeiro</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">São José do Rio Preto</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Sorocaba</div>
+              <div class="px-3 py-2 bg-teal-50 border border-teal-300 rounded-xl font-bold text-teal-900">Telemedicina</div>
+              <div class="px-3 py-2 bg-white border border-slate-200/90 rounded-xl font-semibold text-slate-800">Uberlândia</div>
+            </div>
+          </div>
+
+          <!-- Destaque Adicional: Nutricionista em São Paulo -->
+          <div class="mt-4 p-3.5 bg-teal-600 text-white rounded-xl flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-300"></span>
+              <span class="text-xs font-bold">+ Especialidade Adicional Contratada:</span>
+            </div>
+            <span class="text-xs font-extrabold bg-white/15 px-3 py-1 rounded-lg">Nutricionista em São Paulo</span>
+          </div>
+        </div>
+
+        <!-- Bloco 2: Contratado pelo Dr. Jhonas (5 Colunas) -->
+        <div class="lg:col-span-5 bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-800">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950">Conta Especialista</span>
+                <h3 class="text-base font-extrabold text-white mt-1.5">First Class — Dr. Jhonas</h3>
+              </div>
+              <span class="text-xs font-bold text-teal-300 bg-teal-950 border border-teal-500/30 px-3 py-1 rounded-xl">
+                8 Localidades
+              </span>
+            </div>
+
+            <!-- Lista em Ordem Alfabética com diferenciação visual entre ativas e programadas para desativação -->
+            <div class="mt-4 grid grid-cols-2 gap-2.5 text-xs">
+              <!-- Ativas Permanentes -->
+              <div class="px-3 py-2.5 bg-teal-950/70 border border-teal-500/40 rounded-xl font-bold text-teal-200 flex items-center justify-between">
+                <span>Fortaleza</span>
+                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+              </div>
+              <div class="px-3 py-2.5 bg-teal-950/70 border border-teal-500/40 rounded-xl font-bold text-teal-200 flex items-center justify-between">
+                <span>Recife</span>
+                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+              </div>
+              <div class="px-3 py-2.5 bg-teal-950/70 border border-teal-500/40 rounded-xl font-bold text-teal-200 flex items-center justify-between">
+                <span>Salvador</span>
+                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+              </div>
+              <div class="px-3 py-2.5 bg-teal-950/70 border border-teal-500/40 rounded-xl font-bold text-teal-200 flex items-center justify-between">
+                <span>São Paulo</span>
+                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+              </div>
+
+              <!-- Programadas para desativação no início de Dezembro -->
+              <div class="px-3 py-2.5 bg-amber-950/50 border border-amber-500/50 rounded-xl font-semibold text-amber-200 flex items-center justify-between">
+                <span>Curitiba</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded">Dez</span>
+              </div>
+              <div class="px-3 py-2.5 bg-amber-950/50 border border-amber-500/50 rounded-xl font-semibold text-amber-200 flex items-center justify-between">
+                <span>Goiânia</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded">Dez</span>
+              </div>
+              <div class="px-3 py-2.5 bg-amber-950/50 border border-amber-500/50 rounded-xl font-semibold text-amber-200 flex items-center justify-between">
+                <span>Londrina</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded">Dez</span>
+              </div>
+              <div class="px-3 py-2.5 bg-amber-950/50 border border-amber-500/50 rounded-xl font-semibold text-amber-200 flex items-center justify-between">
+                <span>Vitória</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded">Dez</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aviso de Programação de Desativação -->
+          <div class="mt-5 p-4 bg-amber-500/15 border border-amber-400/50 rounded-xl">
+            <div class="flex items-center gap-2 text-amber-300 font-extrabold text-[11px] uppercase tracking-wider">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Ajuste Programado • Início de Dezembro</span>
+            </div>
+            <p class="text-xs text-slate-200 mt-1.5 leading-relaxed">
+              As praças de <strong class="text-amber-300">Curitiba, Goiânia, Londrina e Vitória</strong> vinculadas ao Dr. Jhonas já estão programadas para serem <strong>desativadas no início de dezembro</strong>.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 7: AUTORIDADE & PROVA SOCIAL NA DOCTORALIA -->
+    <section class="bg-white rounded-[2rem] p-6 lg:p-8 border border-slate-200/60 shadow-lg shadow-slate-200/30">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Autoridade &amp; Prova Social na Doctoralia</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Reputação consolidada do Dr. Jhonas Geraldo &amp; Sinapse para converter pacientes presenciais e de telemedicina.</p>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold self-start sm:self-auto">
+          <span>Doctoralia Perfil Verificado</span>
+          <span class="text-amber-500 tracking-wider">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Opiniões Totais -->
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patrimônio de Opiniões</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-slate-900">497</span>
+              <span class="text-sm font-bold text-emerald-600">Avaliações Validadas</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-500 text-lg mt-1">
+              ★★★★★
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 mt-4 leading-relaxed">
+            Com quase 500 avaliações positivas na Doctoralia, o Dr. Jhonas Geraldo &amp; Sinapse possuem forte credibilidade digital para converter tanto o público local de Florianópolis quanto pacientes de telemedicina em outras capitais.
+          </p>
+        </div>
+
+        <!-- Card Novas Opiniões -->
+        <div class="p-6 bg-teal-50/60 rounded-2xl border border-teal-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">Atualizações no Período</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-600 text-white">+23 Novas</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="text-4xl font-black text-teal-700">23</span>
+              <span class="text-sm font-semibold text-teal-900">avaliações recentes</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white/80 rounded-xl border border-teal-200/70 text-xs text-teal-950 leading-relaxed font-medium">
+            Sabemos que mais de 70% dos pacientes que entram no perfil olham esta seção antes de agendar. O ritmo constante de +23 novas opiniões no período sustenta a alta taxa de conversão das campanhas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 8: REDE DE DISPLAY (GDN) — IMPULSIONAMENTO EM NOME DA SINAPSE (ÚLTIMO ITEM, ABAIXO DE OPINIÕES) -->
+    <section class="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-950 text-white rounded-[2rem] p-6 lg:p-8 border border-indigo-500/40 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-wider bg-indigo-500 text-white">
+              Rede de Display • GDN
+            </span>
+            <h2 class="text-xl font-extrabold text-white tracking-tight">GDN — Impulsionamento em Nome da Sinapse</h2>
+          </div>
+          <p class="text-xs text-indigo-200 mt-1">
+            Campanha de visibilidade e branding gráfico impulsionada institucionalmente em nome da <strong>Sinapse Núcleo Integrado de Saúde Mental</strong> nos principais portais de notícias e saúde do país.
+          </p>
+        </div>
+        <span class="text-xs font-bold px-3.5 py-1.5 bg-indigo-500/20 text-indigo-200 border border-indigo-400/40 rounded-xl self-start sm:self-auto">
+          Impulsionado via Sinapse
+        </span>
+      </div>
+
+      <!-- 4 KPI CARDS EXCLUSIVOS DE GDN -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="p-5 bg-white/5 rounded-2xl border border-indigo-400/25">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-300">Impressões GDN</span>
+          <p class="text-3xl font-black text-white mt-1.5">53.113</p>
+          <p class="text-[11px] text-indigo-200/80 mt-2">Exibições visuais em portais parceiros</p>
+        </div>
+
+        <div class="p-5 bg-white/5 rounded-2xl border border-indigo-400/25">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-300">Cliques / Interações</span>
+          <p class="text-3xl font-black text-indigo-300 mt-1.5">361</p>
+          <p class="text-[11px] text-indigo-200/80 mt-2">Acessos gerados pelos banners da Sinapse</p>
+        </div>
+
+        <div class="p-5 bg-white/5 rounded-2xl border border-indigo-400/25">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-300">Taxa de Interação (CTR)</span>
+          <p class="text-3xl font-black text-amber-300 mt-1.5">0,68%</p>
+          <p class="text-[11px] text-indigo-200/80 mt-2">Desempenho consolidado em Rede Display</p>
+        </div>
+
+        <div class="p-5 bg-white/5 rounded-2xl border border-indigo-400/25">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-300">CPC Médio GDN</span>
+          <p class="text-3xl font-black text-teal-300 mt-1.5">R$ 0,51</p>
+          <p class="text-[11px] text-indigo-200/80 mt-2">Custo altamente econômico para branding</p>
+        </div>
+      </div>
+
+      <!-- TABELA DOS PRINCIPAIS PORTAIS / LOCAIS DE EXIBIÇÃO DO GDN -->
+      <div class="bg-white/5 rounded-2xl p-5 border border-indigo-400/25">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <h3 class="text-sm font-bold text-white">Principais Portais onde os Anúncios da Sinapse foram Exibidos</h3>
+          <span class="text-[11px] text-indigo-300 font-medium">Top Canais por Impressões &amp; Interações</span>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse min-w-[600px]">
+            <thead>
+              <tr class="border-b border-indigo-400/20 text-[11px] font-bold text-indigo-300 uppercase tracking-wider">
+                <th class="py-2.5 px-3">Portal / Canal de Exibição</th>
+                <th class="py-2.5 px-3 text-right">Impressões</th>
+                <th class="py-2.5 px-3 text-right">Interações (Cliques)</th>
+                <th class="py-2.5 px-3 text-right">Taxa de Interação</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-indigo-400/15 text-xs text-slate-200">
+              <tr class="bg-indigo-500/20 font-semibold text-white">
+                <td class="py-2.5 px-3 font-bold">cnnbrasil.com.br</td>
+                <td class="py-2.5 px-3 text-right font-bold">13.752</td>
+                <td class="py-2.5 px-3 text-right font-extrabold text-amber-300">180</td>
+                <td class="py-2.5 px-3 text-right font-bold text-teal-300">1,31%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">nsctotal.com.br (Portal SC)</td>
+                <td class="py-2.5 px-3 text-right">12.485</td>
+                <td class="py-2.5 px-3 text-right font-bold text-indigo-200">68</td>
+                <td class="py-2.5 px-3 text-right">0,54%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">terra.com.br</td>
+                <td class="py-2.5 px-3 text-right">9.526</td>
+                <td class="py-2.5 px-3 text-right font-bold text-indigo-200">32</td>
+                <td class="py-2.5 px-3 text-right">0,34%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">gazetadopovo.com.br</td>
+                <td class="py-2.5 px-3 text-right">4.034</td>
+                <td class="py-2.5 px-3 text-right">1</td>
+                <td class="py-2.5 px-3 text-right text-slate-400">0,02%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">jovempan.com.br</td>
+                <td class="py-2.5 px-3 text-right">3.866</td>
+                <td class="py-2.5 px-3 text-right">2</td>
+                <td class="py-2.5 px-3 text-right text-slate-400">0,05%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">estadao.com.br</td>
+                <td class="py-2.5 px-3 text-right">1.743</td>
+                <td class="py-2.5 px-3 text-right text-slate-400">0</td>
+                <td class="py-2.5 px-3 text-right text-slate-400">0,00%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">correiobraziliense.com.br</td>
+                <td class="py-2.5 px-3 text-right">1.163</td>
+                <td class="py-2.5 px-3 text-right font-semibold text-indigo-200">8</td>
+                <td class="py-2.5 px-3 text-right">0,69%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">clicrbs.com.br</td>
+                <td class="py-2.5 px-3 text-right">1.073</td>
+                <td class="py-2.5 px-3 text-right">2</td>
+                <td class="py-2.5 px-3 text-right">0,19%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">metropoles.com</td>
+                <td class="py-2.5 px-3 text-right">936</td>
+                <td class="py-2.5 px-3 text-right font-extrabold text-amber-300">43</td>
+                <td class="py-2.5 px-3 text-right font-bold text-teal-300">4,59%</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="py-2.5 px-3 font-semibold text-white">r7.com • globo.com • abril.com.br • tuasaude.com</td>
+                <td class="py-2.5 px-3 text-right">1.942</td>
+                <td class="py-2.5 px-3 text-right font-semibold text-indigo-200">13</td>
+                <td class="py-2.5 px-3 text-right">0,67%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="pt-6 pb-12 border-t border-slate-200 text-center text-xs text-slate-500">
+      <p class="font-medium">Mídias 360 • Doctoralia Partner - Consultoria de Performance e Inteligência de Marketing Médico</p>
+      <p class="text-[11px] text-slate-400 mt-1">Relatório executivo de performance • Dr. Jhonas Geraldo &amp; Sinapse.</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPTS & CHARTS -->
+  <script>
+    // Plugin Nativo para Desenhar Rótulos de Dados Nítidos sobre as Barras
+    const nativeDataLabelsPlugin = {
+      id: 'nativeDataLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.type === 'line') return;
+
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const val = dataset.data[index];
+            if (val !== undefined && val !== null) {
+              ctx.save();
+              ctx.font = '700 10.5px "Plus Jakarta Sans", sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillStyle = datasetIndex === 1 ? '#0f766e' : '#475569';
+              ctx.fillText(val, bar.x, bar.y - 4);
+              ctx.restore();
+            }
+          });
+        });
+      }
+    };
+
+    // Gráfico de Histórico de Agendamentos (Janeiro a Novembro Parcial)
+    const ctxHistory = document.getElementById('appointmentsHistoryChart').getContext('2d');
+    new Chart(ctxHistory, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro (até 15)'
+        ],
+        datasets: [
+          {
+            label: 'Tendência Geral',
+            data: [232, 307, 350, 330, 177, 176, 318, 347, 258, 241, 113],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 2.5,
+            tension: 0.35,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#f59e0b',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            order: 1
+          },
+          {
+            label: 'Agendamentos Totais',
+            data: [232, 307, 350, 330, 177, 176, 318, 347, 258, 241, 113],
+            backgroundColor: [
+              '#0d9488', '#0d9488', '#0d9488', '#0d9488', '#0d9488', '#0d9488',
+              '#0d9488', '#0d9488', '#0d9488', '#0d9488', '#14b8a6'
+            ],
+            borderRadius: 8,
+            order: 2
+          },
+          {
+            label: 'Pacientes Novos',
+            data: [73, 123, 122, 108, 46, 58, 137, 155, 123, 110, 40],
+            backgroundColor: '#64748b',
+            borderRadius: 8,
+            order: 3
+          }
+        ]
+      },
+      plugins: [nativeDataLabelsPlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '600' },
+              color: '#334155'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 400,
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10 } },
+            grid: { color: '#f1f5f9' }
+          },
+          x: {
+            ticks: { font: { family: "'Plus Jakarta Sans'", size: 10, weight: '600' } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Mapa Leaflet - Presencial (Florianópolis) + Telemedicina (Fortaleza, Curitiba, São Paulo, Belo Horizonte)
+    const locations = [
+      {
+        title: 'Florianópolis (SC) • Campanha Sinapse Presencial',
+        desc: 'Atendimento presencial local — Clínica Sinapse',
+        coords: [-27.5954, -48.5480],
+        color: '#f59e0b',
+        radius: 12000,
+        open: true
+      },
+      {
+        title: 'Curitiba (PR) • Telemedicina Sinapse',
+        desc: 'Campanha Online Sinapse — Captação por Telemedicina',
+        coords: [-25.4284, -49.2733],
+        color: '#0d9488',
+        radius: 10000,
+        open: false
+      },
+      {
+        title: 'Fortaleza (CE) • Telemedicina Sinapse',
+        desc: 'Campanha Online Sinapse — Captação por Telemedicina',
+        coords: [-3.7172, -38.5433],
+        color: '#0d9488',
+        radius: 10000,
+        open: false
+      },
+      {
+        title: 'São Paulo (SP) • Telemedicina Dr. Jhonas',
+        desc: 'Campanha Online Dr. Jhonas Geraldo — Telemedicina',
+        coords: [-23.5505, -46.6333],
+        color: '#4f46e5',
+        radius: 12000,
+        open: false
+      },
+      {
+        title: 'Belo Horizonte (MG) • Telemedicina Dr. Jhonas',
+        desc: 'Campanha Online Dr. Jhonas Geraldo — Telemedicina',
+        coords: [-19.9167, -43.9345],
+        color: '#4f46e5',
+        radius: 10000,
+        open: false
+      }
+    ];
+
+    const map = L.map('map', {
+      center: [-16.5, -46.0],
+      zoom: 4,
+      scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    const bounds = [];
+
+    locations.forEach((loc) => {
+      const icon = L.divIcon({
+        className: 'custom-loc-pin',
+        html: `<div style="background-color: ${loc.color}; width: 17px; height: 17px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.4);"></div>`,
+        iconSize: [17, 17],
+        iconAnchor: [8.5, 8.5]
+      });
+
+      const marker = L.marker(loc.coords, { icon })
+        .addTo(map)
+        .bindPopup(`<b>${loc.title}</b><br>${loc.desc}`);
+
+      if (loc.open) marker.openPopup();
+
+      L.circle(loc.coords, {
+        color: loc.color,
+        fillColor: loc.color,
+        fillOpacity: 0.2,
+        weight: 2,
+        radius: loc.radius
+      }).addTo(map);
+
+      bounds.push(loc.coords);
+    });
+
+    map.fitBounds(bounds, { padding: [45, 45] });
+  </script>
+</body>
+</html>
